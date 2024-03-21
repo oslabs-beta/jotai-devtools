@@ -11,6 +11,7 @@ import {
   useSnapshotSearchInputValue,
 } from '../../atoms';
 import { Header } from './components/Header';
+// import snapshotHistoryListWrapper from './SnapshotList.module.css';
 import classes from './SnapshotList.module.css';
 
 export const SnapshotList = () => {

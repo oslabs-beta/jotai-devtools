@@ -1,6 +1,7 @@
 import { replace } from 'esbuild-plugin-replace';
 import { Options, defineConfig } from 'tsup';
 
+
 const defaultOutExtension: Options['outExtension'] = ({ format }) => {
   return {
     js: `.${format}.js`,
@@ -25,8 +26,9 @@ const baseConfig: Options = {
   },
   loader: {
     '.woff2': 'dataurl',
+    '.css': 'local-css',
   },
-  sourcemap: false,
+  sourcemap: true,
   // Clean output directory before each build
   clean: true,
   minify: false,

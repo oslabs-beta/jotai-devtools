@@ -12,7 +12,7 @@
     height: 4rem;
     z-index: 99999;
 
-    img {
+    :is(img) {
       height: 2rem;
     }
   }

@@ -58,7 +58,6 @@
     "release:patch": "pnpm run release patch",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
-    
   },
   "repository": {
     "type": "git",
@@ -162,12 +161,13 @@
     "react": ">=17.0.0"
   },
   "dependencies": {
+    "@mantine/code-highlight": "^7.6.0",
     "@mantine/core": "^7.6.0",
     "@mantine/hooks": "^7.6.0",
-    "@mantine/code-highlight": "^7.6.0",
     "@redux-devtools/extension": "^3.3.0",
     "javascript-stringify": "^2.1.0",
     "jsondiffpatch": "^0.5.0",
+    "postcss-modules": "^6.0.0",
     "react-error-boundary": "^4.0.12",
     "react-json-tree": "^0.18.0",
     "react-resizable-panels": "^0.0.54"

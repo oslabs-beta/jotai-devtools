@@ -16,7 +16,9 @@
     flex-direction: column;
     z-index: 99999;
     border-color: var(--mantine-color-gray-3);
-    background: var(--mantine-color-white);
+    /* background: var(--mantine-color-white); */
+    background: var(--mantine-color-dark-4);
+
 
     [data-mantine-color-scheme='dark'] & {
         border-color: var(--mantine-color-dark-4);
