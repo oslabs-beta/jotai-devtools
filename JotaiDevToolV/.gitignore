@@ -278,3 +278,4 @@ dist
 dist/**
 
 .npmrc
+./storybook-static

@@ -9,7 +9,7 @@ export const ThemeToggle = () => {
   return (
     <ActionIcon
       variant="filled"
-      color={dark ? 'gray' : 'dark'}
+      color={dark ? 'dark' : 'gray'}
       onClick={() => toggleColorScheme()}
       title="Toggle color scheme"
     >
