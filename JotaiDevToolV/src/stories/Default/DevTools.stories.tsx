@@ -24,7 +24,7 @@ export const Default: Story = {
       ...args,
       options: nextOptions,
     };
-    return <DemoApp {...props} />;
+    return <DemoApp {...props} />
   },
   args: {
     isInitialOpen: true,

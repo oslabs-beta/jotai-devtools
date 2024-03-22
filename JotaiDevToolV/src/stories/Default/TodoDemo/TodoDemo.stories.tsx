@@ -28,7 +28,7 @@ export const Default: Story = {
     return (
       <Provider>
           <DevTools {...props} />
-          <TodoApp {...props} />;
+          <TodoApp {...props} />
       </Provider>
     )
   },

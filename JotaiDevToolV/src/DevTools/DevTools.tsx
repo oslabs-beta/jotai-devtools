@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { MantineProvider, MantineThemeOverride } from '@mantine/core';
-import '@mantine/core/styles.css';
+import './mantineCustom.css';
 import '@mantine/code-highlight/styles.css';
 import { createStore } from 'jotai/vanilla';
 import { Store } from 'src/types';
@@ -12,6 +12,8 @@ import { Extension, ExtensionProps } from './Extension';
 import './fonts/fonts.module.css';
 import './global.css';
 import { InternalDevToolsContext } from './internal-jotai-store';
+import './override.css';
+
 
 export type DevToolsProps = ExtensionProps & {
   defaultColorScheme?: 'dark' | 'light';

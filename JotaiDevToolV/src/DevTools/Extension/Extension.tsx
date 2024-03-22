@@ -87,5 +87,5 @@ export const Extension = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <>{isShellOpen ? <Shell /> : <ShellTriggerButton />}</>;
+  return <>{isShellOpen ? <Shell /> : <ShellTriggerButton />}</>
 };
