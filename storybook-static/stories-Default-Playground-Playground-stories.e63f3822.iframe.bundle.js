@@ -187,9 +187,8 @@
       (0, utils.cU)(arrayAtom).debugLabel = 'splitAtomAtom';
       const asyncArrayAtom = (0, vanilla.eU)(async () => someRandomArray);
       asyncArrayAtom.debugLabel = 'asyncArrayAtom';
-      (0, utils.cU)(
-        (0, utils.unstable_unwrap)(asyncArrayAtom, () => []),
-      ).debugLabel = 'splitAsyncAtom';
+      (0, utils.cU)(unwrap(asyncArrayAtom, () => [])).debugLabel =
+        'splitAsyncAtom';
       const idAtom = (0, vanilla.eU)(1);
       idAtom.debugLabel = 'idAtom';
       const [userAtom] = (0, index_modern.fw)((get) => ({

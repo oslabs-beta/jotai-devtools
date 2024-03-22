@@ -111,9 +111,9 @@ export default function TodoApp() {
   return (
     <div style={{ height: '700px' }}>
       <Provider store={customStore}>
+        <DevTools store={customStore} />
         <h1 id="todoTitle">Todo List</h1>
         <TodoList />
-        <DevTools store={customStore} />
       </Provider>
     </div>
   );

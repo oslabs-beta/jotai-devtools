@@ -1,4 +1,4 @@
-/*! For license information please see stories-TodoApp-TodoDemo-stories.fbe80f26.iframe.bundle.js.LICENSE.txt */
+/*! For license information please see stories-TodoApp-TodoDemo-stories.0f5780ef.iframe.bundle.js.LICENSE.txt */
 'use strict';
 (self.webpackChunkjotai_devtools = self.webpackChunkjotai_devtools || []).push([
   [856],
@@ -16,7 +16,6 @@
         });
       __webpack_require__('./node_modules/react/index.js');
       var index_cjs = __webpack_require__('./dist/index.cjs.js'),
-        esm_react = __webpack_require__('./node_modules/jotai/esm/react.mjs'),
         CloseOutlined = __webpack_require__(
           './node_modules/@ant-design/icons/es/icons/CloseOutlined.js',
         ),
@@ -25,6 +24,7 @@
         ),
         es_radio = __webpack_require__('./node_modules/antd/es/radio/index.js'),
         vanilla = __webpack_require__('./node_modules/jotai/esm/vanilla.mjs'),
+        esm_react = __webpack_require__('./node_modules/jotai/esm/react.mjs'),
         injectStylesIntoStyleTag = __webpack_require__(
           './node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js',
         ),
@@ -167,19 +167,25 @@
             ],
           });
         };
+      TodoList.displayName = 'TodoList';
+      const customStore = (0, vanilla.y$)();
       function TodoApp() {
-        return (0, jsx_runtime.jsxs)('div', {
+        return (0, jsx_runtime.jsx)('div', {
           style: { height: '700px' },
-          children: [
-            (0, jsx_runtime.jsx)('h1', {
-              id: 'todoTitle',
-              children: 'Todo List',
-            }),
-            (0, jsx_runtime.jsx)(TodoList, {}),
-          ],
+          children: (0, jsx_runtime.jsxs)(esm_react.Kq, {
+            store: customStore,
+            children: [
+              (0, jsx_runtime.jsx)('h1', {
+                id: 'todoTitle',
+                children: 'Todo List',
+              }),
+              (0, jsx_runtime.jsx)(index_cjs.VD, { store: customStore }),
+              (0, jsx_runtime.jsx)(TodoList, {}),
+            ],
+          }),
         });
       }
-      (TodoList.displayName = 'TodoList'), (TodoApp.displayName = 'TodoApp');
+      TodoApp.displayName = 'TodoApp';
       const TodoDemo_stories = {
           component: index_cjs.VD,
           title: 'Devtools + TodoApp',
@@ -191,12 +197,7 @@
                 shouldShowPrivateAtoms: args['options.shouldShowPrivateAtoms'],
               },
               props = { ...args, options: nextOptions };
-            return (0, jsx_runtime.jsxs)(esm_react.Kq, {
-              children: [
-                (0, jsx_runtime.jsx)(TodoApp, {}),
-                (0, jsx_runtime.jsx)(index_cjs.VD, { ...props }),
-              ],
-            });
+            return (0, jsx_runtime.jsx)(TodoApp, { ...props });
           },
           args: { isInitialOpen: !1, 'options.shouldShowPrivateAtoms': !1 },
           argTypes: {
@@ -210,7 +211,7 @@
           ...Default.parameters?.docs,
           source: {
             originalSource:
-              "{\n  render: ({\n    ...args\n  }) => {\n    const nextOptions = {\n      ...args.options,\n      shouldShowPrivateAtoms: args['options.shouldShowPrivateAtoms']\n    };\n    const props = {\n      ...args,\n      options: nextOptions\n    };\n    return <Provider>\n          <TodoApp />\n          <DevTools {...props} />\n      </Provider>;\n  },\n  args: {\n    isInitialOpen: false,\n    'options.shouldShowPrivateAtoms': false\n  },\n  argTypes: {\n    store: {\n      control: {\n        type: false\n      }\n    },\n    options: {\n      control: {\n        type: false\n      }\n    }\n  }\n}",
+              "{\n  render: ({\n    ...args\n  }) => {\n    const nextOptions = {\n      ...args.options,\n      shouldShowPrivateAtoms: args['options.shouldShowPrivateAtoms']\n    };\n    const props = {\n      ...args,\n      options: nextOptions\n    };\n    return <TodoApp {...props} />;\n  },\n  args: {\n    isInitialOpen: false,\n    'options.shouldShowPrivateAtoms': false\n  },\n  argTypes: {\n    store: {\n      control: {\n        type: false\n      }\n    },\n    options: {\n      control: {\n        type: false\n      }\n    }\n  }\n}",
             ...Default.parameters?.docs?.source,
           },
         },
@@ -790,7 +791,7 @@
             );
         });
     },
-    './dist/chunk-D6SWPCV6.cjs.js': (
+    './dist/chunk-W2G7LQXW.cjs.js': (
       __unused_webpack_module,
       exports,
       __webpack_require__,
@@ -8762,7 +8763,7 @@
       exports,
       __webpack_require__,
     ) => {
-      __webpack_require__('./dist/chunk-D6SWPCV6.cjs.js');
+      __webpack_require__('./dist/chunk-W2G7LQXW.cjs.js');
       var _chunk5K6HCVT2cjsjs = __webpack_require__(
         './dist/chunk-5K6HCVT2.cjs.js',
       );
@@ -8799,24 +8800,20 @@
           );
         ___CSS_LOADER_EXPORT___.push([
           module.id,
-          '@import url(https://rsms.me/inter/inter.css);',
-        ]),
-          ___CSS_LOADER_EXPORT___.push([
-            module.id,
-            '\n* {\n  box-sizing: border-box;\n}\n\n#body {\n  width: 100%;\n  height: 100%;\n}\n\n#body {\n  margin-top: 5em;\n  display: flex;\n  align-items: flex-start;\n  justify-content: center;\n  background: #fdfdfd;\n  font-family: "Inter", sans-serif !important;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  filter: saturate(0);\n}\n\n#root {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  gap: 1em;\n}\n\n#todo-input:not([type="checkbox"]) {\n  width: 30%;\n  border: none;\n  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.05);\n  padding: 10px 20px;\n  margin-top: 2em;\n  margin-bottom: 4em;\n  background: white;\n}\n\n#todo-input:focus {\n  outline: none;\n}\n\n.anticon-close {\n  width: 32px !important;\n  cursor: pointer;\n  color: #c0c0c0;\n}\n\n.anticon-close:hover {\n  color: #272730;\n}\n\n.item {\n  position: relative;\n  display: flex;\n  width: 30%;\n  align-items: center;\n  justify-content: space-between;\n  gap: 20px;\n  overflow: hidden;\n}\n\n.item > span {\n  display: inline-block;\n  width: 100%;\n}\n\n#todoTitle {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n\n  font-size: 5em;\n  font-weight: 800;\n  margin: 0;\n  padding: 0;\n  color: black;\n  /* color: purple; */\n\n  white-space: nowrap;\n}\n\n#todoForm{\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n}',
-            '',
-            {
-              version: 3,
-              sources: ['webpack://./src/stories/TodoApp/todoStyles.css'],
-              names: [],
-              mappings:
-                ';AAGA;EACE,sBAAsB;AACxB;;AAEA;EACE,WAAW;EACX,YAAY;AACd;;AAEA;EACE,eAAe;EACf,aAAa;EACb,uBAAuB;EACvB,uBAAuB;EACvB,mBAAmB;EACnB,2CAA2C;EAC3C,mCAAmC;EACnC,kCAAkC;EAClC,mBAAmB;AACrB;;AAEA;EACE,WAAW;EACX,aAAa;EACb,sBAAsB;EACtB,QAAQ;AACV;;AAEA;EACE,UAAU;EACV,YAAY;EACZ,6CAA6C;EAC7C,kBAAkB;EAClB,eAAe;EACf,kBAAkB;EAClB,iBAAiB;AACnB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,sBAAsB;EACtB,eAAe;EACf,cAAc;AAChB;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE,kBAAkB;EAClB,aAAa;EACb,UAAU;EACV,mBAAmB;EACnB,8BAA8B;EAC9B,SAAS;EACT,gBAAgB;AAClB;;AAEA;EACE,qBAAqB;EACrB,WAAW;AACb;;AAEA;EACE,aAAa;EACb,uBAAuB;EACvB,mBAAmB;;EAEnB,cAAc;EACd,gBAAgB;EAChB,SAAS;EACT,UAAU;EACV,YAAY;EACZ,mBAAmB;;EAEnB,mBAAmB;AACrB;;AAEA;EACE,aAAa;EACb,sBAAsB;EACtB,uBAAuB;EACvB,mBAAmB;AACrB',
-              sourcesContent: [
-                '\n@import url("https://rsms.me/inter/inter.css");\n\n* {\n  box-sizing: border-box;\n}\n\n#body {\n  width: 100%;\n  height: 100%;\n}\n\n#body {\n  margin-top: 5em;\n  display: flex;\n  align-items: flex-start;\n  justify-content: center;\n  background: #fdfdfd;\n  font-family: "Inter", sans-serif !important;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  filter: saturate(0);\n}\n\n#root {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  gap: 1em;\n}\n\n#todo-input:not([type="checkbox"]) {\n  width: 30%;\n  border: none;\n  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.05);\n  padding: 10px 20px;\n  margin-top: 2em;\n  margin-bottom: 4em;\n  background: white;\n}\n\n#todo-input:focus {\n  outline: none;\n}\n\n.anticon-close {\n  width: 32px !important;\n  cursor: pointer;\n  color: #c0c0c0;\n}\n\n.anticon-close:hover {\n  color: #272730;\n}\n\n.item {\n  position: relative;\n  display: flex;\n  width: 30%;\n  align-items: center;\n  justify-content: space-between;\n  gap: 20px;\n  overflow: hidden;\n}\n\n.item > span {\n  display: inline-block;\n  width: 100%;\n}\n\n#todoTitle {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n\n  font-size: 5em;\n  font-weight: 800;\n  margin: 0;\n  padding: 0;\n  color: black;\n  /* color: purple; */\n\n  white-space: nowrap;\n}\n\n#todoForm{\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n}',
-              ],
-              sourceRoot: '',
-            },
-          ]);
+          '/* \n@import url("https://rsms.me/inter/inter.css");\n\n* {\n  box-sizing: border-box;\n}\n\n#body {\n  width: 100%;\n  height: 100%;\n}\n\n#body {\n  margin-top: 5em;\n  display: flex;\n  align-items: flex-start;\n  justify-content: center;\n  background: #fdfdfd;\n  font-family: "Inter", sans-serif !important;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  filter: saturate(0);\n}\n\n#root {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  gap: 1em;\n}\n\n#todo-input:not([type="checkbox"]) {\n  width: 30%;\n  border: none;\n  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.05);\n  padding: 10px 20px;\n  margin-top: 2em;\n  margin-bottom: 4em;\n  background: white;\n}\n\n#todo-input:focus {\n  outline: none;\n}\n\n.anticon-close {\n  width: 32px !important;\n  cursor: pointer;\n  color: #c0c0c0;\n}\n\n.anticon-close:hover {\n  color: #272730;\n}\n\n.item {\n  position: relative;\n  display: flex;\n  width: 30%;\n  align-items: center;\n  justify-content: space-between;\n  gap: 20px;\n  overflow: hidden;\n}\n\n.item > span {\n  display: inline-block;\n  width: 100%;\n}\n\n#todoTitle {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n\n  font-size: 5em;\n  font-weight: 800;\n  margin: 0;\n  padding: 0;\n  color: black;\n\n  white-space: nowrap;\n}\n\n#todoForm{\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n} */',
+          '',
+          {
+            version: 3,
+            sources: ['webpack://./src/stories/TodoApp/todoStyles.css'],
+            names: [],
+            mappings:
+              'AAAA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;GAyFG',
+            sourcesContent: [
+              '/* \n@import url("https://rsms.me/inter/inter.css");\n\n* {\n  box-sizing: border-box;\n}\n\n#body {\n  width: 100%;\n  height: 100%;\n}\n\n#body {\n  margin-top: 5em;\n  display: flex;\n  align-items: flex-start;\n  justify-content: center;\n  background: #fdfdfd;\n  font-family: "Inter", sans-serif !important;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  filter: saturate(0);\n}\n\n#root {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  gap: 1em;\n}\n\n#todo-input:not([type="checkbox"]) {\n  width: 30%;\n  border: none;\n  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.05);\n  padding: 10px 20px;\n  margin-top: 2em;\n  margin-bottom: 4em;\n  background: white;\n}\n\n#todo-input:focus {\n  outline: none;\n}\n\n.anticon-close {\n  width: 32px !important;\n  cursor: pointer;\n  color: #c0c0c0;\n}\n\n.anticon-close:hover {\n  color: #272730;\n}\n\n.item {\n  position: relative;\n  display: flex;\n  width: 30%;\n  align-items: center;\n  justify-content: space-between;\n  gap: 20px;\n  overflow: hidden;\n}\n\n.item > span {\n  display: inline-block;\n  width: 100%;\n}\n\n#todoTitle {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n\n  font-size: 5em;\n  font-weight: 800;\n  margin: 0;\n  padding: 0;\n  color: black;\n\n  white-space: nowrap;\n}\n\n#todoForm{\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n} */',
+            ],
+            sourceRoot: '',
+          },
+        ]);
         const __WEBPACK_DEFAULT_EXPORT__ = ___CSS_LOADER_EXPORT___;
       },
   },

@@ -1,4 +1,4 @@
-
+/* 
 @import url("https://rsms.me/inter/inter.css");
 
 * {
@@ -78,7 +78,6 @@
   margin: 0;
   padding: 0;
   color: black;
-  /* color: purple; */
 
   white-space: nowrap;
 }
@@ -88,4 +87,4 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
+} */

@@ -28,7 +28,7 @@ export const Shell = () => {
   const handleOnTabChange = (value: string | null) =>
     setSelectedShellTab(value as TabKeys);
   return (
-    <div>
+    <div id="shell">
       <Tabs
         keepMounted={false}
         variant="default"
