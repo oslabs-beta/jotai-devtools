@@ -9,7 +9,7 @@ import { ThemeToggle } from './components/ThemeToggle';
 import classes from './Header.module.css';
 
 export const Header = React.memo(() => {
-  const themedColor = useThemeMode('dark', 'gray');
+  const themedColor = useThemeMode('dark', 'grey');
   const setIsShellOpen = useSetAtom(
     isShellOpenAtom,
     useDevtoolsJotaiStoreOptions(),

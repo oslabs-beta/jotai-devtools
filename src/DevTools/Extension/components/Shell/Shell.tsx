@@ -3,6 +3,7 @@ import { Tabs } from '@mantine/core';
 import { useAtomValue } from 'jotai/react';
 import { shellStylesAtom } from '../../../atoms/shell-styles';
 import { TabKeys, shellStyleDefaults } from '../../../constants';
+import { useThemeMode } from '../../../hooks/useThemeMode';
 import { useDevtoolsJotaiStoreOptions } from '../../../internal-jotai-store';
 import { useSelectedShellTab } from './atoms';
 import { AtomViewer } from './components/AtomViewer';
@@ -27,38 +28,41 @@ export const Shell = () => {
   const handleOnTabChange = (value: string | null) =>
     setSelectedShellTab(value as TabKeys);
   return (
-    <Tabs
-      keepMounted={false}
-      variant="default"
-      defaultValue={TabKeys.AtomViewer}
-      className={`${classes.root} jotai-devtools-shell`}
-      h={height}
-      mah={shellStyleDefaults.maxHeight}
-      ref={shellRef}
-      data-testid="jotai-devtools-shell"
-      id="jotai-devtools-shell"
-      value={selectedShellTab}
-      onChange={handleOnTabChange}
-    >
-      <ShellResizeBar shellRef={shellRef} />
-      <Header />
-      <ErrorBoundary>
-        <TabsHeader />
-        <Tabs.Panel
-          value={TabKeys.AtomViewer}
-          h="100%"
-          className={classes.tabPanel}
-        >
-          <AtomViewer />
-        </Tabs.Panel>
-        <Tabs.Panel
-          value={TabKeys.TimeTravel}
-          h="100%"
-          className={classes.tabPanel}
-        >
-          <TimeTravel />
-        </Tabs.Panel>
-      </ErrorBoundary>
-    </Tabs>
+    <div id="shell">
+      <Tabs
+        keepMounted={false}
+        variant="default"
+        defaultValue={TabKeys.AtomViewer}
+        className={`${classes.root} jotai-devtools-shell`}
+        h={height}
+        mah={shellStyleDefaults.maxHeight}
+        ref={shellRef}
+        data-testid="jotai-devtools-shell"
+        id="jotai-devtools-shell"
+        value={selectedShellTab}
+        onChange={handleOnTabChange}
+        c={useThemeMode('dark', 'gray.3')}
+      >
+        <ShellResizeBar shellRef={shellRef} />
+        <Header />
+        <ErrorBoundary>
+          <TabsHeader />
+          <Tabs.Panel
+            value={TabKeys.AtomViewer}
+            h="100%"
+            className={classes.tabPanel}
+          >
+            <AtomViewer />
+          </Tabs.Panel>
+          <Tabs.Panel
+            value={TabKeys.TimeTravel}
+            h="100%"
+            className={classes.tabPanel}
+          >
+            <TimeTravel />
+          </Tabs.Panel>
+        </ErrorBoundary>
+      </Tabs>
+    </div>
   );
 };
