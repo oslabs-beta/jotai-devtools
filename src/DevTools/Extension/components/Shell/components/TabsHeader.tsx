@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { Indicator, Tabs } from '@mantine/core';
-import { IconLayoutList, IconTimeline } from '@tabler/icons-react';
+import {
+  IconLayoutList,
+  IconTimeline,
+  IconVectorTriangle,
+} from '@tabler/icons-react';
 import { TabKeys } from '../../../../constants';
 import classes from './TabsHeader.module.css';
 import { useShouldRecordSnapshotHistoryValue } from './TimeTravel/atoms';
@@ -49,13 +53,13 @@ export const TabsHeader = React.memo(() => {
         )}
       </Tabs.Tab>
       {/* TODO Add these features */}
-      {/* <Tabs.Tab
+      <Tabs.Tab
         value={TabKeys.AtomGraph}
         icon={<IconVectorTriangle size={14} />}
-        disabled
+        // disabled
       >
         Atom Graph
-      </Tabs.Tab> */}
+      </Tabs.Tab>
     </Tabs.List>
   );
 });

@@ -1,4 +1,4 @@
-/*! For license information please see stories-TodoApp-TodoDemo-stories.0f5780ef.iframe.bundle.js.LICENSE.txt */
+/*! For license information please see stories-TodoApp-TodoDemo-stories.96fa4579.iframe.bundle.js.LICENSE.txt */
 'use strict';
 (self.webpackChunkjotai_devtools = self.webpackChunkjotai_devtools || []).push([
   [856],
@@ -179,8 +179,8 @@
                 id: 'todoTitle',
                 children: 'Todo List',
               }),
-              (0, jsx_runtime.jsx)(index_cjs.VD, { store: customStore }),
               (0, jsx_runtime.jsx)(TodoList, {}),
+              (0, jsx_runtime.jsx)(index_cjs.VD, { store: customStore }),
             ],
           }),
         });
@@ -791,7 +791,7 @@
             );
         });
     },
-    './dist/chunk-W2G7LQXW.cjs.js': (
+    './dist/chunk-Q6XK3F23.cjs.js': (
       __unused_webpack_module,
       exports,
       __webpack_require__,
@@ -8763,7 +8763,7 @@
       exports,
       __webpack_require__,
     ) => {
-      __webpack_require__('./dist/chunk-W2G7LQXW.cjs.js');
+      __webpack_require__('./dist/chunk-Q6XK3F23.cjs.js');
       var _chunk5K6HCVT2cjsjs = __webpack_require__(
         './dist/chunk-5K6HCVT2.cjs.js',
       );

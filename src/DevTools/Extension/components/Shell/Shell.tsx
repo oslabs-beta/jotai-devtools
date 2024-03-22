@@ -6,6 +6,7 @@ import { TabKeys, shellStyleDefaults } from '../../../constants';
 import { useThemeMode } from '../../../hooks/useThemeMode';
 import { useDevtoolsJotaiStoreOptions } from '../../../internal-jotai-store';
 import { useSelectedShellTab } from './atoms';
+import { AtomGraph } from './components/AtomGraph/AtomGraph';
 import { AtomViewer } from './components/AtomViewer';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Header } from './components/Header';
@@ -60,6 +61,13 @@ export const Shell = () => {
             className={classes.tabPanel}
           >
             <TimeTravel />
+          </Tabs.Panel>
+          <Tabs.Panel
+            value={TabKeys.AtomGraph}
+            h="100%"
+            className={classes.tabPanel}
+          >
+            <AtomGraph />
           </Tabs.Panel>
         </ErrorBoundary>
       </Tabs>
