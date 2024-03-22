@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Title } from '@mantine/core';
-import { useThemeMode } from '../../../../../../../../../../hooks/useThemeMode';
 import { MetaInfo } from '../../../../../../MetaInfo';
 
 type SnapshotMetaDetailsProps = {

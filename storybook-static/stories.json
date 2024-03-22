@@ -87,6 +87,35 @@
         "docsOnly": false,
         "fileName": "./src/stories/ProviderLess/DevToolsProviderLess.stories.tsx"
       }
+    },
+    "devtools-todoapp--docs": {
+      "id": "devtools-todoapp--docs",
+      "title": "Devtools + TodoApp",
+      "name": "Docs",
+      "importPath": "./src/stories/TodoApp/TodoDemo.stories.tsx",
+      "tags": ["docs", "autodocs"],
+      "storiesImports": [],
+      "kind": "Devtools + TodoApp",
+      "story": "Docs",
+      "parameters": {
+        "__id": "devtools-todoapp--docs",
+        "docsOnly": true,
+        "fileName": "./src/stories/TodoApp/TodoDemo.stories.tsx"
+      }
+    },
+    "devtools-todoapp--default": {
+      "id": "devtools-todoapp--default",
+      "name": "Default",
+      "title": "Devtools + TodoApp",
+      "importPath": "./src/stories/TodoApp/TodoDemo.stories.tsx",
+      "tags": ["story"],
+      "kind": "Devtools + TodoApp",
+      "story": "Default",
+      "parameters": {
+        "__id": "devtools-todoapp--default",
+        "docsOnly": false,
+        "fileName": "./src/stories/TodoApp/TodoDemo.stories.tsx"
+      }
     }
   }
 }

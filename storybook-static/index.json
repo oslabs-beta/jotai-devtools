@@ -51,6 +51,23 @@
       "title": "DevtoolsProviderLess",
       "importPath": "./src/stories/ProviderLess/DevToolsProviderLess.stories.tsx",
       "tags": ["story"]
+    },
+    "devtools-todoapp--docs": {
+      "id": "devtools-todoapp--docs",
+      "title": "Devtools + TodoApp",
+      "name": "Docs",
+      "importPath": "./src/stories/TodoApp/TodoDemo.stories.tsx",
+      "type": "docs",
+      "tags": ["docs", "autodocs"],
+      "storiesImports": []
+    },
+    "devtools-todoapp--default": {
+      "type": "story",
+      "id": "devtools-todoapp--default",
+      "name": "Default",
+      "title": "Devtools + TodoApp",
+      "importPath": "./src/stories/TodoApp/TodoDemo.stories.tsx",
+      "tags": ["story"]
     }
   }
 }
