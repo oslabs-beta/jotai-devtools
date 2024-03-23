@@ -1,8 +1,8 @@
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import { Provider } from 'jotai/react';
-import { DevTools, DevToolsProps } from '../../../';
-import TodoApp from './TodoApp';
+import { DevTools, DevToolsProps } from '../../';
+import { TodoApp } from './TodoApp';
 
 export default {
   component: DevTools,

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import type { FormEvent } from 'react';
 import { CloseOutlined } from '@ant-design/icons';
 import { a, useTransition } from '@react-spring/web';
@@ -110,14 +110,14 @@ const TodoList = () => {
 };
 const customStore = createStore();
 
-export default function TodoApp() {
+export const TodoApp = (props: DevToolsProps) => {
   return (
     <div style={{ height: '700px' }}>
       <Provider store={customStore}>
-        <DevTools store={customStore} />
         <h1 id="todoTitle">Todo List</h1>
         <TodoList />
+        <DevTools store={customStore} {...props} />
       </Provider>
     </div>
   );
-}
+};
