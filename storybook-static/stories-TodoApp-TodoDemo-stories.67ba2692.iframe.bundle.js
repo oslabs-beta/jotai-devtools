@@ -1,4 +1,4 @@
-/*! For license information please see stories-TodoApp-TodoDemo-stories.78e2df29.iframe.bundle.js.LICENSE.txt */
+/*! For license information please see stories-TodoApp-TodoDemo-stories.67ba2692.iframe.bundle.js.LICENSE.txt */
 'use strict';
 (self.webpackChunkjotai_devtools = self.webpackChunkjotai_devtools || []).push([
   [856],
@@ -25,6 +25,7 @@
         es_radio = __webpack_require__('./node_modules/antd/es/radio/index.js'),
         vanilla = __webpack_require__('./node_modules/jotai/esm/vanilla.mjs'),
         esm_react = __webpack_require__('./node_modules/jotai/esm/react.mjs'),
+        src = __webpack_require__('./src/index.ts'),
         injectStylesIntoStyleTag = __webpack_require__(
           './node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js',
         ),
@@ -168,24 +169,86 @@
           });
         };
       TodoList.displayName = 'TodoList';
-      const customStore = (0, vanilla.y$)();
-      function TodoApp() {
-        return (0, jsx_runtime.jsx)('div', {
-          style: { height: '700px' },
-          children: (0, jsx_runtime.jsxs)(esm_react.Kq, {
-            store: customStore,
-            children: [
-              (0, jsx_runtime.jsx)('h1', {
-                id: 'todoTitle',
-                children: 'Todo List',
-              }),
-              (0, jsx_runtime.jsx)(TodoList, {}),
-              (0, jsx_runtime.jsx)(index_cjs.VD, { store: customStore }),
-            ],
-          }),
-        });
-      }
+      const customStore = (0, vanilla.y$)(),
+        TodoApp = (props) =>
+          (0, jsx_runtime.jsx)('div', {
+            style: { height: '700px' },
+            children: (0, jsx_runtime.jsxs)(esm_react.Kq, {
+              store: customStore,
+              children: [
+                (0, jsx_runtime.jsx)('h1', {
+                  id: 'todoTitle',
+                  children: 'Todo List',
+                }),
+                (0, jsx_runtime.jsx)(TodoList, {}),
+                (0, jsx_runtime.jsx)(src.VD, { store: customStore, ...props }),
+              ],
+            }),
+          });
       TodoApp.displayName = 'TodoApp';
+      try {
+        (TodoApp.displayName = 'TodoApp'),
+          (TodoApp.__docgenInfo = {
+            description: '',
+            displayName: 'TodoApp',
+            props: {
+              store: {
+                defaultValue: null,
+                description: '',
+                name: 'store',
+                required: !1,
+                type: {
+                  name: '{ get: <Value>(atom: Atom<Value>) => Value; set: <Value_1, Args extends unknown[], Result>(atom: WritableAtom<Value_1, Args, Result>, ...args: Args) => Result; ... 5 more ...; dev_restore_atoms: (values: Iterable<...>) => void; } | { ...; }',
+                },
+              },
+              isInitialOpen: {
+                defaultValue: null,
+                description: '',
+                name: 'isInitialOpen',
+                required: !1,
+                type: { name: 'boolean' },
+              },
+              defaultColorScheme: {
+                defaultValue: null,
+                description: '',
+                name: 'defaultColorScheme',
+                required: !1,
+                type: { name: '"dark" | "light"' },
+              },
+              position: {
+                defaultValue: null,
+                description: '',
+                name: 'position',
+                required: !1,
+                type: {
+                  name: '"top-right" | "top-left" | "bottom-right" | "bottom-left"',
+                },
+              },
+              nonce: {
+                defaultValue: null,
+                description: '',
+                name: 'nonce',
+                required: !1,
+                type: { name: 'string' },
+              },
+              options: {
+                defaultValue: null,
+                description: '',
+                name: 'options',
+                required: !1,
+                type: { name: 'DevToolsOptions' },
+              },
+            },
+          }),
+          'undefined' != typeof STORYBOOK_REACT_CLASSES &&
+            (STORYBOOK_REACT_CLASSES[
+              'src/stories/TodoApp/TodoApp.tsx#TodoApp'
+            ] = {
+              docgenInfo: TodoApp.__docgenInfo,
+              name: 'TodoApp',
+              path: 'src/stories/TodoApp/TodoApp.tsx#TodoApp',
+            });
+      } catch (__react_docgen_typescript_loader_error) {}
       const TodoDemo_stories = {
           component: index_cjs.VD,
           title: 'Devtools + TodoApp',
@@ -218,580 +281,7 @@
       };
       const __namedExportsOrder = ['Default'];
     },
-    './dist/chunk-5K6HCVT2.cjs.js': (
-      __unused_webpack_module,
-      exports,
-      __webpack_require__,
-    ) => {
-      function _optionalChain(ops) {
-        let lastAccessLHS,
-          value = ops[0],
-          i = 1;
-        for (; i < ops.length; ) {
-          const op = ops[i],
-            fn = ops[i + 1];
-          if (
-            ((i += 2),
-            ('optionalAccess' === op || 'optionalCall' === op) && null == value)
-          )
-            return;
-          'access' === op || 'optionalAccess' === op
-            ? ((lastAccessLHS = value), (value = fn(value)))
-            : ('call' !== op && 'optionalCall' !== op) ||
-              ((value = fn((...args) => value.call(lastAccessLHS, ...args))),
-              (lastAccessLHS = void 0));
-        }
-        return value;
-      }
-      Object.defineProperty(exports, '__esModule', { value: !0 });
-      var fn,
-        res,
-        __create = Object.create,
-        __defProp = Object.defineProperty,
-        __getOwnPropDesc = Object.getOwnPropertyDescriptor,
-        __getOwnPropNames = Object.getOwnPropertyNames,
-        __getProtoOf = Object.getPrototypeOf,
-        __hasOwnProp = Object.prototype.hasOwnProperty,
-        _react = __webpack_require__('./node_modules/react/index.js'),
-        init_react_shim =
-          ((function _interopRequireDefault(obj) {
-            return obj && obj.__esModule ? obj : { default: obj };
-          })(_react),
-          (fn = { 'react-shim.js'() {} }),
-          function __init() {
-            return (
-              fn && (res = (0, fn[__getOwnPropNames(fn)[0]])((fn = 0))), res
-            );
-          });
-      init_react_shim(), init_react_shim();
-      var _react3 = __webpack_require__('./node_modules/jotai/react.js'),
-        isEqualAtomsValues = (left, right) =>
-          left.size === right.size &&
-          Array.from(left).every(([left2, v]) =>
-            Object.is(right.get(left2), v),
-          ),
-        isEqualAtomsDependents = (left, right) =>
-          left.size === right.size &&
-          Array.from(left).every(([a, dLeft]) => {
-            const dRight = right.get(a);
-            return (
-              dRight &&
-              dLeft.size === dRight.size &&
-              Array.from(dLeft).every((d) => dRight.has(d))
-            );
-          });
-      function useAtomsSnapshot({
-        shouldShowPrivateAtoms = !1,
-        ...options
-      } = {}) {
-        const store = _react3.useStore.call(void 0, options),
-          [atomsSnapshot, setAtomsSnapshot] = _react.useState.call(
-            void 0,
-            () => ({ values: new Map(), dependents: new Map() }),
-          ),
-          duringReactRenderPhase = _react.useRef.call(void 0, !0);
-        return (
-          (duringReactRenderPhase.current = !0),
-          _react.useLayoutEffect.call(void 0, () => {
-            duringReactRenderPhase.current = !1;
-          }),
-          _react.useEffect.call(
-            void 0,
-            () => {
-              const devSubscribeStore =
-                _optionalChain([
-                  store,
-                  'optionalAccess',
-                  (_) => _.dev_subscribe_store,
-                ]) ||
-                _optionalChain([
-                  store,
-                  'optionalAccess',
-                  (_2) => _2.dev_subscribe_state,
-                ]);
-              if (!devSubscribeStore) return;
-              let prevValues = new Map(),
-                prevDependents = new Map();
-              'dev_subscribe_store' in store ||
-                console.warn(
-                  '[DEPRECATION-WARNING]: Your Jotai version is out-of-date and contains deprecated properties that will be removed soon. Please update to the latest version of Jotai.',
-                );
-              const callback = (type) => {
-                  'object' != typeof type &&
-                    console.warn(
-                      '[DEPRECATION-WARNING]: Your Jotai version is out-of-date and contains deprecated properties that will be removed soon. Please update to the latest version of Jotai.',
-                    );
-                  const values = new Map(),
-                    dependents = new Map();
-                  for (const atom of _optionalChain([
-                    store,
-                    'access',
-                    (_3) => _3.dev_get_mounted_atoms,
-                    'optionalCall',
-                    (_4) => _4(),
-                  ]) || []) {
-                    if (!shouldShowPrivateAtoms && atom.debugPrivate) continue;
-                    const atomState = _optionalChain([
-                      store,
-                      'access',
-                      (_5) => _5.dev_get_atom_state,
-                      'optionalCall',
-                      (_6) => _6(atom),
-                    ]);
-                    atomState &&
-                      'v' in atomState &&
-                      values.set(atom, atomState.v);
-                    const mounted = _optionalChain([
-                      store,
-                      'access',
-                      (_7) => _7.dev_get_mounted,
-                      'optionalCall',
-                      (_8) => _8(atom),
-                    ]);
-                    if (mounted) {
-                      let atomDependents = mounted.t;
-                      shouldShowPrivateAtoms ||
-                        (atomDependents = new Set(
-                          Array.from(atomDependents.values()).filter(
-                            (dependent) => !dependent.debugPrivate,
-                          ),
-                        )),
-                        dependents.set(atom, atomDependents);
-                    }
-                  }
-                  if (
-                    isEqualAtomsValues(prevValues, values) &&
-                    isEqualAtomsDependents(prevDependents, dependents)
-                  )
-                    return;
-                  (prevValues = values), (prevDependents = dependents);
-                  const deferrableAtomSetAction = () =>
-                    setAtomsSnapshot({ values, dependents });
-                  duringReactRenderPhase.current
-                    ? Promise.resolve().then(deferrableAtomSetAction)
-                    : deferrableAtomSetAction();
-                },
-                unsubscribe = _optionalChain([
-                  devSubscribeStore,
-                  'optionalCall',
-                  (_9) => _9(callback, 2),
-                ]);
-              return callback({}), unsubscribe;
-            },
-            [store, shouldShowPrivateAtoms],
-          ),
-          atomsSnapshot
-        );
-      }
-      function useGotoAtomsSnapshot(options) {
-        const store = _react3.useStore.call(void 0, options);
-        return _react.useCallback.call(
-          void 0,
-          (snapshot) => {
-            store.dev_restore_atoms && store.dev_restore_atoms(snapshot.values);
-          },
-          [store],
-        );
-      }
-      init_react_shim(), init_react_shim();
-      var atomToPrintable = (atom) => atom.debugLabel || atom.toString(),
-        stateToPrintable = ([store, atoms]) =>
-          Object.fromEntries(
-            atoms.flatMap((atom) => {
-              const mounted = _optionalChain([
-                store,
-                'access',
-                (_10) => _10.dev_get_mounted,
-                'optionalCall',
-                (_11) => _11(atom),
-              ]);
-              if (!mounted) return [];
-              const dependents = mounted.t,
-                atomState =
-                  _optionalChain([
-                    store,
-                    'access',
-                    (_12) => _12.dev_get_atom_state,
-                    'optionalCall',
-                    (_13) => _13(atom),
-                  ]) || {};
-              return [
-                [
-                  atomToPrintable(atom),
-                  {
-                    ...('e' in atomState && { error: atomState.e }),
-                    ...('v' in atomState && { value: atomState.v }),
-                    dependents: Array.from(dependents).map(atomToPrintable),
-                  },
-                ],
-              ];
-            }),
-          );
-      init_react_shim(), init_react_shim();
-      var createReduxConnection = (extension, name) => {
-        if (!extension) return;
-        const connection = extension.connect({ name });
-        return Object.assign(connection, { shouldInit: !0 });
-      };
-      init_react_shim();
-      var getReduxExtension = (enabled = !1) => {
-        if (!enabled) return;
-        const reduxExtension = window.__REDUX_DEVTOOLS_EXTENSION__;
-        return reduxExtension;
-      };
-      init_react_shim();
-      var atomToPrintable2 = (atom) =>
-          atom.debugLabel ? `${atom}:${atom.debugLabel}` : `${atom}`,
-        getDevtoolsState = (atomsSnapshot) => {
-          const values = {};
-          atomsSnapshot.values.forEach((v, atom) => {
-            values[atomToPrintable2(atom)] = v;
-          });
-          const dependents = {};
-          return (
-            atomsSnapshot.dependents.forEach((d, atom) => {
-              dependents[atomToPrintable2(atom)] =
-                Array.from(d).map(atomToPrintable2);
-            }),
-            { values, dependents }
-          );
-        };
-      (exports.__commonJS = (cb, mod) =>
-        function __require() {
-          return (
-            mod ||
-              (0, cb[__getOwnPropNames(cb)[0]])(
-                (mod = { exports: {} }).exports,
-                mod,
-              ),
-            mod.exports
-          );
-        }),
-        (exports.__toESM = (mod, isNodeMode, target) => (
-          (target = null != mod ? __create(__getProtoOf(mod)) : {}),
-          ((to, from, except, desc) => {
-            if ((from && 'object' == typeof from) || 'function' == typeof from)
-              for (let key of __getOwnPropNames(from))
-                __hasOwnProp.call(to, key) ||
-                  key === except ||
-                  __defProp(to, key, {
-                    get: () => from[key],
-                    enumerable:
-                      !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
-                  });
-            return to;
-          })(
-            !isNodeMode && mod && mod.__esModule
-              ? target
-              : __defProp(target, 'default', { value: mod, enumerable: !0 }),
-            mod,
-          )
-        )),
-        (exports.init_react_shim = init_react_shim),
-        (exports.useAtomsSnapshot = useAtomsSnapshot),
-        (exports.useGotoAtomsSnapshot = useGotoAtomsSnapshot),
-        (exports.useAtomsDebugValue = (options) => {
-          const enabled = (function _nullishCoalesce(lhs, rhsFn) {
-              return null != lhs ? lhs : rhsFn();
-            })(
-              _optionalChain([options, 'optionalAccess', (_14) => _14.enabled]),
-              () => !1,
-            ),
-            store = _react3.useStore.call(void 0, options),
-            [atoms, setAtoms] = _react.useState.call(void 0, []),
-            duringReactRenderPhase = _react.useRef.call(void 0, !0);
-          (duringReactRenderPhase.current = !0),
-            _react.useLayoutEffect.call(void 0, () => {
-              duringReactRenderPhase.current = !1;
-            }),
-            _react.useEffect.call(
-              void 0,
-              () => {
-                const devSubscribeStore =
-                  _optionalChain([
-                    store,
-                    'optionalAccess',
-                    (_15) => _15.dev_subscribe_store,
-                  ]) ||
-                  _optionalChain([
-                    store,
-                    'optionalAccess',
-                    (_16) => _16.dev_subscribe_state,
-                  ]);
-                if (!enabled || !devSubscribeStore) return;
-                const callback = () => {
-                  const deferrableAtomSetAction = () =>
-                    setAtoms(
-                      Array.from(
-                        _optionalChain([
-                          store,
-                          'access',
-                          (_17) => _17.dev_get_mounted_atoms,
-                          'optionalCall',
-                          (_18) => _18(),
-                        ]) || [],
-                      ),
-                    );
-                  duringReactRenderPhase.current
-                    ? Promise.resolve().then(deferrableAtomSetAction)
-                    : deferrableAtomSetAction();
-                };
-                'dev_subscribe_store' in store ||
-                  console.warn(
-                    "[DEPRECATION-WARNING] Jotai version you're using contains deprecated dev-only properties that will be removed soon. Please update to the latest version of Jotai.",
-                  );
-                const unsubscribe = _optionalChain([
-                  devSubscribeStore,
-                  'optionalCall',
-                  (_19) => _19(callback, 2),
-                ]);
-                return callback(), unsubscribe;
-              },
-              [enabled, store],
-            ),
-            _react.useDebugValue.call(void 0, [store, atoms], stateToPrintable);
-        }),
-        (exports.useAtomDevtools = function useAtomDevtools(anAtom, options) {
-          const { enabled, name } = options || {},
-            extension = getReduxExtension(enabled),
-            [value, setValue] = _react3.useAtom.call(void 0, anAtom, options),
-            lastValue = _react.useRef.call(void 0, value),
-            isTimeTraveling = _react.useRef.call(void 0, !1),
-            devtools = _react.useRef.call(void 0),
-            atomName = name || anAtom.debugLabel || anAtom.toString();
-          _react.useEffect.call(
-            void 0,
-            () => {
-              if (!extension) return;
-              const setValueIfWritable = (value2) => {
-                'function' != typeof setValue
-                  ? console.warn(
-                      '[Warn] you cannot do write operations (Time-travelling, etc) in read-only atoms\n',
-                      anAtom,
-                    )
-                  : setValue(value2);
-              };
-              devtools.current = createReduxConnection(extension, atomName);
-              return _optionalChain([
-                devtools,
-                'access',
-                (_20) => _20.current,
-                'optionalAccess',
-                (_21) => _21.subscribe,
-                'call',
-                (_22) =>
-                  _22((message) => {
-                    if ('ACTION' === message.type && message.payload)
-                      try {
-                        setValueIfWritable(JSON.parse(message.payload));
-                      } catch (e) {
-                        console.error(
-                          'please dispatch a serializable value that JSON.parse() support\n',
-                          e,
-                        );
-                      }
-                    else if ('DISPATCH' === message.type && message.state)
-                      ('JUMP_TO_ACTION' !==
-                        _optionalChain([
-                          message,
-                          'access',
-                          (_23) => _23.payload,
-                          'optionalAccess',
-                          (_24) => _24.type,
-                        ]) &&
-                        'JUMP_TO_STATE' !==
-                          _optionalChain([
-                            message,
-                            'access',
-                            (_25) => _25.payload,
-                            'optionalAccess',
-                            (_26) => _26.type,
-                          ])) ||
-                        ((isTimeTraveling.current = !0),
-                        setValueIfWritable(JSON.parse(message.state)));
-                    else if (
-                      'DISPATCH' === message.type &&
-                      'COMMIT' ===
-                        _optionalChain([
-                          message,
-                          'access',
-                          (_27) => _27.payload,
-                          'optionalAccess',
-                          (_28) => _28.type,
-                        ])
-                    )
-                      _optionalChain([
-                        devtools,
-                        'access',
-                        (_29) => _29.current,
-                        'optionalAccess',
-                        (_30) => _30.init,
-                        'call',
-                        (_31) => _31(lastValue.current),
-                      ]);
-                    else if (
-                      'DISPATCH' === message.type &&
-                      'IMPORT_STATE' ===
-                        _optionalChain([
-                          message,
-                          'access',
-                          (_32) => _32.payload,
-                          'optionalAccess',
-                          (_33) => _33.type,
-                        ])
-                    ) {
-                      (
-                        _optionalChain([
-                          message,
-                          'access',
-                          (_34) => _34.payload,
-                          'access',
-                          (_35) => _35.nextLiftedState,
-                          'optionalAccess',
-                          (_36) => _36.computedStates,
-                        ]) || []
-                      ).forEach(({ state }, index) => {
-                        0 === index
-                          ? _optionalChain([
-                              devtools,
-                              'access',
-                              (_37) => _37.current,
-                              'optionalAccess',
-                              (_38) => _38.init,
-                              'call',
-                              (_39) => _39(state),
-                            ])
-                          : setValueIfWritable(state);
-                      });
-                    }
-                  }),
-              ]);
-            },
-            [anAtom, extension, atomName, setValue],
-          ),
-            _react.useEffect.call(
-              void 0,
-              () => {
-                devtools.current &&
-                  ((lastValue.current = value),
-                  devtools.current.shouldInit
-                    ? (devtools.current.init(value),
-                      (devtools.current.shouldInit = !1))
-                    : isTimeTraveling.current
-                      ? (isTimeTraveling.current = !1)
-                      : devtools.current.send(
-                          `${atomName} - ${new Date().toLocaleString()}`,
-                          value,
-                        ));
-              },
-              [anAtom, extension, atomName, value],
-            );
-        }),
-        (exports.useAtomsDevtools = function useAtomsDevtools(name, options) {
-          const { enabled } = options || {},
-            extension = getReduxExtension(enabled),
-            atomsSnapshot = useAtomsSnapshot(options),
-            goToSnapshot = useGotoAtomsSnapshot(options),
-            isTimeTraveling = _react.useRef.call(void 0, !1),
-            isRecording = _react.useRef.call(void 0, !0),
-            devtools = _react.useRef.call(void 0),
-            snapshots = _react.useRef.call(void 0, []);
-          _react.useEffect.call(
-            void 0,
-            () => {
-              if (!extension) return;
-              const getSnapshotAt = (index = snapshots.current.length - 1) => {
-                const snapshot = snapshots.current[index >= 0 ? index : 0];
-                if (!snapshot) throw new Error('snapshot index out of bounds');
-                return snapshot;
-              };
-              devtools.current = createReduxConnection(extension, name);
-              const devtoolsUnsubscribe = _optionalChain([
-                devtools,
-                'access',
-                (_40) => _40.current,
-                'optionalAccess',
-                (_41) => _41.subscribe,
-                'call',
-                (_42) =>
-                  _42((message) => {
-                    if ('DISPATCH' === message.type)
-                      switch (
-                        _optionalChain([
-                          message,
-                          'access',
-                          (_43) => _43.payload,
-                          'optionalAccess',
-                          (_44) => _44.type,
-                        ])
-                      ) {
-                        case 'RESET':
-                          break;
-                        case 'COMMIT':
-                          _optionalChain([
-                            devtools,
-                            'access',
-                            (_45) => _45.current,
-                            'optionalAccess',
-                            (_46) => _46.init,
-                            'call',
-                            (_47) => _47(getDevtoolsState(getSnapshotAt())),
-                          ]),
-                            (snapshots.current = []);
-                          break;
-                        case 'JUMP_TO_ACTION':
-                        case 'JUMP_TO_STATE':
-                          (isTimeTraveling.current = !0),
-                            goToSnapshot(
-                              getSnapshotAt(message.payload.actionId - 1),
-                            );
-                          break;
-                        case 'PAUSE_RECORDING':
-                          isRecording.current = !isRecording.current;
-                      }
-                  }),
-              ]);
-              return () => {
-                _optionalChain([
-                  extension,
-                  'optionalAccess',
-                  (_48) => _48.disconnect,
-                  'optionalCall',
-                  (_49) => _49(),
-                ]),
-                  _optionalChain([
-                    devtoolsUnsubscribe,
-                    'optionalCall',
-                    (_50) => _50(),
-                  ]);
-              };
-            },
-            [extension, goToSnapshot, name],
-          ),
-            _react.useEffect.call(
-              void 0,
-              () => {
-                if (devtools.current)
-                  return devtools.current.shouldInit
-                    ? (devtools.current.init(void 0),
-                      void (devtools.current.shouldInit = !1))
-                    : void (isTimeTraveling.current
-                        ? (isTimeTraveling.current = !1)
-                        : isRecording.current &&
-                          (snapshots.current.push(atomsSnapshot),
-                          devtools.current.send(
-                            {
-                              type: `${snapshots.current.length}`,
-                              updatedAt: new Date().toLocaleString(),
-                            },
-                            getDevtoolsState(atomsSnapshot),
-                          )));
-              },
-              [atomsSnapshot],
-            );
-        });
-    },
-    './dist/chunk-WJNC2W5L.cjs.js': (
+    './dist/chunk-4EA3P3K4.cjs.js': (
       __unused_webpack_module,
       exports,
       __webpack_require__,
@@ -8920,12 +8410,585 @@
       exports.InternalDevTools = (props) =>
         React40.createElement(React40.Fragment, null);
     },
+    './dist/chunk-5K6HCVT2.cjs.js': (
+      __unused_webpack_module,
+      exports,
+      __webpack_require__,
+    ) => {
+      function _optionalChain(ops) {
+        let lastAccessLHS,
+          value = ops[0],
+          i = 1;
+        for (; i < ops.length; ) {
+          const op = ops[i],
+            fn = ops[i + 1];
+          if (
+            ((i += 2),
+            ('optionalAccess' === op || 'optionalCall' === op) && null == value)
+          )
+            return;
+          'access' === op || 'optionalAccess' === op
+            ? ((lastAccessLHS = value), (value = fn(value)))
+            : ('call' !== op && 'optionalCall' !== op) ||
+              ((value = fn((...args) => value.call(lastAccessLHS, ...args))),
+              (lastAccessLHS = void 0));
+        }
+        return value;
+      }
+      Object.defineProperty(exports, '__esModule', { value: !0 });
+      var fn,
+        res,
+        __create = Object.create,
+        __defProp = Object.defineProperty,
+        __getOwnPropDesc = Object.getOwnPropertyDescriptor,
+        __getOwnPropNames = Object.getOwnPropertyNames,
+        __getProtoOf = Object.getPrototypeOf,
+        __hasOwnProp = Object.prototype.hasOwnProperty,
+        _react = __webpack_require__('./node_modules/react/index.js'),
+        init_react_shim =
+          ((function _interopRequireDefault(obj) {
+            return obj && obj.__esModule ? obj : { default: obj };
+          })(_react),
+          (fn = { 'react-shim.js'() {} }),
+          function __init() {
+            return (
+              fn && (res = (0, fn[__getOwnPropNames(fn)[0]])((fn = 0))), res
+            );
+          });
+      init_react_shim(), init_react_shim();
+      var _react3 = __webpack_require__('./node_modules/jotai/react.js'),
+        isEqualAtomsValues = (left, right) =>
+          left.size === right.size &&
+          Array.from(left).every(([left2, v]) =>
+            Object.is(right.get(left2), v),
+          ),
+        isEqualAtomsDependents = (left, right) =>
+          left.size === right.size &&
+          Array.from(left).every(([a, dLeft]) => {
+            const dRight = right.get(a);
+            return (
+              dRight &&
+              dLeft.size === dRight.size &&
+              Array.from(dLeft).every((d) => dRight.has(d))
+            );
+          });
+      function useAtomsSnapshot({
+        shouldShowPrivateAtoms = !1,
+        ...options
+      } = {}) {
+        const store = _react3.useStore.call(void 0, options),
+          [atomsSnapshot, setAtomsSnapshot] = _react.useState.call(
+            void 0,
+            () => ({ values: new Map(), dependents: new Map() }),
+          ),
+          duringReactRenderPhase = _react.useRef.call(void 0, !0);
+        return (
+          (duringReactRenderPhase.current = !0),
+          _react.useLayoutEffect.call(void 0, () => {
+            duringReactRenderPhase.current = !1;
+          }),
+          _react.useEffect.call(
+            void 0,
+            () => {
+              const devSubscribeStore =
+                _optionalChain([
+                  store,
+                  'optionalAccess',
+                  (_) => _.dev_subscribe_store,
+                ]) ||
+                _optionalChain([
+                  store,
+                  'optionalAccess',
+                  (_2) => _2.dev_subscribe_state,
+                ]);
+              if (!devSubscribeStore) return;
+              let prevValues = new Map(),
+                prevDependents = new Map();
+              'dev_subscribe_store' in store ||
+                console.warn(
+                  '[DEPRECATION-WARNING]: Your Jotai version is out-of-date and contains deprecated properties that will be removed soon. Please update to the latest version of Jotai.',
+                );
+              const callback = (type) => {
+                  'object' != typeof type &&
+                    console.warn(
+                      '[DEPRECATION-WARNING]: Your Jotai version is out-of-date and contains deprecated properties that will be removed soon. Please update to the latest version of Jotai.',
+                    );
+                  const values = new Map(),
+                    dependents = new Map();
+                  for (const atom of _optionalChain([
+                    store,
+                    'access',
+                    (_3) => _3.dev_get_mounted_atoms,
+                    'optionalCall',
+                    (_4) => _4(),
+                  ]) || []) {
+                    if (!shouldShowPrivateAtoms && atom.debugPrivate) continue;
+                    const atomState = _optionalChain([
+                      store,
+                      'access',
+                      (_5) => _5.dev_get_atom_state,
+                      'optionalCall',
+                      (_6) => _6(atom),
+                    ]);
+                    atomState &&
+                      'v' in atomState &&
+                      values.set(atom, atomState.v);
+                    const mounted = _optionalChain([
+                      store,
+                      'access',
+                      (_7) => _7.dev_get_mounted,
+                      'optionalCall',
+                      (_8) => _8(atom),
+                    ]);
+                    if (mounted) {
+                      let atomDependents = mounted.t;
+                      shouldShowPrivateAtoms ||
+                        (atomDependents = new Set(
+                          Array.from(atomDependents.values()).filter(
+                            (dependent) => !dependent.debugPrivate,
+                          ),
+                        )),
+                        dependents.set(atom, atomDependents);
+                    }
+                  }
+                  if (
+                    isEqualAtomsValues(prevValues, values) &&
+                    isEqualAtomsDependents(prevDependents, dependents)
+                  )
+                    return;
+                  (prevValues = values), (prevDependents = dependents);
+                  const deferrableAtomSetAction = () =>
+                    setAtomsSnapshot({ values, dependents });
+                  duringReactRenderPhase.current
+                    ? Promise.resolve().then(deferrableAtomSetAction)
+                    : deferrableAtomSetAction();
+                },
+                unsubscribe = _optionalChain([
+                  devSubscribeStore,
+                  'optionalCall',
+                  (_9) => _9(callback, 2),
+                ]);
+              return callback({}), unsubscribe;
+            },
+            [store, shouldShowPrivateAtoms],
+          ),
+          atomsSnapshot
+        );
+      }
+      function useGotoAtomsSnapshot(options) {
+        const store = _react3.useStore.call(void 0, options);
+        return _react.useCallback.call(
+          void 0,
+          (snapshot) => {
+            store.dev_restore_atoms && store.dev_restore_atoms(snapshot.values);
+          },
+          [store],
+        );
+      }
+      init_react_shim(), init_react_shim();
+      var atomToPrintable = (atom) => atom.debugLabel || atom.toString(),
+        stateToPrintable = ([store, atoms]) =>
+          Object.fromEntries(
+            atoms.flatMap((atom) => {
+              const mounted = _optionalChain([
+                store,
+                'access',
+                (_10) => _10.dev_get_mounted,
+                'optionalCall',
+                (_11) => _11(atom),
+              ]);
+              if (!mounted) return [];
+              const dependents = mounted.t,
+                atomState =
+                  _optionalChain([
+                    store,
+                    'access',
+                    (_12) => _12.dev_get_atom_state,
+                    'optionalCall',
+                    (_13) => _13(atom),
+                  ]) || {};
+              return [
+                [
+                  atomToPrintable(atom),
+                  {
+                    ...('e' in atomState && { error: atomState.e }),
+                    ...('v' in atomState && { value: atomState.v }),
+                    dependents: Array.from(dependents).map(atomToPrintable),
+                  },
+                ],
+              ];
+            }),
+          );
+      init_react_shim(), init_react_shim();
+      var createReduxConnection = (extension, name) => {
+        if (!extension) return;
+        const connection = extension.connect({ name });
+        return Object.assign(connection, { shouldInit: !0 });
+      };
+      init_react_shim();
+      var getReduxExtension = (enabled = !1) => {
+        if (!enabled) return;
+        const reduxExtension = window.__REDUX_DEVTOOLS_EXTENSION__;
+        return reduxExtension;
+      };
+      init_react_shim();
+      var atomToPrintable2 = (atom) =>
+          atom.debugLabel ? `${atom}:${atom.debugLabel}` : `${atom}`,
+        getDevtoolsState = (atomsSnapshot) => {
+          const values = {};
+          atomsSnapshot.values.forEach((v, atom) => {
+            values[atomToPrintable2(atom)] = v;
+          });
+          const dependents = {};
+          return (
+            atomsSnapshot.dependents.forEach((d, atom) => {
+              dependents[atomToPrintable2(atom)] =
+                Array.from(d).map(atomToPrintable2);
+            }),
+            { values, dependents }
+          );
+        };
+      (exports.__commonJS = (cb, mod) =>
+        function __require() {
+          return (
+            mod ||
+              (0, cb[__getOwnPropNames(cb)[0]])(
+                (mod = { exports: {} }).exports,
+                mod,
+              ),
+            mod.exports
+          );
+        }),
+        (exports.__toESM = (mod, isNodeMode, target) => (
+          (target = null != mod ? __create(__getProtoOf(mod)) : {}),
+          ((to, from, except, desc) => {
+            if ((from && 'object' == typeof from) || 'function' == typeof from)
+              for (let key of __getOwnPropNames(from))
+                __hasOwnProp.call(to, key) ||
+                  key === except ||
+                  __defProp(to, key, {
+                    get: () => from[key],
+                    enumerable:
+                      !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+                  });
+            return to;
+          })(
+            !isNodeMode && mod && mod.__esModule
+              ? target
+              : __defProp(target, 'default', { value: mod, enumerable: !0 }),
+            mod,
+          )
+        )),
+        (exports.init_react_shim = init_react_shim),
+        (exports.useAtomsSnapshot = useAtomsSnapshot),
+        (exports.useGotoAtomsSnapshot = useGotoAtomsSnapshot),
+        (exports.useAtomsDebugValue = (options) => {
+          const enabled = (function _nullishCoalesce(lhs, rhsFn) {
+              return null != lhs ? lhs : rhsFn();
+            })(
+              _optionalChain([options, 'optionalAccess', (_14) => _14.enabled]),
+              () => !1,
+            ),
+            store = _react3.useStore.call(void 0, options),
+            [atoms, setAtoms] = _react.useState.call(void 0, []),
+            duringReactRenderPhase = _react.useRef.call(void 0, !0);
+          (duringReactRenderPhase.current = !0),
+            _react.useLayoutEffect.call(void 0, () => {
+              duringReactRenderPhase.current = !1;
+            }),
+            _react.useEffect.call(
+              void 0,
+              () => {
+                const devSubscribeStore =
+                  _optionalChain([
+                    store,
+                    'optionalAccess',
+                    (_15) => _15.dev_subscribe_store,
+                  ]) ||
+                  _optionalChain([
+                    store,
+                    'optionalAccess',
+                    (_16) => _16.dev_subscribe_state,
+                  ]);
+                if (!enabled || !devSubscribeStore) return;
+                const callback = () => {
+                  const deferrableAtomSetAction = () =>
+                    setAtoms(
+                      Array.from(
+                        _optionalChain([
+                          store,
+                          'access',
+                          (_17) => _17.dev_get_mounted_atoms,
+                          'optionalCall',
+                          (_18) => _18(),
+                        ]) || [],
+                      ),
+                    );
+                  duringReactRenderPhase.current
+                    ? Promise.resolve().then(deferrableAtomSetAction)
+                    : deferrableAtomSetAction();
+                };
+                'dev_subscribe_store' in store ||
+                  console.warn(
+                    "[DEPRECATION-WARNING] Jotai version you're using contains deprecated dev-only properties that will be removed soon. Please update to the latest version of Jotai.",
+                  );
+                const unsubscribe = _optionalChain([
+                  devSubscribeStore,
+                  'optionalCall',
+                  (_19) => _19(callback, 2),
+                ]);
+                return callback(), unsubscribe;
+              },
+              [enabled, store],
+            ),
+            _react.useDebugValue.call(void 0, [store, atoms], stateToPrintable);
+        }),
+        (exports.useAtomDevtools = function useAtomDevtools(anAtom, options) {
+          const { enabled, name } = options || {},
+            extension = getReduxExtension(enabled),
+            [value, setValue] = _react3.useAtom.call(void 0, anAtom, options),
+            lastValue = _react.useRef.call(void 0, value),
+            isTimeTraveling = _react.useRef.call(void 0, !1),
+            devtools = _react.useRef.call(void 0),
+            atomName = name || anAtom.debugLabel || anAtom.toString();
+          _react.useEffect.call(
+            void 0,
+            () => {
+              if (!extension) return;
+              const setValueIfWritable = (value2) => {
+                'function' != typeof setValue
+                  ? console.warn(
+                      '[Warn] you cannot do write operations (Time-travelling, etc) in read-only atoms\n',
+                      anAtom,
+                    )
+                  : setValue(value2);
+              };
+              devtools.current = createReduxConnection(extension, atomName);
+              return _optionalChain([
+                devtools,
+                'access',
+                (_20) => _20.current,
+                'optionalAccess',
+                (_21) => _21.subscribe,
+                'call',
+                (_22) =>
+                  _22((message) => {
+                    if ('ACTION' === message.type && message.payload)
+                      try {
+                        setValueIfWritable(JSON.parse(message.payload));
+                      } catch (e) {
+                        console.error(
+                          'please dispatch a serializable value that JSON.parse() support\n',
+                          e,
+                        );
+                      }
+                    else if ('DISPATCH' === message.type && message.state)
+                      ('JUMP_TO_ACTION' !==
+                        _optionalChain([
+                          message,
+                          'access',
+                          (_23) => _23.payload,
+                          'optionalAccess',
+                          (_24) => _24.type,
+                        ]) &&
+                        'JUMP_TO_STATE' !==
+                          _optionalChain([
+                            message,
+                            'access',
+                            (_25) => _25.payload,
+                            'optionalAccess',
+                            (_26) => _26.type,
+                          ])) ||
+                        ((isTimeTraveling.current = !0),
+                        setValueIfWritable(JSON.parse(message.state)));
+                    else if (
+                      'DISPATCH' === message.type &&
+                      'COMMIT' ===
+                        _optionalChain([
+                          message,
+                          'access',
+                          (_27) => _27.payload,
+                          'optionalAccess',
+                          (_28) => _28.type,
+                        ])
+                    )
+                      _optionalChain([
+                        devtools,
+                        'access',
+                        (_29) => _29.current,
+                        'optionalAccess',
+                        (_30) => _30.init,
+                        'call',
+                        (_31) => _31(lastValue.current),
+                      ]);
+                    else if (
+                      'DISPATCH' === message.type &&
+                      'IMPORT_STATE' ===
+                        _optionalChain([
+                          message,
+                          'access',
+                          (_32) => _32.payload,
+                          'optionalAccess',
+                          (_33) => _33.type,
+                        ])
+                    ) {
+                      (
+                        _optionalChain([
+                          message,
+                          'access',
+                          (_34) => _34.payload,
+                          'access',
+                          (_35) => _35.nextLiftedState,
+                          'optionalAccess',
+                          (_36) => _36.computedStates,
+                        ]) || []
+                      ).forEach(({ state }, index) => {
+                        0 === index
+                          ? _optionalChain([
+                              devtools,
+                              'access',
+                              (_37) => _37.current,
+                              'optionalAccess',
+                              (_38) => _38.init,
+                              'call',
+                              (_39) => _39(state),
+                            ])
+                          : setValueIfWritable(state);
+                      });
+                    }
+                  }),
+              ]);
+            },
+            [anAtom, extension, atomName, setValue],
+          ),
+            _react.useEffect.call(
+              void 0,
+              () => {
+                devtools.current &&
+                  ((lastValue.current = value),
+                  devtools.current.shouldInit
+                    ? (devtools.current.init(value),
+                      (devtools.current.shouldInit = !1))
+                    : isTimeTraveling.current
+                      ? (isTimeTraveling.current = !1)
+                      : devtools.current.send(
+                          `${atomName} - ${new Date().toLocaleString()}`,
+                          value,
+                        ));
+              },
+              [anAtom, extension, atomName, value],
+            );
+        }),
+        (exports.useAtomsDevtools = function useAtomsDevtools(name, options) {
+          const { enabled } = options || {},
+            extension = getReduxExtension(enabled),
+            atomsSnapshot = useAtomsSnapshot(options),
+            goToSnapshot = useGotoAtomsSnapshot(options),
+            isTimeTraveling = _react.useRef.call(void 0, !1),
+            isRecording = _react.useRef.call(void 0, !0),
+            devtools = _react.useRef.call(void 0),
+            snapshots = _react.useRef.call(void 0, []);
+          _react.useEffect.call(
+            void 0,
+            () => {
+              if (!extension) return;
+              const getSnapshotAt = (index = snapshots.current.length - 1) => {
+                const snapshot = snapshots.current[index >= 0 ? index : 0];
+                if (!snapshot) throw new Error('snapshot index out of bounds');
+                return snapshot;
+              };
+              devtools.current = createReduxConnection(extension, name);
+              const devtoolsUnsubscribe = _optionalChain([
+                devtools,
+                'access',
+                (_40) => _40.current,
+                'optionalAccess',
+                (_41) => _41.subscribe,
+                'call',
+                (_42) =>
+                  _42((message) => {
+                    if ('DISPATCH' === message.type)
+                      switch (
+                        _optionalChain([
+                          message,
+                          'access',
+                          (_43) => _43.payload,
+                          'optionalAccess',
+                          (_44) => _44.type,
+                        ])
+                      ) {
+                        case 'RESET':
+                          break;
+                        case 'COMMIT':
+                          _optionalChain([
+                            devtools,
+                            'access',
+                            (_45) => _45.current,
+                            'optionalAccess',
+                            (_46) => _46.init,
+                            'call',
+                            (_47) => _47(getDevtoolsState(getSnapshotAt())),
+                          ]),
+                            (snapshots.current = []);
+                          break;
+                        case 'JUMP_TO_ACTION':
+                        case 'JUMP_TO_STATE':
+                          (isTimeTraveling.current = !0),
+                            goToSnapshot(
+                              getSnapshotAt(message.payload.actionId - 1),
+                            );
+                          break;
+                        case 'PAUSE_RECORDING':
+                          isRecording.current = !isRecording.current;
+                      }
+                  }),
+              ]);
+              return () => {
+                _optionalChain([
+                  extension,
+                  'optionalAccess',
+                  (_48) => _48.disconnect,
+                  'optionalCall',
+                  (_49) => _49(),
+                ]),
+                  _optionalChain([
+                    devtoolsUnsubscribe,
+                    'optionalCall',
+                    (_50) => _50(),
+                  ]);
+              };
+            },
+            [extension, goToSnapshot, name],
+          ),
+            _react.useEffect.call(
+              void 0,
+              () => {
+                if (devtools.current)
+                  return devtools.current.shouldInit
+                    ? (devtools.current.init(void 0),
+                      void (devtools.current.shouldInit = !1))
+                    : void (isTimeTraveling.current
+                        ? (isTimeTraveling.current = !1)
+                        : isRecording.current &&
+                          (snapshots.current.push(atomsSnapshot),
+                          devtools.current.send(
+                            {
+                              type: `${snapshots.current.length}`,
+                              updatedAt: new Date().toLocaleString(),
+                            },
+                            getDevtoolsState(atomsSnapshot),
+                          )));
+              },
+              [atomsSnapshot],
+            );
+        });
+    },
     './dist/index.cjs.js': (
       __unused_webpack_module,
       exports,
       __webpack_require__,
     ) => {
-      __webpack_require__('./dist/chunk-WJNC2W5L.cjs.js');
+      __webpack_require__('./dist/chunk-4EA3P3K4.cjs.js');
       var _chunk5K6HCVT2cjsjs = __webpack_require__(
         './dist/chunk-5K6HCVT2.cjs.js',
       );
@@ -8937,6 +9000,14 @@
         _chunk5K6HCVT2cjsjs.useAtomsDevtools,
         _chunk5K6HCVT2cjsjs.useAtomsSnapshot,
         _chunk5K6HCVT2cjsjs.useGotoAtomsSnapshot;
+    },
+    './src/index.ts': (
+      __unused_webpack_module,
+      __webpack_exports__,
+      __webpack_require__,
+    ) => {
+      __webpack_require__.d(__webpack_exports__, { VD: () => DevTools });
+      const DevTools = () => null;
     },
     './node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].use[1]!./src/stories/TodoApp/todoStyles.css':
       (module, __webpack_exports__, __webpack_require__) => {
@@ -8962,20 +9033,24 @@
           );
         ___CSS_LOADER_EXPORT___.push([
           module.id,
-          '/* \n@import url("https://rsms.me/inter/inter.css");\n\n* {\n  box-sizing: border-box;\n}\n\n#body {\n  width: 100%;\n  height: 100%;\n}\n\n#body {\n  margin-top: 5em;\n  display: flex;\n  align-items: flex-start;\n  justify-content: center;\n  background: #fdfdfd;\n  font-family: "Inter", sans-serif !important;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  filter: saturate(0);\n}\n\n#root {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  gap: 1em;\n}\n\n#todo-input:not([type="checkbox"]) {\n  width: 30%;\n  border: none;\n  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.05);\n  padding: 10px 20px;\n  margin-top: 2em;\n  margin-bottom: 4em;\n  background: white;\n}\n\n#todo-input:focus {\n  outline: none;\n}\n\n.anticon-close {\n  width: 32px !important;\n  cursor: pointer;\n  color: #c0c0c0;\n}\n\n.anticon-close:hover {\n  color: #272730;\n}\n\n.item {\n  position: relative;\n  display: flex;\n  width: 30%;\n  align-items: center;\n  justify-content: space-between;\n  gap: 20px;\n  overflow: hidden;\n}\n\n.item > span {\n  display: inline-block;\n  width: 100%;\n}\n\n#todoTitle {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n\n  font-size: 5em;\n  font-weight: 800;\n  margin: 0;\n  padding: 0;\n  color: black;\n\n  white-space: nowrap;\n}\n\n#todoForm{\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n} */',
-          '',
-          {
-            version: 3,
-            sources: ['webpack://./src/stories/TodoApp/todoStyles.css'],
-            names: [],
-            mappings:
-              'AAAA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;GAyFG',
-            sourcesContent: [
-              '/* \n@import url("https://rsms.me/inter/inter.css");\n\n* {\n  box-sizing: border-box;\n}\n\n#body {\n  width: 100%;\n  height: 100%;\n}\n\n#body {\n  margin-top: 5em;\n  display: flex;\n  align-items: flex-start;\n  justify-content: center;\n  background: #fdfdfd;\n  font-family: "Inter", sans-serif !important;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  filter: saturate(0);\n}\n\n#root {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  gap: 1em;\n}\n\n#todo-input:not([type="checkbox"]) {\n  width: 30%;\n  border: none;\n  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.05);\n  padding: 10px 20px;\n  margin-top: 2em;\n  margin-bottom: 4em;\n  background: white;\n}\n\n#todo-input:focus {\n  outline: none;\n}\n\n.anticon-close {\n  width: 32px !important;\n  cursor: pointer;\n  color: #c0c0c0;\n}\n\n.anticon-close:hover {\n  color: #272730;\n}\n\n.item {\n  position: relative;\n  display: flex;\n  width: 30%;\n  align-items: center;\n  justify-content: space-between;\n  gap: 20px;\n  overflow: hidden;\n}\n\n.item > span {\n  display: inline-block;\n  width: 100%;\n}\n\n#todoTitle {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n\n  font-size: 5em;\n  font-weight: 800;\n  margin: 0;\n  padding: 0;\n  color: black;\n\n  white-space: nowrap;\n}\n\n#todoForm{\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n} */',
-            ],
-            sourceRoot: '',
-          },
-        ]);
+          '@import url(https://rsms.me/inter/inter.css);',
+        ]),
+          ___CSS_LOADER_EXPORT___.push([
+            module.id,
+            '\n* {\n  box-sizing: border-box;\n}\n\n#body {\n  width: 100%;\n  height: 100%;\n}\n\n#body {\n  margin-top: 5em;\n  display: flex;\n  align-items: flex-start;\n  justify-content: center;\n  background: #fdfdfd;\n  font-family: "Inter", sans-serif !important;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  filter: saturate(0);\n}\n\n#root {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  gap: 1em;\n}\n\n#todo-input:not([type="checkbox"]) {\n  width: 30%;\n  border: none;\n  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.05);\n  padding: 10px 20px;\n  margin-top: 2em;\n  margin-bottom: 4em;\n  background: white;\n}\n\n#todo-input:focus {\n  outline: none;\n}\n\n.anticon-close {\n  width: 32px !important;\n  cursor: pointer;\n  color: #c0c0c0;\n}\n\n.anticon-close:hover {\n  color: #272730;\n}\n\n.item {\n  position: relative;\n  display: flex;\n  width: 30%;\n  align-items: center;\n  justify-content: space-between;\n  gap: 20px;\n  overflow: hidden;\n}\n\n.item > span {\n  display: inline-block;\n  width: 100%;\n}\n\n#todoTitle {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n\n  font-size: 5em;\n  font-weight: 800;\n  margin: 0;\n  padding: 0;\n  color: black;\n\n  white-space: nowrap;\n}\n\n#todoForm{\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n}',
+            '',
+            {
+              version: 3,
+              sources: ['webpack://./src/stories/TodoApp/todoStyles.css'],
+              names: [],
+              mappings:
+                ';AAGA;EACE,sBAAsB;AACxB;;AAEA;EACE,WAAW;EACX,YAAY;AACd;;AAEA;EACE,eAAe;EACf,aAAa;EACb,uBAAuB;EACvB,uBAAuB;EACvB,mBAAmB;EACnB,2CAA2C;EAC3C,mCAAmC;EACnC,kCAAkC;EAClC,mBAAmB;AACrB;;AAEA;EACE,WAAW;EACX,aAAa;EACb,sBAAsB;EACtB,QAAQ;AACV;;AAEA;EACE,UAAU;EACV,YAAY;EACZ,6CAA6C;EAC7C,kBAAkB;EAClB,eAAe;EACf,kBAAkB;EAClB,iBAAiB;AACnB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,sBAAsB;EACtB,eAAe;EACf,cAAc;AAChB;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE,kBAAkB;EAClB,aAAa;EACb,UAAU;EACV,mBAAmB;EACnB,8BAA8B;EAC9B,SAAS;EACT,gBAAgB;AAClB;;AAEA;EACE,qBAAqB;EACrB,WAAW;AACb;;AAEA;EACE,aAAa;EACb,uBAAuB;EACvB,mBAAmB;;EAEnB,cAAc;EACd,gBAAgB;EAChB,SAAS;EACT,UAAU;EACV,YAAY;;EAEZ,mBAAmB;AACrB;;AAEA;EACE,aAAa;EACb,sBAAsB;EACtB,uBAAuB;EACvB,mBAAmB;AACrB',
+              sourcesContent: [
+                '\n@import url("https://rsms.me/inter/inter.css");\n\n* {\n  box-sizing: border-box;\n}\n\n#body {\n  width: 100%;\n  height: 100%;\n}\n\n#body {\n  margin-top: 5em;\n  display: flex;\n  align-items: flex-start;\n  justify-content: center;\n  background: #fdfdfd;\n  font-family: "Inter", sans-serif !important;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  filter: saturate(0);\n}\n\n#root {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  gap: 1em;\n}\n\n#todo-input:not([type="checkbox"]) {\n  width: 30%;\n  border: none;\n  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.05);\n  padding: 10px 20px;\n  margin-top: 2em;\n  margin-bottom: 4em;\n  background: white;\n}\n\n#todo-input:focus {\n  outline: none;\n}\n\n.anticon-close {\n  width: 32px !important;\n  cursor: pointer;\n  color: #c0c0c0;\n}\n\n.anticon-close:hover {\n  color: #272730;\n}\n\n.item {\n  position: relative;\n  display: flex;\n  width: 30%;\n  align-items: center;\n  justify-content: space-between;\n  gap: 20px;\n  overflow: hidden;\n}\n\n.item > span {\n  display: inline-block;\n  width: 100%;\n}\n\n#todoTitle {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n\n  font-size: 5em;\n  font-weight: 800;\n  margin: 0;\n  padding: 0;\n  color: black;\n\n  white-space: nowrap;\n}\n\n#todoForm{\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n}',
+              ],
+              sourceRoot: '',
+            },
+          ]);
         const __WEBPACK_DEFAULT_EXPORT__ = ___CSS_LOADER_EXPORT___;
       },
   },

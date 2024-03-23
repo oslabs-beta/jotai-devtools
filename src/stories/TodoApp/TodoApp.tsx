@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import type { FormEvent } from 'react';
 import { CloseOutlined } from '@ant-design/icons';
 import { a, useTransition } from '@react-spring/web';
@@ -6,7 +6,7 @@ import { Radio } from 'antd';
 import { atom, createStore, useAtom, useSetAtom } from 'jotai';
 import type { PrimitiveAtom } from 'jotai';
 import { Provider } from 'jotai/react';
-import { DevTools, DevToolsProps } from '../../../';
+import { DevTools, DevToolsProps } from '../../';
 import './todoStyles.css';
 
 type Todo = {
@@ -23,10 +23,13 @@ todosAtom.debugLabel = 'todosAtom';
 const filteredAtom = atom<PrimitiveAtom<Todo>[]>((get) => {
   const filter = get(filterAtom);
   const todos = get(todosAtom);
-  if (filter === 'all') return todos;
-  else if (filter === 'completed')
+  if (filter === 'all') {
+    return todos;
+  } else if (filter === 'completed') {
     return todos.filter((atom) => get(atom).completed);
-  else return todos.filter((atom) => !get(atom).completed);
+  } else {
+    return todos.filter((atom) => !get(atom).completed);
+  }
 });
 filteredAtom.debugLabel = 'filteredAtom';
 
@@ -107,14 +110,14 @@ const TodoList = () => {
 };
 const customStore = createStore();
 
-export default function TodoApp() {
+export const TodoApp = (props: DevToolsProps) => {
   return (
     <div style={{ height: '700px' }}>
       <Provider store={customStore}>
         <h1 id="todoTitle">Todo List</h1>
         <TodoList />
-        <DevTools store={customStore} />
+        <DevTools store={customStore} {...props} />
       </Provider>
     </div>
   );
-}
+};
