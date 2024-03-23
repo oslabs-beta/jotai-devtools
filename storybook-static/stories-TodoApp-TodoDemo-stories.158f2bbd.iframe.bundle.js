@@ -1,4 +1,4 @@
-/*! For license information please see stories-TodoApp-TodoDemo-stories.0f5780ef.iframe.bundle.js.LICENSE.txt */
+/*! For license information please see stories-TodoApp-TodoDemo-stories.158f2bbd.iframe.bundle.js.LICENSE.txt */
 'use strict';
 (self.webpackChunkjotai_devtools = self.webpackChunkjotai_devtools || []).push([
   [856],
@@ -25,6 +25,7 @@
         es_radio = __webpack_require__('./node_modules/antd/es/radio/index.js'),
         vanilla = __webpack_require__('./node_modules/jotai/esm/vanilla.mjs'),
         esm_react = __webpack_require__('./node_modules/jotai/esm/react.mjs'),
+        src = __webpack_require__('./src/index.ts'),
         injectStylesIntoStyleTag = __webpack_require__(
           './node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js',
         ),
@@ -175,11 +176,11 @@
           children: (0, jsx_runtime.jsxs)(esm_react.Kq, {
             store: customStore,
             children: [
+              (0, jsx_runtime.jsx)(src.VD, { store: customStore }),
               (0, jsx_runtime.jsx)('h1', {
                 id: 'todoTitle',
                 children: 'Todo List',
               }),
-              (0, jsx_runtime.jsx)(index_cjs.VD, { store: customStore }),
               (0, jsx_runtime.jsx)(TodoList, {}),
             ],
           }),
@@ -791,7 +792,7 @@
             );
         });
     },
-    './dist/chunk-W2G7LQXW.cjs.js': (
+    './dist/chunk-Q6XK3F23.cjs.js': (
       __unused_webpack_module,
       exports,
       __webpack_require__,
@@ -8763,7 +8764,7 @@
       exports,
       __webpack_require__,
     ) => {
-      __webpack_require__('./dist/chunk-W2G7LQXW.cjs.js');
+      __webpack_require__('./dist/chunk-Q6XK3F23.cjs.js');
       var _chunk5K6HCVT2cjsjs = __webpack_require__(
         './dist/chunk-5K6HCVT2.cjs.js',
       );
@@ -8775,6 +8776,14 @@
         _chunk5K6HCVT2cjsjs.useAtomsDevtools,
         _chunk5K6HCVT2cjsjs.useAtomsSnapshot,
         _chunk5K6HCVT2cjsjs.useGotoAtomsSnapshot;
+    },
+    './src/index.ts': (
+      __unused_webpack_module,
+      __webpack_exports__,
+      __webpack_require__,
+    ) => {
+      __webpack_require__.d(__webpack_exports__, { VD: () => DevTools });
+      const DevTools = () => null;
     },
     './node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].use[1]!./src/stories/TodoApp/todoStyles.css':
       (module, __webpack_exports__, __webpack_require__) => {
