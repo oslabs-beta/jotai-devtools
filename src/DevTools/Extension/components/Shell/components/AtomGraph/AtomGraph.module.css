@@ -1,0 +1,20 @@
+/* TO FIX: migrate container height and width to module */
+/* .ContainerAtomGraph {
+    width: '100%';
+    height: '100%'; 
+} */
+
+.AtomGraph {
+    background: var(--mantine-color-dark-1);
+    [data-mantine-color-scheme='dark'] & {
+        background: var(--mantine-color-dark-8);
+    }
+}
+
+.AtomGraphLines {
+    color: var(--mantine-color-blue-5);
+    [data-mantine-color-scheme='dark'] & {
+        background: var(--mantine-color-red-6);
+    }
+    /* color=darkMode ? '#252B37' : '#FFFFFF' */
+}

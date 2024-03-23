@@ -18,6 +18,7 @@ import { valuesAtom } from '../../../../../atoms/values-atom';
 import { useSyncSnapshotValuesToAtom } from '../../../../../hooks/useAtomsSnapshots';
 import { useDevtoolsJotaiStoreOptions } from '../../../../../internal-jotai-store';
 import { atomToPrintable } from '../../../../../utils';
+import classes from './AtomGraph.module.css';
 import CustomNode from './CustomNode';
 
 const allValues = atomWithDefault<ValuesAtomTuple[]>((get) => {
@@ -30,7 +31,6 @@ const nodeTypes = {
 };
 
 export const AtomGraph = React.memo(() => {
-  //   const darkMode = useDarkModeValue();
   useSyncSnapshotValuesToAtom();
 
   const values = useAtomValue(allValues, useDevtoolsJotaiStoreOptions());
@@ -90,12 +90,10 @@ export const AtomGraph = React.memo(() => {
   );
 
   return (
-    <div
-      //   className={darkMode ? 'dark' : ''}
-      style={{ width: '98%', height: '98%' }}
-    >
+    <div style={{ width: '100%', height: '100%' }}>
       <ReactFlow
         fitView
+        className={classes.AtomGraph}
         nodes={nodes}
         nodeTypes={nodeTypes}
         edges={edges}
@@ -103,7 +101,7 @@ export const AtomGraph = React.memo(() => {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         // style={{ backgroundColor: darkMode ? '#111724' : '#F5F5F5' }}
-        style={{ backgroundColor: '#111724' }}
+        // style={{ backgroundColor: '#111724' }}
       >
         {/* TODO: Controls are not responding to lightvsdark mode settings, need to fix  */}
         <div
@@ -114,7 +112,11 @@ export const AtomGraph = React.memo(() => {
           <Controls />
         </div>
         {/* <Background color={darkMode ? '#252B37' : '#FFFFFF'} variant="lines" /> */}
-        <Background color={'#252B37'} variant="lines" />
+        <Background
+          className={classes.AtomGraphLines}
+          //   color={'#252B37'}
+          variant="lines"
+        />
       </ReactFlow>
     </div>
   );
