@@ -70,19 +70,6 @@ const DevToolsMain = ({
           '#111724',
           '#252B37',
         ],
-        light: [
-          '#F5F5F5',
-          '#FF0000',
-          '#FF0000',
-          '#FF0000',
-          '#FF0000',
-          '#FF0000',
-          '#FF0000',
-          '#FF0000',
-          '#FF0000',
-          '#FF0000',
-          '#FF0000',
-        ],
       },
       components: {
         ShellTriggerButton: {

@@ -1,4 +1,4 @@
-/*! For license information please see stories-TodoApp-TodoDemo-stories.68d04ebf.iframe.bundle.js.LICENSE.txt */
+/*! For license information please see stories-TodoApp-TodoDemo-stories.78e2df29.iframe.bundle.js.LICENSE.txt */
 'use strict';
 (self.webpackChunkjotai_devtools = self.webpackChunkjotai_devtools || []).push([
   [856],
@@ -791,7 +791,7 @@
             );
         });
     },
-    './dist/chunk-OTSPOTIT.cjs.js': (
+    './dist/chunk-WJNC2W5L.cjs.js': (
       __unused_webpack_module,
       exports,
       __webpack_require__,
@@ -5810,8 +5810,7 @@
             ),
             values
           );
-        },
-        AtomGraph_module_default = {};
+        };
       _chunk5K6HCVT2cjsjs.init_react_shim.call(void 0);
       var CustomNode_default = _react.memo.call(
           void 0,
@@ -5903,13 +5902,13 @@
             _reactflow2.default,
             {
               fitView: !0,
-              className: AtomGraph_module_default.AtomGraph,
               nodes,
               nodeTypes,
               edges,
               onNodesChange,
               onEdgesChange,
               onConnect,
+              style: { background: useThemeMode('#F5F5F5', '#111724') },
             },
             React40.default.createElement(
               'div',
@@ -5920,8 +5919,8 @@
               React40.default.createElement(_reactflow.Controls, null),
             ),
             React40.default.createElement(_reactflow.Background, {
-              className: AtomGraph_module_default.AtomGraphLines,
-              variant: 'lines',
+              color: useThemeMode('#FFFFFF', '#252B37'),
+              variant: _reactflow.BackgroundVariant.Lines,
             }),
           ),
         );
@@ -8926,7 +8925,7 @@
       exports,
       __webpack_require__,
     ) => {
-      __webpack_require__('./dist/chunk-OTSPOTIT.cjs.js');
+      __webpack_require__('./dist/chunk-WJNC2W5L.cjs.js');
       var _chunk5K6HCVT2cjsjs = __webpack_require__(
         './dist/chunk-5K6HCVT2.cjs.js',
       );

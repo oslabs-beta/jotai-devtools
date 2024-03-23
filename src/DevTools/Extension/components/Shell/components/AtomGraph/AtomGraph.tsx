@@ -3,6 +3,7 @@ import { useAtomValue } from 'jotai/react';
 import { atomWithDefault } from 'jotai/vanilla/utils';
 import ReactFlow, {
   Background,
+  BackgroundVariant,
   Connection,
   Controls,
   Edge,
@@ -13,12 +14,11 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import 'reactflow/dist/base.css';
 import { ValuesAtomTuple } from 'src/types';
-// import { useDarkModeValue } from '../../../../../atoms/dark-mode';
+import { useThemeMode } from '../../../../../../DevTools/hooks/useThemeMode';
 import { valuesAtom } from '../../../../../atoms/values-atom';
 import { useSyncSnapshotValuesToAtom } from '../../../../../hooks/useAtomsSnapshots';
 import { useDevtoolsJotaiStoreOptions } from '../../../../../internal-jotai-store';
 import { atomToPrintable } from '../../../../../utils';
-import classes from './AtomGraph.module.css';
 import CustomNode from './CustomNode';
 
 const allValues = atomWithDefault<ValuesAtomTuple[]>((get) => {
@@ -93,15 +93,14 @@ export const AtomGraph = React.memo(() => {
     <div style={{ width: '100%', height: '100%' }}>
       <ReactFlow
         fitView
-        className={classes.AtomGraph}
+        // className={styles.AtomGraph}
         nodes={nodes}
         nodeTypes={nodeTypes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
-        // style={{ backgroundColor: darkMode ? '#111724' : '#F5F5F5' }}
-        // style={{ backgroundColor: '#111724' }}
+        style={{ background: useThemeMode('#F5F5F5', '#111724') }}
       >
         {/* TODO: Controls are not responding to lightvsdark mode settings, need to fix  */}
         <div
@@ -111,11 +110,9 @@ export const AtomGraph = React.memo(() => {
         >
           <Controls />
         </div>
-        {/* <Background color={darkMode ? '#252B37' : '#FFFFFF'} variant="lines" /> */}
         <Background
-          className={classes.AtomGraphLines}
-          //   color={'#252B37'}
-          variant="lines"
+          color={useThemeMode('#FFFFFF', '#252B37')}
+          variant={BackgroundVariant.Lines}
         />
       </ReactFlow>
     </div>
