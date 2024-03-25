@@ -6,7 +6,7 @@ import {
   useDevtoolsJotaiStoreOptions,
   useInternalStore,
 } from '../../../../../../../DevTools/internal-jotai-store';
-import { selectedAtomAtom } from '../atoms';
+import { selectedAtomAtom } from '../../atoms';
 import { useUserStore } from './../../../../../../hooks/useUserStore';
 import { isPromise, use } from './use';
 
