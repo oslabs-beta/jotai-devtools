@@ -32,8 +32,8 @@ const DevToolsMain = ({
   // Function to resolve root element to set `data-mantine-color-scheme` attribute; see MantineProviderInterface
   const getRootElement = () => {
     if (typeof window !== 'undefined') {
-      const jotaiShell = document.getElementById('jotai-extension');
-      return jotaiShell ?? undefined;
+      const jotaiExtension = document.getElementById('jotai-extension');
+      return jotaiExtension ?? undefined;
     }
     return undefined;
   };
@@ -69,19 +69,6 @@ const DevToolsMain = ({
           '#101113',
           '#111724',
           '#252B37',
-        ],
-        light: [
-          '#F5F5F5',
-          '#FF0000',
-          '#FF0000',
-          '#FF0000',
-          '#FF0000',
-          '#FF0000',
-          '#FF0000',
-          '#FF0000',
-          '#FF0000',
-          '#FF0000',
-          '#FF0000',
         ],
       },
       components: {

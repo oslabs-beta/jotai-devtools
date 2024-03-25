@@ -4,17 +4,19 @@
     height: '100%'; 
 } */
 
-.AtomGraph {
+.AtomGraph .AtomGraphLines{
     background: var(--mantine-color-dark-1);
+    color: var(--mantine-color-dark-8);
     [data-mantine-color-scheme='dark'] & {
         background: var(--mantine-color-dark-8);
-    }
+        color: var(--mantine-color-blue-5);
+  }
 }
 
-.AtomGraphLines {
+/* .AtomGraphLines {
     color: var(--mantine-color-blue-5);
     [data-mantine-color-scheme='dark'] & {
         background: var(--mantine-color-red-6);
     }
     /* color=darkMode ? '#252B37' : '#FFFFFF' */
-}
+/* } */
