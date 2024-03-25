@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import * as React from 'react';
 import { useAtomValue } from 'jotai/react';
 import { atomWithDefault } from 'jotai/vanilla/utils';
 import ReactFlow, {
@@ -19,6 +19,7 @@ import { valuesAtom } from '../../../../../../../atoms/values-atom';
 import { useSyncSnapshotValuesToAtom } from '../../../../../../../hooks/useAtomsSnapshots';
 import { useDevtoolsJotaiStoreOptions } from '../../../../../../../internal-jotai-store';
 import { atomToPrintable } from '../../../../../../../utils';
+import { selectedAtomAtom } from '../../../atoms';
 import CustomNode from './CustomNode';
 
 const allValues = atomWithDefault<ValuesAtomTuple[]>((get) => {
@@ -36,6 +37,12 @@ export const AtomGraphVisual = React.memo(() => {
   const values = useAtomValue(allValues, useDevtoolsJotaiStoreOptions());
   const valuesRef = React.useRef(values);
 
+  const selectedAtomData = useAtomValue(
+    selectedAtomAtom,
+    useDevtoolsJotaiStoreOptions(),
+  );
+  const selectedAtomDataRef = React.useRef(selectedAtomData);
+
   React.useEffect(() => {
     valuesRef.current = values;
   }, [values]);
@@ -43,26 +50,40 @@ export const AtomGraphVisual = React.memo(() => {
   type nodeObj = {
     id: string;
     type: string;
-    position: { x: number; y: number };
+    position?: { x: number; y: number };
     data: { label: string };
   };
 
   const atomNodes = (): nodeObj[] => {
     const nodesArray: nodeObj[] = [];
-    // values.map iterates through all the atoms in the application to create a node
-    values.map(([atom], i) => {
-      const atomKey = atom.toString();
-      nodesArray.push({
-        id: `atom-list-item-${atomKey + i}`,
-        type: 'custom',
-        // x and y position creates a grid layout based on index of the atom in values
-        position: {
-          x: (i % 10) * 125,
-          y: Math.floor(i / 10) * 125,
-        },
-        data: { label: atomToPrintable(atom) },
+    if (!selectedAtomData) {
+      // values.map iterates through all the atoms in the application to create a node
+      values.map(([atom], i) => {
+        const atomKey = atom.toString();
+        nodesArray.push({
+          id: `atom-list-item-${atomKey + i}`,
+          type: 'custom',
+          // x and y position creates a grid layout based on index of the atom in values
+          position: {
+            x: (i % 10) * 125,
+            y: Math.floor(i / 10) * 125,
+          },
+          data: { label: atomToPrintable(atom) },
+        });
       });
-    });
+    } else {
+      const selectedAtom = selectedAtomData.atom;
+      const atomKey = selectedAtom.toString();
+      nodesArray.push({
+        id: `atom-list-item-${atomKey}`,
+        type: 'custom',
+        position: {
+          x: 0,
+          y: 0,
+        },
+        data: { label: atomToPrintable(selectedAtom) },
+      });
+    }
     return nodesArray;
   };
 
@@ -80,11 +101,11 @@ export const AtomGraphVisual = React.memo(() => {
   const [nodes, setNodes, onNodesChange] = useNodesState(atomNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setNodes(atomNodes);
-  }, [values]);
+  }, [values, selectedAtomData]);
 
-  const onConnect = useCallback(
+  const onConnect = React.useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges],
   );
