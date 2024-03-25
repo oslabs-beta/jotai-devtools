@@ -3,7 +3,7 @@ import { Box, LoaderProps, LoadingOverlay, Text } from '@mantine/core';
 import { useAtomValue } from 'jotai/react';
 import { useThemeMode } from '../../../../../../../hooks/useThemeMode';
 import { useDevtoolsJotaiStoreOptions } from '../../../../../../../internal-jotai-store';
-import { selectedAtomAtom } from '../../atoms';
+import { selectedAtomAtom } from '../../../atoms';
 import classes from './AtomDetail.module.css';
 import { DisplayAtomDetails } from './components/DisplayAtomDetails';
 

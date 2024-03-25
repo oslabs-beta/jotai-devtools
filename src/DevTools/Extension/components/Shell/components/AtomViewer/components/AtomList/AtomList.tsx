@@ -10,7 +10,7 @@ import {
   filteredValuesAtom,
   searchInputAtom,
   selectedAtomAtom,
-} from '../../atoms';
+} from '../../../atoms';
 import classes from './AtomList.module.css';
 
 const SearchAtoms = React.memo(() => {
