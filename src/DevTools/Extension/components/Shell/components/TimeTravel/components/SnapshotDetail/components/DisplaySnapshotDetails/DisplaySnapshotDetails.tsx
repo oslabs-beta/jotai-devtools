@@ -11,7 +11,7 @@ type DisplaySnapshotDetailsProps = {
 
 export const DisplaySnapshotDetails = (props: DisplaySnapshotDetailsProps) => {
   return (
-    <Stack h="auto" pb="sm">
+    <Stack h="auto" pb="sm" c="#fff">
       <Title size="h3">Snapshot {props.details.label}</Title>
       <SnapshotMetaDetails timestamp={props.details.timestamp} />
       <SnapshotValue state={props.details} />

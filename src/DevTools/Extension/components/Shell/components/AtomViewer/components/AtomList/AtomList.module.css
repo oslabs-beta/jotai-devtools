@@ -3,4 +3,4 @@
     top: 0;
 }
 
-.atomItemsWrapper { overflow: auto; }
+.atomItemsWrapper { overflow: auto; font-size: 1px; }

@@ -19,7 +19,7 @@ export const DisplayAtomDetails = ({ atom }: DisplayAtomDetailsProps) => {
   const atomValueType = getTypeOfAtomValue(atomValue);
 
   return (
-    <Stack h="auto">
+    <Stack h="auto" c="#fff">
       <Title size="h3">Atom Details</Title>
       <AtomMetaDetails
         debugLabel={atomToPrintable(atom)}

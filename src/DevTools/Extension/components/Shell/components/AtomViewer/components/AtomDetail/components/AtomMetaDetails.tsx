@@ -17,7 +17,7 @@ export const AtomMetaDetails = React.memo(
   }: AtomMetaDetailsProps): JSX.Element => {
     return (
       <Box>
-        <Text fw="bold" mb={10}>
+        <Text fw="bold" mb={10} c="#fff">
           Meta
         </Text>
         <MetaInfo label="Debug Label" value={debugLabel} />

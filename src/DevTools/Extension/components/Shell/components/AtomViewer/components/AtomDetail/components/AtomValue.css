@@ -1,0 +1,12 @@
+.RawValue[data-active="true"] {
+    color: #fff;
+  }
+.RawValue{
+    color: #C1C2C5
+  }
+.TreeView[data-active="true"] {
+    color: #fff;
+  }
+.TreeView {
+    color: #C1C2C5;
+  }

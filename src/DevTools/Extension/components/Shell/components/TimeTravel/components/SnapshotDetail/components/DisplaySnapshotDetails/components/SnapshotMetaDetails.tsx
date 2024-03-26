@@ -9,7 +9,7 @@ type SnapshotMetaDetailsProps = {
 export const SnapshotMetaDetails = (props: SnapshotMetaDetailsProps) => {
   return (
     <Box>
-      <Title size="h5" mb={10}>
+      <Title size="h5" mb={10} c="#fff">
         Meta
       </Title>
       <MetaInfo label="Timestamp" value={props.timestamp} />

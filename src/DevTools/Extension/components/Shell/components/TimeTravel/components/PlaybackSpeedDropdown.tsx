@@ -1,6 +1,7 @@
 import React from 'react';
 import { Select } from '@mantine/core';
 import { defaultPlaybackOptions, usePlaybackSpeedOption } from '../atoms';
+import './PlaybackSpeedDropdown.css';
 
 const options = Object.keys(
   defaultPlaybackOptions,
@@ -38,6 +39,7 @@ export const PlaybackSpeedDropdown = () => {
       id="jotai-devtools-playback-speed-dropdown"
       data-testid="jotai-devtools-playback-speed-dropdown"
       comboboxProps={{ position: 'top' }}
+      className="menu"
     />
   );
 };

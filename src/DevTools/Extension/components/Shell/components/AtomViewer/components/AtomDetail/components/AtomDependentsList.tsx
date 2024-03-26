@@ -39,7 +39,7 @@ export const AtomDependentsList = ({
 
   return (
     <Box>
-      <Text component="div" fw="bold" mb={10} mt={20}>
+      <Text component="div" fw="bold" mb={10} mt={20} c="#fff">
         Dependents
       </Text>
       {listOfDependents.length ? (
@@ -47,7 +47,7 @@ export const AtomDependentsList = ({
           {listOfDependents}
         </List>
       ) : (
-        <Text component="div" size="sm" mb={10}>
+        <Text component="div" size="sm" mb={10} c="#fff">
           No dependents
         </Text>
       )}
