@@ -21,7 +21,12 @@ export const Header = React.memo(() => {
           <Title size="h4" className={classes.logo}>
             👻&nbsp;Jōtai DevTools
           </Title>
-          <Badge color="orange" variant="light" size="xs">
+          <Badge
+            color="orange"
+            variant="light"
+            size="xs"
+            className={classes.badge}
+          >
             Alpha
           </Badge>
         </Group>

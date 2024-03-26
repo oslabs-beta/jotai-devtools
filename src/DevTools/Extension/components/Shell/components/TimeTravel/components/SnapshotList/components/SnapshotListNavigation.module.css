@@ -1,0 +1,5 @@
+.navBtn:disabled{
+    [data-mantine-color-scheme='dark'] & {
+      background-color: #373A40;
+    }
+  }

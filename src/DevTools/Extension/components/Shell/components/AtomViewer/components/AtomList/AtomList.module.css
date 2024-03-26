@@ -1,6 +1,9 @@
 .text {
-    position: sticky;
-    top: 0;
+  position: sticky;
+  top: 0;
 }
 
-.atomItemsWrapper { overflow: auto; font-size: 1px; }
+.atomItemsWrapper {
+  overflow: auto;
+  font-size: 1px;
+}

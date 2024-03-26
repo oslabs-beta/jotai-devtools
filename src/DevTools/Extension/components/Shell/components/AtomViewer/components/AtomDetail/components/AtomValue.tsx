@@ -41,7 +41,12 @@ export const AtomValue = ({
   if (parsedValue === ErrorSymbol) {
     return (
       <Box>
-        <Text component="span" fw="bold" mb="sm">
+        <Text
+          component="span"
+          fw="bold"
+          mb="sm"
+          className={classes.RawValueText}
+        >
           Raw value
         </Text>
         <ErrorMessage message="Failed to parse the value of the atom" />
@@ -55,7 +60,12 @@ export const AtomValue = ({
   if (!isJsonTreeCompatible) {
     return (
       <Box>
-        <Text component="div" fw="bold" mb="sm">
+        <Text
+          component="div"
+          fw="bold"
+          mb="sm"
+          className={classes.RawValueText}
+        >
           Raw value
         </Text>
         <MemoizedValueRenderer value={parsedValue} />

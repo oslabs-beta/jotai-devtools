@@ -1,12 +1,30 @@
-.jotai-devtools-Select-option{
-    color: black;
-    [data-mantine-color-scheme='dark'] & {
-        color: #fff;
-    }
+.jotai-devtools-Select-option {
+  color: black;
+  [data-mantine-color-scheme='dark'] & {
+    color: #fff;
+  }
 }
-.jotai-devtools-Input-input{
-    color: black;
-    [data-mantine-color-scheme='dark'] & {
-        color: #fff;
-    }
+
+.jotai-devtools-Input-input {
+  color: black;
+  [data-mantine-color-scheme='dark'] & {
+    color: #fff;
+  }
+}
+
+.jotai-devtools-Select-option[data-checked]{
+  background-color: black;
+  color: #fff;
+  [data-mantine-color-scheme='dark'] & {
+    background-color: #141516;
+    color: #fff;
+  }
+}
+.jotai-devtools-Select-option:hover[data-checked]{
+  background-color: black;
+  color: #fff;
+  [data-mantine-color-scheme='dark'] & {
+    background-color: #111214;
+    color: #fff;
+  }
 }

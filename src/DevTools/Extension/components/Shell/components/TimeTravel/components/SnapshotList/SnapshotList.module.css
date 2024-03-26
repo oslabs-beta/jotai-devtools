@@ -1,7 +1,7 @@
 .snapshotHistoryListWrapper {
-    overflow: auto;
-    margin-top: 10px;
-    [data-mantine-color-scheme='dark'] & {
-        color: #fff
-    }
+  overflow: auto;
+  margin-top: 10px;
+  [data-mantine-color-scheme='dark'] & {
+    color: #fff;
+  }
 }

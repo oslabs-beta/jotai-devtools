@@ -1,6 +1,6 @@
-.metaText{
-    color:black;
-      [data-mantine-color-scheme='dark'] & {
-        color: #fff;
-    }
+.metaText {
+  color: black;
+  [data-mantine-color-scheme='dark'] & {
+    color: #fff;
   }
+}

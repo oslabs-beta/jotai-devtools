@@ -36,6 +36,7 @@ export const PlayBar = () => {
         disabled={isDisabled}
         onClick={onTimeTravelToggle}
         title={isTimeTraveling ? 'Pause time travel' : 'Start time travel'}
+        className={classes.navBtn}
       >
         {isTimeTraveling ? (
           <IconPlayerPauseFilled size={16} />
@@ -66,6 +67,7 @@ export const PlayBar = () => {
           title="Restore previous snapshot"
           disabled={isDisabled || isTimeTraveling || !prev.isPossible}
           onClick={prev.onClick}
+          className={classes.navBtn}
         >
           <IconChevronLeft size={16} />
         </ActionIcon>
@@ -76,6 +78,7 @@ export const PlayBar = () => {
           title="Restore next snapshot"
           disabled={isDisabled || isTimeTraveling || !next.isPossible}
           onClick={next.onClick}
+          className={classes.navBtn}
         >
           <IconChevronRight size={16} />
         </ActionIcon>
