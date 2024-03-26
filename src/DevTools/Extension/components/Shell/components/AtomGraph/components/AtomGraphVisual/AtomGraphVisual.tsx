@@ -18,8 +18,8 @@ import { useThemeMode } from '../../../../../../../../DevTools/hooks/useThemeMod
 import { valuesAtom } from '../../../../../../../atoms/values-atom';
 import { useSyncSnapshotValuesToAtom } from '../../../../../../../hooks/useAtomsSnapshots';
 import { useDevtoolsJotaiStoreOptions } from '../../../../../../../internal-jotai-store';
-import { atomToPrintable } from '../../../../../../../utils';
 import { selectedAtomAtom } from '../../../atoms';
+import { useCreateAtomNodes } from '../../hooks/createAtomNodes';
 import CustomNode from './CustomNode';
 
 const allValues = atomWithDefault<ValuesAtomTuple[]>((get) => {
@@ -41,74 +41,28 @@ export const AtomGraphVisual = React.memo(() => {
     selectedAtomAtom,
     useDevtoolsJotaiStoreOptions(),
   );
-  const selectedAtomDataRef = React.useRef(selectedAtomData);
+  //Is this needed?
+  // const selectedAtomDataRef = React.useRef(selectedAtomData);
 
   React.useEffect(() => {
     valuesRef.current = values;
   }, [values]);
 
-  type nodeObj = {
-    id: string;
-    type: string;
-    position?: { x: number; y: number };
-    data: { label: string };
-  };
-
-  const atomNodes = (): nodeObj[] => {
-    const nodesArray: nodeObj[] = [];
-    if (!selectedAtomData) {
-      // values.map iterates through all the atoms in the application to create a node
-      values.map(([atom], i) => {
-        const atomKey = atom.toString();
-        nodesArray.push({
-          id: `atom-list-item-${atomKey + i}`,
-          type: 'custom',
-          // x and y position creates a grid layout based on index of the atom in values
-          position: {
-            x: (i % 10) * 125,
-            y: Math.floor(i / 10) * 125,
-          },
-          data: { label: atomToPrintable(atom) },
-        });
-      });
-    } else {
-      const selectedAtom = selectedAtomData.atom;
-      const atomKey = selectedAtom.toString();
-      nodesArray.push({
-        id: `atom-list-item-${atomKey}`,
-        type: 'custom',
-        position: {
-          x: 0,
-          y: 0,
-        },
-        data: { label: atomToPrintable(selectedAtom) },
-      });
-    }
-    return nodesArray;
-  };
-
-  type edgeObj = {
-    id: string;
-    source: string;
-    target: string;
-  };
-
-  const initialEdges: Edge<edgeObj>[] = [
-    // { id: 'e1-2', source: '1', target: '2' },
-    // { id: 'el1-3', source:'1', target: '3'}
-  ];
+  const atomNodes = useCreateAtomNodes(selectedAtomData, values);
 
   const [nodes, setNodes, onNodesChange] = useNodesState(atomNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  // const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   React.useEffect(() => {
     setNodes(atomNodes);
   }, [values, selectedAtomData]);
 
-  const onConnect = React.useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges],
-  );
+  // const onConnect = React.useCallback(
+  //   (params) => setEdges((eds) => addEdge(params, eds)),
+  //   [setEdges],
+  // );
+
+  // const proOptions = { hideAttribution: true }; //Arjun tbd
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
@@ -117,23 +71,30 @@ export const AtomGraphVisual = React.memo(() => {
         // className={styles.AtomGraph}
         nodes={nodes}
         nodeTypes={nodeTypes}
-        edges={edges}
+        // edges={edges}
         onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        style={{ background: useThemeMode('#F5F5F5', '#111724') }}
+        // onEdgesChange={onEdgesChange}
+        // onConnect={onConnect}
+        // mantine gray 2 for light, dark 8 for dark
+        style={{ background: useThemeMode('#E9ECEF', '#1F1F1F') }}
+        minZoom={0.15}
+        maxZoom={1.0}
+        draggable={false}
       >
+        {/*proOptions={proOptions}  Arjun tbd */}
         {/* TODO: Controls are not responding to lightvsdark mode settings, need to fix  */}
         <div
           //   style={{ backgroundColor: darkMode ? '#C0C2C9' : '#F5F5F5' }}
           style={{ backgroundColor: '#C0C2C9' }}
           className="dark:bg-slate-900"
         >
-          <Controls />
+          <Controls showInteractive={false} />
         </div>
         <Background
-          color={useThemeMode('#FFFFFF', '#252B37')}
-          variant={BackgroundVariant.Lines}
+          color={useThemeMode('#CED4DA', '#424242')}
+          variant={BackgroundVariant.Dots}
+          gap={15}
+          size={2}
         />
       </ReactFlow>
     </div>

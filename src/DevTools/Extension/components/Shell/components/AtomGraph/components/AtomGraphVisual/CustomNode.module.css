@@ -1,0 +1,27 @@
+.CustomNode {
+    font-size: 1em;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis ellipsis;
+    word-break: break-all;
+    /* white-space: nowrap; */
+    border: 1px solid black;
+    border-radius: 6px;
+    block-size: fit-content;
+    /* width: 12em; */
+    /* max-height: 3em; */
+    /* height: 3em; */
+    padding: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--mantine-color-gray-8);
+    background: var(--mantine-color-gray-0);
+
+    /* background: var(--mantine-color-gray-6); */
+    [data-mantine-color-scheme='dark'] & {
+        color: var(--mantine-color-gray-8);
+        background: var(--mantine-color-gray-2);
+    } 
+  
+}
