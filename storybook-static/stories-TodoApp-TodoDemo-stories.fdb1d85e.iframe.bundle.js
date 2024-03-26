@@ -1,4 +1,4 @@
-/*! For license information please see stories-TodoApp-TodoDemo-stories.fd75ae28.iframe.bundle.js.LICENSE.txt */
+/*! For license information please see stories-TodoApp-TodoDemo-stories.fdb1d85e.iframe.bundle.js.LICENSE.txt */
 'use strict';
 (self.webpackChunkjotai_devtools = self.webpackChunkjotai_devtools || []).push([
   [856],
@@ -854,7 +854,7 @@
             );
         });
     },
-    './dist/chunk-SMRVKSUI.cjs.js': (
+    './dist/chunk-FA7E3GUA.cjs.js': (
       __unused_webpack_module,
       exports,
       __webpack_require__,
@@ -6494,6 +6494,7 @@
       __webpack_require__('./node_modules/reactflow/dist/style.css'),
         __webpack_require__('./node_modules/reactflow/dist/base.css'),
         _chunk5K6HCVT2cjsjs.init_react_shim.call(void 0);
+      _chunk5K6HCVT2cjsjs.init_react_shim.call(void 0);
       var CustomNode_default = _react.memo.call(
           void 0,
           function CustomNode({ data }) {
@@ -6543,22 +6544,22 @@
               selectedAtomAtom,
               useDevtoolsJotaiStoreOptions(),
             );
-          React6.useRef(selectedAtomData);
           React6.useEffect(() => {
             valuesRef.current = values;
           }, [values]);
-          const atomNodes = React6.useMemo(() => {
+          const atomNodes = ((selectedAtom, allAtoms) => {
               const nodesArray = [];
-              if (selectedAtomData) {
-                const selectedAtom = selectedAtomData.atom,
-                  atomKey = selectedAtom.toString();
+              if (selectedAtom) {
+                const atom8 = selectedAtom.atom,
+                  atomKey = atom8.toString();
                 nodesArray.push({
                   id: `atom-list-item-${atomKey}`,
                   type: 'custom',
-                  data: { label: atomToPrintable(selectedAtom) },
+                  position: { x: 0, y: 0 },
+                  data: { label: atomToPrintable(atom8) },
                 });
               } else
-                values.map(([atom8], i) => {
+                allAtoms.map((atom8, i) => {
                   const atomKey = atom8.toString();
                   nodesArray.push({
                     id: `atom-list-item-${atomKey + i}`,
@@ -6571,51 +6572,41 @@
                   });
                 });
               return nodesArray;
-            }, [selectedAtomData, values]),
+            })(selectedAtomData, values),
             [nodes, setNodes, onNodesChange] = _reactflow.useNodesState.call(
               void 0,
               atomNodes,
-            ),
-            [edges, setEdges, onEdgesChange] = _reactflow.useEdgesState.call(
-              void 0,
-              [],
             );
-          React6.useEffect(() => {
-            setNodes(atomNodes);
-          }, [values]);
-          const onConnect = React6.useCallback(
-            (params) =>
-              setEdges((eds) => _reactflow.addEdge.call(void 0, params, eds)),
-            [setEdges],
-          );
-          return React6.createElement(
-            'div',
-            { style: { width: '100%', height: '100%' } },
+          return (
+            React6.useEffect(() => {
+              setNodes(atomNodes);
+            }, [values, selectedAtomData]),
             React6.createElement(
-              _reactflow2.default,
-              {
-                fitView: !0,
-                nodes,
-                nodeTypes,
-                edges,
-                onNodesChange,
-                onEdgesChange,
-                onConnect,
-                style: { background: useThemeMode('#F5F5F5', '#111724') },
-              },
+              'div',
+              { style: { width: '100%', height: '100%' } },
               React6.createElement(
-                'div',
+                _reactflow2.default,
                 {
-                  style: { backgroundColor: '#C0C2C9' },
-                  className: 'dark:bg-slate-900',
+                  fitView: !0,
+                  nodes,
+                  nodeTypes,
+                  onNodesChange,
+                  style: { background: useThemeMode('#F5F5F5', '#111724') },
                 },
-                React6.createElement(_reactflow.Controls, null),
+                React6.createElement(
+                  'div',
+                  {
+                    style: { backgroundColor: '#C0C2C9' },
+                    className: 'dark:bg-slate-900',
+                  },
+                  React6.createElement(_reactflow.Controls, null),
+                ),
+                React6.createElement(_reactflow.Background, {
+                  color: useThemeMode('#FFFFFF', '#252B37'),
+                  variant: _reactflow.BackgroundVariant.Lines,
+                }),
               ),
-              React6.createElement(_reactflow.Background, {
-                color: useThemeMode('#FFFFFF', '#252B37'),
-                variant: _reactflow.BackgroundVariant.Lines,
-              }),
-            ),
+            )
           );
         });
       React42.default.memo(() =>
@@ -9169,7 +9160,7 @@
       exports,
       __webpack_require__,
     ) => {
-      __webpack_require__('./dist/chunk-SMRVKSUI.cjs.js');
+      __webpack_require__('./dist/chunk-FA7E3GUA.cjs.js');
       var _chunk5K6HCVT2cjsjs = __webpack_require__(
         './dist/chunk-5K6HCVT2.cjs.js',
       );

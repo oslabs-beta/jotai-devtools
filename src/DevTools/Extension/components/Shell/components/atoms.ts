@@ -4,7 +4,7 @@ import { AnyAtom, ValuesAtomTuple } from 'src/types';
 import { valuesAtom } from '../../../../atoms/values-atom';
 import { filterAtomsByString } from './AtomViewer/utils/filter-atoms-by-string';
 
-type SelectedAtomAtomData = { atomKey: string; atom: AnyAtom };
+export type SelectedAtomAtomData = { atomKey: string; atom: AnyAtom };
 
 export const selectedAtomAtom = atom<SelectedAtomAtomData | undefined>(
   undefined,
