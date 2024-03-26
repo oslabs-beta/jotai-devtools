@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Box, Group, Text, TextInput } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
+import { Button } from 'antd';
 import { useAtom, useAtomValue } from 'jotai/react';
 import { useSyncSnapshotValuesToAtom } from '../../../../../../../hooks/useAtomsSnapshots';
 import { useDevtoolsJotaiStoreOptions } from '../../../../../../../internal-jotai-store';
@@ -61,6 +62,10 @@ export const AtomGraphList = () => {
     valuesRef.current = values;
   }, [values]);
 
+  const handleOnClickReset = React.useCallback(() => {
+    setSelectedAtomAtom(undefined);
+  }, [setSelectedAtomAtom]);
+
   const handleOnClick = React.useCallback(
     (pos: string | number) => {
       if (typeof pos === 'string') {
@@ -109,6 +114,12 @@ export const AtomGraphList = () => {
   return (
     <>
       <SearchAtoms />
+      <ActionListItem
+        label="All"
+        onClick={handleOnClickReset}
+        id={'All'}
+        isActive={!selectedAtomData?.atomKey}
+      />
       <Box className={classes.atomItemsWrapper}>{atomItems}</Box>
       {noResultsFound && (
         <Group mt={20} justify="center">

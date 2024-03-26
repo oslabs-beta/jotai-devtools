@@ -70,6 +70,7 @@ export const AtomGraphVisual = React.memo(() => {
         fitView
         // className={styles.AtomGraph}
         nodes={nodes}
+        nodesDraggable={false}
         nodeTypes={nodeTypes}
         // edges={edges}
         onNodesChange={onNodesChange}
