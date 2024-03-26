@@ -62,6 +62,8 @@ export const AtomGraphVisual = React.memo(() => {
   //   [setEdges],
   // );
 
+  // const proOptions = { hideAttribution: true }; //Arjun tbd
+
   return (
     <div style={{ width: '100%', height: '100%' }}>
       <ReactFlow
@@ -73,19 +75,26 @@ export const AtomGraphVisual = React.memo(() => {
         onNodesChange={onNodesChange}
         // onEdgesChange={onEdgesChange}
         // onConnect={onConnect}
-        style={{ background: useThemeMode('#F5F5F5', '#111724') }}
+        // mantine gray 2 for light, dark 8 for dark
+        style={{ background: useThemeMode('#E9ECEF', '#1F1F1F') }}
+        minZoom={0.15}
+        maxZoom={1.0}
+        draggable={false}
       >
+        {/*proOptions={proOptions}  Arjun tbd */}
         {/* TODO: Controls are not responding to lightvsdark mode settings, need to fix  */}
         <div
           //   style={{ backgroundColor: darkMode ? '#C0C2C9' : '#F5F5F5' }}
           style={{ backgroundColor: '#C0C2C9' }}
           className="dark:bg-slate-900"
         >
-          <Controls />
+          <Controls showInteractive={false} />
         </div>
         <Background
-          color={useThemeMode('#FFFFFF', '#252B37')}
-          variant={BackgroundVariant.Lines}
+          color={useThemeMode('#CED4DA', '#424242')}
+          variant={BackgroundVariant.Dots}
+          gap={15}
+          size={2}
         />
       </ReactFlow>
     </div>
