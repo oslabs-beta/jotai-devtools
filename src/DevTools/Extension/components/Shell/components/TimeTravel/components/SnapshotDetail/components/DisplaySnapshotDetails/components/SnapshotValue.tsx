@@ -8,7 +8,7 @@ import {
   snapshotValueViewer,
   useSnapshotValueViewer,
 } from '../atoms';
-import './SnapshotValue.css';
+import classes from './SnapshotValue.module.css';
 import { TreeView } from './TreeView';
 
 type SnapshotValueProps = {
@@ -29,7 +29,7 @@ export const SnapshotValue = (props: SnapshotValueProps): JSX.Element => {
   );
   return (
     <Box>
-      <Title size="h5" mb={10} c="#fff">
+      <Title size="h5" mb={10} className={classes.valueText}>
         Value
       </Title>
 
@@ -42,14 +42,14 @@ export const SnapshotValue = (props: SnapshotValueProps): JSX.Element => {
       >
         <Tabs.List>
           <Tabs.Tab
-            className="tab"
+            className={classes.stateText}
             value="state"
             leftSection={<IconFileCode size="0.9rem" stroke="1.75" />}
           >
             State
           </Tabs.Tab>
           <Tabs.Tab
-            className="tab2"
+            className={classes.diffText}
             value="diff"
             leftSection={<IconFileDiff size="0.9rem" stroke="1.75" />}
           >

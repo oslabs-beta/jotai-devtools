@@ -1,0 +1,25 @@
+.stateText[data-active='true'] {
+  [data-mantine-color-scheme='dark'] & {
+    color: #fff;
+  }
+}
+.stateText {
+  [data-mantine-color-scheme='dark'] & {
+    color: #c1c2c5;
+  }
+}
+.diffText[data-active='true'] {
+  [data-mantine-color-scheme='dark'] & {
+    color: #fff;
+  }
+}
+.diffText {
+  [data-mantine-color-scheme='dark'] & {
+    color: #c1c2c5;
+  }
+}
+.valueText {
+  [data-mantine-color-scheme='dark'] & {
+    color: #fff;
+  }
+}

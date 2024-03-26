@@ -9,6 +9,7 @@ import { useInternalAtomValue } from '../../../hooks/useInternalAtomValue';
 import { AtomDependentsList } from './AtomDependentsList';
 import { AtomMetaDetails } from './AtomMetaDetails';
 import { AtomValue } from './AtomValue';
+import classes from './DisplayAtomDetails.module.css';
 
 type DisplayAtomDetailsProps = {
   atom: AnyAtom;
@@ -19,8 +20,10 @@ export const DisplayAtomDetails = ({ atom }: DisplayAtomDetailsProps) => {
   const atomValueType = getTypeOfAtomValue(atomValue);
 
   return (
-    <Stack h="auto" c="#fff">
-      <Title size="h3">Atom Details</Title>
+    <Stack h="auto">
+      <Title size="h3" className={classes.atomDetailsText}>
+        Atom Details
+      </Title>
       <AtomMetaDetails
         debugLabel={atomToPrintable(atom)}
         atomValueType={atomValueType}

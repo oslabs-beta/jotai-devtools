@@ -1,0 +1,6 @@
+.metaText {
+    [data-mantine-color-scheme='dark'] & {
+      color: #fff;
+    }
+  }
+  

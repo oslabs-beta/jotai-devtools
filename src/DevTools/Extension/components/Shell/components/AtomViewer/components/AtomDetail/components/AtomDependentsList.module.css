@@ -1,0 +1,6 @@
+.dependentsText{
+    color:black;
+      [data-mantine-color-scheme='dark'] & {
+        color: #fff;
+    }
+  }

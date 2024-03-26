@@ -1,0 +1,5 @@
+.snapshotText {
+  [data-mantine-color-scheme='dark'] & {
+    color: #fff;
+  }
+}

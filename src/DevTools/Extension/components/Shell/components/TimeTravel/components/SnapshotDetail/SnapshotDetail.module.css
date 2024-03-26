@@ -2,5 +2,7 @@
     position: relative;
     top: 50%;
     transform: translateY(-50%);
-    color: #fff;
+    [data-mantine-color-scheme='dark'] & {
+        color: #fff
+    }
 }

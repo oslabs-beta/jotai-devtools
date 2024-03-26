@@ -6,6 +6,7 @@ import { AtomsSnapshot } from '../../../../../../../../../../../types';
 import { useGotoAtomsSnapshot } from '../../../../../../../../../../../utils';
 import { useUserStoreOptions } from '../../../../../../../../../../hooks/useUserStore';
 import { useIsTimeTravelingValue } from '../../../../../atoms';
+import classes from './SnapshotActions.module.css';
 
 const commonStyles: ButtonProps['styles'] = {
   section: {
@@ -43,13 +44,14 @@ export const SnapshotActions = (props: SnapshotActionsProps) => {
 
   return (
     <Box>
-      <Title size="h5" mb={10}>
+      <Title size="h5" mb={10} className={classes.actionText}>
         Actions
       </Title>
       <Button
         title="Restore this state"
         onClick={handleOnRestoreClick}
         variant="default"
+        className={classes.restoreBtn}
         styles={justRestored ? commonStyles : rotateButtonStyles}
         leftSection={
           justRestored ? (

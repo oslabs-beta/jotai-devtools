@@ -39,7 +39,6 @@ export const PlaybackSpeedDropdown = () => {
       id="jotai-devtools-playback-speed-dropdown"
       data-testid="jotai-devtools-playback-speed-dropdown"
       comboboxProps={{ position: 'top' }}
-      className="menu"
     />
   );
 };

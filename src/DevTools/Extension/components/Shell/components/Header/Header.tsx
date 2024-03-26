@@ -36,7 +36,7 @@ export const Header = React.memo(() => {
             color={themedColor}
             onClick={() => setIsShellOpen(false)}
           >
-            <IconMinus size={16} color="#fff" />
+            <IconMinus size={16} className={classes.minimize} />
           </ActionIcon>
         </Flex>
       </Flex>

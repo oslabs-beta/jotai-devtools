@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Box, Text } from '@mantine/core';
 import { AtomValueType } from '../../../../../../../../utils/get-type-of-atom-value';
 import { MetaInfo } from '../../../../MetaInfo';
+import classes from './AtomMetaDetails.module.css';
 
 type AtomMetaDetailsProps = {
   debugLabel: string;
@@ -17,7 +18,7 @@ export const AtomMetaDetails = React.memo(
   }: AtomMetaDetailsProps): JSX.Element => {
     return (
       <Box>
-        <Text fw="bold" mb={10} c="#fff">
+        <Text fw="bold" mb={10} className={classes.metaText}>
           Meta
         </Text>
         <MetaInfo label="Debug Label" value={debugLabel} />

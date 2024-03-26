@@ -1,0 +1,30 @@
+.RawValue[data-active="true"] {
+  color:black;
+    [data-mantine-color-scheme='dark'] & {
+      color: #fff;
+  }
+}
+.RawValue{
+  color:black;
+    [data-mantine-color-scheme='dark'] & {
+      color: #C1C2C5;
+  }
+}
+.TreeView[data-active="true"] {
+  color:black;
+    [data-mantine-color-scheme='dark'] & {
+      color: #fff;
+  }
+}
+.TreeView {
+  color:black;
+    [data-mantine-color-scheme='dark'] & {
+      color: #C1C2C5;
+  }
+}
+.valueText{
+  color:black;
+    [data-mantine-color-scheme='dark'] & {
+      color: #fff;
+  }
+}

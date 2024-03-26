@@ -10,8 +10,8 @@ import {
 import { ErrorMessage } from '../../../../ErrorMessage';
 import { JSONTree } from '../../../../JSONTree';
 import { AtomValueViewer, useAtomValueViewer } from '../atoms';
+import classes from './AtomValue.module.css';
 import { MemoizedValueRenderer } from './MemoizedValueRenderer';
-import './AtomValue.css';
 
 type AtomParseRawValueValueProps = {
   atomValue: AnyAtomValue;
@@ -65,7 +65,7 @@ export const AtomValue = ({
 
   return (
     <Box>
-      <Text component="span" fw="bold" mb="sm" c="#fff">
+      <Text component="span" fw="bold" mb="sm" className={classes.valueText}>
         Value
       </Text>
       <Tabs
@@ -77,14 +77,14 @@ export const AtomValue = ({
       >
         <Tabs.List>
           <Tabs.Tab
-            className="RawValue"
+            className={classes.RawValue}
             value="raw-value"
             leftSection={<IconSourceCode size="0.9rem" stroke="1.75" />}
           >
             Raw value
           </Tabs.Tab>
           <Tabs.Tab
-            className="TreeView"
+            className={classes.TreeView}
             value="json-tree"
             leftSection={<IconBinaryTree2 size="0.9rem" stroke="1.75" />}
           >

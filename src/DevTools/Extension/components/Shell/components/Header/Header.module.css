@@ -3,9 +3,17 @@
     top: 0;
     z-index: 1;
     width: 100%;
-    color: #fff;
+    [data-mantine-color-scheme='dark'] & {
+        color: #fff
+    }
 }
 
 .logo { 
     user-select: none;
+}
+
+.minimize{
+    [data-mantine-color-scheme='dark'] & {
+        color: #fff
+    }
 }

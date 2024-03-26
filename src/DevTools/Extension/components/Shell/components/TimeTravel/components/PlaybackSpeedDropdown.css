@@ -1,6 +1,12 @@
 .jotai-devtools-Select-option{
-    color: #fff !important;
+    color: black;
+    [data-mantine-color-scheme='dark'] & {
+        color: #fff;
+    }
 }
 .jotai-devtools-Input-input{
-    color: #fff !important;
+    color: black;
+    [data-mantine-color-scheme='dark'] & {
+        color: #fff;
+    }
 }
