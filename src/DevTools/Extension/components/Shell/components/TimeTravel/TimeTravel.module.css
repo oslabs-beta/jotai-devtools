@@ -15,7 +15,9 @@
     height: calc(100% - 56px) !important; 
 }
 
-h1, h3, h5{
+.panel h1, 
+.panel h3, 
+.panel h5{
     display: flex;
     text-align: center;
     justify-content: center;

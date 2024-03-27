@@ -5,7 +5,13 @@
       background-color: #25262b;
     }
   }
-  
+  .jotai-devtools-Select-option:hover{
+    color: black;
+    [data-mantine-color-scheme='dark'] & {
+      color: #fff;
+      background-color: #353a3f;
+    }
+  }
   .jotai-devtools-Input-input {
     color: black;
     [data-mantine-color-scheme='dark'] & {

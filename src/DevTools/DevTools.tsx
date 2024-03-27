@@ -86,6 +86,7 @@ const DevToolsMain = ({
         defaultColorScheme={defaultColorScheme}
         getRootElement={getRootElement}
         classNamesPrefix="jotai-devtools"
+        deduplicateCssVariables={true}
       >
         <Extension store={store} isInitialOpen={isInitialOpen} />
       </MantineProvider>
