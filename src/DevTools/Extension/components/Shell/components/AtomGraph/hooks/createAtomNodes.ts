@@ -38,7 +38,7 @@ export const useCreateAtomNodes = (
 
   // Set the node spacing
   dagreGraph.setGraph({
-    rankdir: 'LR',
+    rankdir: 'TB',
     nodesep: 100, // horiz spacing between nodes
     ranksep: 100, // vert spacing between nodes
   });
@@ -125,8 +125,6 @@ export const useCreateAtomNodes = (
 //     const filteredCurrentAtom = arr.filter(
 //       (a) => a.toString() !== atom.toString(),
 //     );
-//     console.log('dependents arr', arr);
-//     console.log('filteredCurrentAtom', filteredCurrentAtom);
 
 //     return filteredCurrentAtom;
 //   }, [dependents, atom]);

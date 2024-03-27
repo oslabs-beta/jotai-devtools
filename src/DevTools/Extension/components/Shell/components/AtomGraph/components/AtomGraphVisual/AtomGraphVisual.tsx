@@ -69,7 +69,6 @@ export const AtomGraphVisual = React.memo(() => {
   const [nodes, setNodes, onNodesChange] = useNodesState(atomNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(atomEdges);
 
-  // console.log('nodes', nodes);
   // const reactFlowInstance = useReactFlow();
 
   // useFocusNode(nodes, reactFlowInstance);

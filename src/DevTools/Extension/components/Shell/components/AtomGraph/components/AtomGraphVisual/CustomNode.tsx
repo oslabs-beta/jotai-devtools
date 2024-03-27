@@ -21,8 +21,16 @@ function CustomNode({ data }: CustomNodeProps) {
   return (
     <div>
       <div className={classes.CustomNode}>{data.label}</div>
-      {/* <Handle type="target" position={Position.Top} className="w-16 !bg-teal-500" />
-      <Handle type="source" position={Position.Bottom} className="w-16 !bg-teal-500" /> */}
+      <Handle
+        type="target"
+        position={Position.Top}
+        className="w-16 !bg-teal-500"
+      />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        className="w-16 !bg-teal-500"
+      />
     </div>
   );
 }
