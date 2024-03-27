@@ -7,6 +7,7 @@ import {
   useSetSelectedSnapshotId,
   useSetSnapshotHistory,
 } from '../../../atoms';
+import classes from './ClearHistory.module.css';
 
 export const ClearHistory = () => {
   const filteredSnapshotHistory = useFilteredSnapshotHistoryAtomValue();
@@ -37,6 +38,7 @@ export const ClearHistory = () => {
       title="Clear snapshot history"
       onClick={handleOnClick}
       disabled={filteredSnapshotHistory.length === 0}
+      className={classes.clearHistoryBtn}
     >
       <IconTrashX size={16} />
     </ActionIcon>

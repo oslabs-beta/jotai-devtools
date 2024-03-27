@@ -4,6 +4,7 @@ import { SelectedSnapshotDetail } from '../../atoms';
 import { SnapshotActions } from './components/SnapshotActions';
 import { SnapshotMetaDetails } from './components/SnapshotMetaDetails';
 import { SnapshotValue } from './components/SnapshotValue';
+import classes from './DisplaySnapshotDetails.module.css';
 
 type DisplaySnapshotDetailsProps = {
   details: SelectedSnapshotDetail;
@@ -12,7 +13,9 @@ type DisplaySnapshotDetailsProps = {
 export const DisplaySnapshotDetails = (props: DisplaySnapshotDetailsProps) => {
   return (
     <Stack h="auto" pb="sm">
-      <Title size="h3">Snapshot {props.details.label}</Title>
+      <Title size="h3" className={classes.snapshotText}>
+        Snapshot {props.details.label}
+      </Title>
       <SnapshotMetaDetails timestamp={props.details.timestamp} />
       <SnapshotValue state={props.details} />
       <SnapshotActions

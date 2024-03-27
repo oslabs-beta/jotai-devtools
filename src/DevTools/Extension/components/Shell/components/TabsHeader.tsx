@@ -8,7 +8,7 @@ import { useShouldRecordSnapshotHistoryValue } from './TimeTravel/atoms';
 export const TabsHeader = React.memo(() => {
   const isSnapshotRecordingOn = useShouldRecordSnapshotHistoryValue();
   return (
-    <Tabs.List>
+    <Tabs.List className={classes.tabList}>
       <Tabs.Tab
         value={TabKeys.AtomViewer}
         leftSection={<IconLayoutList size={14} />}

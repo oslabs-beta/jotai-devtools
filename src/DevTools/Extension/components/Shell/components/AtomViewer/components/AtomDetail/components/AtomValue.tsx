@@ -10,6 +10,7 @@ import {
 import { ErrorMessage } from '../../../../ErrorMessage';
 import { JSONTree } from '../../../../JSONTree';
 import { AtomValueViewer, useAtomValueViewer } from '../atoms';
+import classes from './AtomValue.module.css';
 import { MemoizedValueRenderer } from './MemoizedValueRenderer';
 
 type AtomParseRawValueValueProps = {
@@ -40,7 +41,12 @@ export const AtomValue = ({
   if (parsedValue === ErrorSymbol) {
     return (
       <Box>
-        <Text component="span" fw="bold" mb="sm">
+        <Text
+          component="span"
+          fw="bold"
+          mb="sm"
+          className={classes.RawValueText}
+        >
           Raw value
         </Text>
         <ErrorMessage message="Failed to parse the value of the atom" />
@@ -54,7 +60,12 @@ export const AtomValue = ({
   if (!isJsonTreeCompatible) {
     return (
       <Box>
-        <Text component="div" fw="bold" mb="sm">
+        <Text
+          component="div"
+          fw="bold"
+          mb="sm"
+          className={classes.RawValueText}
+        >
           Raw value
         </Text>
         <MemoizedValueRenderer value={parsedValue} />
@@ -64,7 +75,7 @@ export const AtomValue = ({
 
   return (
     <Box>
-      <Text component="span" fw="bold" mb="sm">
+      <Text component="span" fw="bold" mb="sm" className={classes.valueText}>
         Value
       </Text>
       <Tabs
@@ -76,12 +87,14 @@ export const AtomValue = ({
       >
         <Tabs.List>
           <Tabs.Tab
+            className={classes.RawValue}
             value="raw-value"
             leftSection={<IconSourceCode size="0.9rem" stroke="1.75" />}
           >
             Raw value
           </Tabs.Tab>
           <Tabs.Tab
+            className={classes.TreeView}
             value="json-tree"
             leftSection={<IconBinaryTree2 size="0.9rem" stroke="1.75" />}
           >

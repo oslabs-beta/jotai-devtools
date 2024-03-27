@@ -1,6 +1,21 @@
 .text {
-    position: sticky;
-    top: 0;
+  position: sticky;
+  top: 0;
+  [data-mantine-color-scheme='dark'] & {
+    color: #c1c2c5;
+  }
+}
+.atomItemsWrapper {
+  overflow: auto;
+  font-size: 1px;
+  [data-mantine-color-scheme='dark'] & {
+    color: #C1C2C5;
+  }
+}
+.atomItemsWrapper[data-active]{
+  [data-mantine-color-scheme='dark'] & {
+    color: #fff;
+    background-color: #353a3f;
+  }
 }
 
-.atomItemsWrapper { overflow: auto; }

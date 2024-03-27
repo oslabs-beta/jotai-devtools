@@ -1,7 +1,27 @@
-.tab:hover,
 .tab[data-active] {
-    .tabLabel,
-    .tabSection {
-        color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-    }
+  .tabLabel,
+  .tabSection {
+    color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+  }
+}
+.tabLabel[data-active] {
+  [data-mantine-color-scheme='dark'] & {
+    color: #fff;
+  }
+}
+
+.tab[data-active] {
+  [data-mantine-color-scheme='dark'] & {
+    border-color: #141516;
+  }
+}
+.tabLabel {
+  [data-mantine-color-scheme='dark'] & {
+    color: #c1c2c5;
+  }
+}
+.tab:hover {
+  [data-mantine-color-scheme='dark'] & {
+    background-color: #25262b;
+  }
 }

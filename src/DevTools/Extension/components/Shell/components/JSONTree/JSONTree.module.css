@@ -1,8 +1,11 @@
 .monoSpaceFonts {
-    font-family: var(--mantine-font-family-monospace);
-    font-size: 13px;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 13px;
+}
 
-    ul:first-of-type {
-        border-radius: var(--mantine-radius-md);
-    }
+.monoSpaceFonts ul:first-of-type {
+  [data-mantine-color-scheme='dark'] & {
+    border-radius: var(--mantine-radius-md);
+    background-color: #141516 !important;
+  }
 }

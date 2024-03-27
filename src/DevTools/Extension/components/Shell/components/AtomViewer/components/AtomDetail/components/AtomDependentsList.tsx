@@ -3,6 +3,7 @@ import { Box, Code, List, Text } from '@mantine/core';
 import { AnyAtom } from 'src/types';
 import { useAtomsSnapshots } from '../../../../../../../../hooks/useAtomsSnapshots';
 import { atomToPrintable } from '../../../../../../../../utils/';
+import classes from './AtomDependentsList.module.css';
 
 type AtomDependentsListProps = {
   atom: AnyAtom;
@@ -39,7 +40,13 @@ export const AtomDependentsList = ({
 
   return (
     <Box>
-      <Text component="div" fw="bold" mb={10} mt={20}>
+      <Text
+        component="div"
+        fw="bold"
+        mb={10}
+        mt={20}
+        className={classes.dependentsText}
+      >
         Dependents
       </Text>
       {listOfDependents.length ? (
@@ -47,7 +54,12 @@ export const AtomDependentsList = ({
           {listOfDependents}
         </List>
       ) : (
-        <Text component="div" size="sm" mb={10}>
+        <Text
+          component="div"
+          size="sm"
+          mb={10}
+          className={classes.dependentsText}
+        >
           No dependents
         </Text>
       )}

@@ -1,0 +1,20 @@
+
+.clearHistoryBtn:disabled {
+    [data-mantine-color-scheme='dark'] & {
+      background-color: #353a3f;
+      color: #868e96;
+    }
+  }
+  
+  .clearHistoryBtn {
+    [data-mantine-color-scheme='dark'] & {
+      background-color: #25262b;
+      color: #ffffff;
+    }
+  }
+  
+  .clearHistoryBtn:hover {
+    [data-mantine-color-scheme='dark'] & {
+      background-color: #353a3f;
+    }
+  }

@@ -3,6 +3,7 @@ import { ActionIcon, Group } from '@mantine/core';
 import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { useThemeMode } from '../../../../../../../../hooks/useThemeMode';
 import { useSnapshotHistoryNavigation } from '../atoms';
+import classes from './SnapshotListNavigation.module.css';
 
 export const SnapshotListNavigation = () => {
   const { prev, next } = useSnapshotHistoryNavigation();
@@ -15,6 +16,7 @@ export const SnapshotListNavigation = () => {
         title="Select previous snapshot"
         disabled={!prev.isPossible}
         onClick={prev.onClick}
+        className={classes.navBtn}
       >
         <IconChevronUp size={16} />
       </ActionIcon>
@@ -25,6 +27,7 @@ export const SnapshotListNavigation = () => {
         title="Select next snapshot"
         disabled={!next.isPossible}
         onClick={next.onClick}
+        className={classes.navBtn}
       >
         <IconChevronDown size={16} />
       </ActionIcon>

@@ -3,7 +3,12 @@ import { Box, Tabs, Title } from '@mantine/core';
 import { IconFileCode, IconFileDiff } from '@tabler/icons-react';
 import { JSONTree } from '../../../../../../JSONTree';
 import { SelectedSnapshotDetail } from '../../../atoms';
-import { SnapshotValueViewer, useSnapshotValueViewer } from '../atoms';
+import {
+  SnapshotValueViewer,
+  snapshotValueViewer,
+  useSnapshotValueViewer,
+} from '../atoms';
+import classes from './SnapshotValue.module.css';
 import { TreeView } from './TreeView';
 
 type SnapshotValueProps = {
@@ -24,7 +29,7 @@ export const SnapshotValue = (props: SnapshotValueProps): JSX.Element => {
   );
   return (
     <Box>
-      <Title size="h5" mb={10}>
+      <Title size="h5" mb={10} className={classes.valueText}>
         Value
       </Title>
 
@@ -37,12 +42,14 @@ export const SnapshotValue = (props: SnapshotValueProps): JSX.Element => {
       >
         <Tabs.List>
           <Tabs.Tab
+            className={classes.stateText}
             value="state"
             leftSection={<IconFileCode size="0.9rem" stroke="1.75" />}
           >
             State
           </Tabs.Tab>
           <Tabs.Tab
+            className={classes.diffText}
             value="diff"
             leftSection={<IconFileDiff size="0.9rem" stroke="1.75" />}
           >

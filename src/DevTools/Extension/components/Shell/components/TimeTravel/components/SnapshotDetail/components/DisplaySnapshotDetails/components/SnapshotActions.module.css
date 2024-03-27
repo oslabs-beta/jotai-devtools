@@ -1,0 +1,26 @@
+.actionText {
+  [data-mantine-color-scheme='dark'] & {
+    color: #fff;
+  }
+}
+.restoreBtn {
+  [data-mantine-color-scheme='dark'] & {
+    color: var(--mantine-color-white);
+    background-color: var(--mantine-color-dark-7);
+    border-color: #373a40;
+  }
+}
+
+.restoreBtn:hover {
+  [data-mantine-color-scheme='dark'] & {
+    color: var(--mantine-color-white);
+    background-color: var(--mantine-color-dark-6);
+    border-color: #373a40;
+  }
+}
+.restoreBtn:disabled {
+  [data-mantine-color-scheme='dark'] & {
+    color: #25262b;
+    background-color: #373a40;
+  }
+}

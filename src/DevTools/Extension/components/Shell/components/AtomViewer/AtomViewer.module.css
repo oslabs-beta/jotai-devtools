@@ -1,11 +1,11 @@
 .atomListWrapper {
-    background: var(--mantine-color-gray-2);
+  background: var(--mantine-color-gray-2);
 
-    [data-mantine-color-scheme='dark'] & {
-        background: var(--mantine-color-dark-8);
-    }
+  [data-mantine-color-scheme='dark'] & {
+    background:#141516;
+  }
 }
 
-.panel { 
-    overflow: auto !important;
+.panel {
+  overflow: auto !important;
 }
