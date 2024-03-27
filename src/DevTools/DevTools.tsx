@@ -30,13 +30,13 @@ const DevToolsMain = ({
   const setDevToolsOptions = useSetDevToolsOptions();
 
   // Function to resolve root element to set `data-mantine-color-scheme` attribute; see MantineProviderInterface
-  const getRootElement = () => {
-    if (typeof window !== 'undefined') {
-      const jotaiExtension = document.getElementById('jotai-extension');
-      return jotaiExtension ?? undefined;
-    }
-    return undefined;
-  };
+  // const getRootElement = () => {
+  //   if (typeof window !== 'undefined') {
+  //     const jotaiExtension = document.getElementById('jotai-extension');
+  //     return jotaiExtension ?? undefined;
+  //   }
+  //   return undefined;
+  // };
 
   React.useEffect(() => {
     // Should we consider caching these options in the future instead of allowing users to change these?
@@ -86,7 +86,7 @@ const DevToolsMain = ({
       <MantineProvider
         theme={theme}
         defaultColorScheme={defaultColorScheme}
-        getRootElement={getRootElement}
+        // getRootElement={getRootElement}
         //this breaks the dark mode toggle
         // classNamesPrefix="jotai-devtools"
       >

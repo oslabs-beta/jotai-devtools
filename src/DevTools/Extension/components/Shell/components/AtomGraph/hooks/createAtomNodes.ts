@@ -1,9 +1,10 @@
 import { graphlib, layout } from 'dagre';
-import { Edge, Node, Position } from 'reactflow';
+import { Edge, MarkerType, Node, Position } from 'reactflow';
 import { AnyAtom, ValuesAtomTuple } from 'src/types';
 import { useAtomsSnapshots } from '../../../../../../hooks/useAtomsSnapshots';
 import { atomToPrintable } from '../../../../../../utils';
 import { SelectedAtomAtomData } from '../../atoms';
+import classes from '../components/AtomGraphVisual/CustomNode.module.css';
 
 interface CustomNodeData {
   label: string;
@@ -24,6 +25,14 @@ interface CustomEdge extends Edge<any> {
   id: string;
   source: string;
   target: string;
+  markerEnd?: {
+    type: string;
+    width?: number;
+    height?: number;
+    color?: string;
+    className?: any;
+  };
+  style?: object;
 }
 
 export const useCreateAtomNodes = (
@@ -38,8 +47,8 @@ export const useCreateAtomNodes = (
 
   // Set the node spacing
   dagreGraph.setGraph({
-    rankdir: 'TB',
-    nodesep: 100, // horiz spacing between nodes
+    rankdir: 'LR',
+    nodesep: 150, // horiz spacing between nodes
     ranksep: 100, // vert spacing between nodes
   });
 
@@ -68,6 +77,14 @@ export const useCreateAtomNodes = (
           id: `${nodeId}-${depNodeId}`,
           source: nodeId,
           target: depNodeId,
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            width: 20,
+            height: 20,
+          },
+          style: {
+            strokeWidth: 2,
+          },
         });
       });
     });
@@ -81,6 +98,14 @@ export const useCreateAtomNodes = (
         id: `${nodeId}-${depNodeId}`,
         source: nodeId,
         target: depNodeId,
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          width: 20,
+          height: 20,
+        },
+        style: {
+          strokeWidth: 2,
+        },
       });
     });
   }
