@@ -7,9 +7,11 @@ import ReactFlow, {
   Connection,
   Controls,
   Edge,
+  ReactFlowProvider,
   addEdge,
   useEdgesState,
   useNodesState,
+  useReactFlow,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import 'reactflow/dist/base.css';
@@ -20,6 +22,8 @@ import { useSyncSnapshotValuesToAtom } from '../../../../../../../hooks/useAtoms
 import { useDevtoolsJotaiStoreOptions } from '../../../../../../../internal-jotai-store';
 import { selectedAtomAtom } from '../../../atoms';
 import { useCreateAtomNodes } from '../../hooks/createAtomNodes';
+// import { useFocusNode } from '../../hooks/useAdjustViewport';
+import classes from './AtomGraphVisual.module.css';
 import CustomNode from './CustomNode';
 
 const allValues = atomWithDefault<ValuesAtomTuple[]>((get) => {
@@ -30,6 +34,18 @@ const allValues = atomWithDefault<ValuesAtomTuple[]>((get) => {
 const nodeTypes = {
   custom: CustomNode,
 };
+
+// export const useFocusNode = (nodes, reactFlowInstance) => {
+//   React.useEffect(() => {
+//     if (reactFlowInstance && nodes.length > 0) {
+//       const node = nodes[0];
+//       const x = node.position.x;
+//       const y = node.position.y;
+//       const zoom = 1.85;
+//       reactFlowInstance.setCenter(x, y, { zoom });
+//     }
+//   }, [nodes, reactFlowInstance]);
+// };
 
 export const AtomGraphVisual = React.memo(() => {
   useSyncSnapshotValuesToAtom();
@@ -48,13 +64,18 @@ export const AtomGraphVisual = React.memo(() => {
     valuesRef.current = values;
   }, [values]);
 
-  const atomNodes = useCreateAtomNodes(selectedAtomData, values);
+  const { atomNodes, atomEdges } = useCreateAtomNodes(selectedAtomData, values);
 
   const [nodes, setNodes, onNodesChange] = useNodesState(atomNodes);
-  // const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(atomEdges);
+
+  // const reactFlowInstance = useReactFlow();
+
+  // useFocusNode(nodes, reactFlowInstance);
 
   React.useEffect(() => {
     setNodes(atomNodes);
+    setEdges(atomEdges);
   }, [values, selectedAtomData]);
 
   // const onConnect = React.useCallback(
@@ -65,39 +86,41 @@ export const AtomGraphVisual = React.memo(() => {
   // const proOptions = { hideAttribution: true }; //Arjun tbd
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
-      <ReactFlow
-        fitView
-        // className={styles.AtomGraph}
-        nodes={nodes}
-        nodesDraggable={false}
-        nodeTypes={nodeTypes}
-        // edges={edges}
-        onNodesChange={onNodesChange}
-        // onEdgesChange={onEdgesChange}
-        // onConnect={onConnect}
-        // mantine gray 2 for light, dark 8 for dark
-        style={{ background: useThemeMode('#E9ECEF', '#1F1F1F') }}
-        minZoom={0.15}
-        maxZoom={1.0}
-        draggable={false}
-      >
-        {/*proOptions={proOptions}  Arjun tbd */}
-        {/* TODO: Controls are not responding to lightvsdark mode settings, need to fix  */}
-        <div
-          //   style={{ backgroundColor: darkMode ? '#C0C2C9' : '#F5F5F5' }}
-          style={{ backgroundColor: '#C0C2C9' }}
-          className="dark:bg-slate-900"
+    <ReactFlowProvider>
+      <div className={classes['graph-container']}>
+        <ReactFlow
+          // fitView
+          // className={styles.AtomGraph}
+          nodes={nodes}
+          nodesDraggable={false}
+          nodeTypes={nodeTypes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          // onConnect={onConnect}
+          // mantine gray 2 for light, dark 8 for dark
+          style={{ background: useThemeMode('#E9ECEF', '#1F1F1F') }}
+          minZoom={0.15}
+          maxZoom={1.0}
+          onlyRenderVisibleElements={true}
         >
-          <Controls showInteractive={false} />
-        </div>
-        <Background
-          color={useThemeMode('#CED4DA', '#424242')}
-          variant={BackgroundVariant.Dots}
-          gap={15}
-          size={2}
-        />
-      </ReactFlow>
-    </div>
+          {/*proOptions={proOptions}  Arjun tbd */}
+          {/* TODO: Controls are not responding to lightvsdark mode settings, need to fix  */}
+          <div
+            //   style={{ backgroundColor: darkMode ? '#C0C2C9' : '#F5F5F5' }}
+            style={{ backgroundColor: '#C0C2C9' }}
+            className="dark:bg-slate-900"
+          >
+            <Controls showInteractive={false} />
+          </div>
+          <Background
+            color={useThemeMode('#CED4DA', '#424242')}
+            variant={BackgroundVariant.Dots}
+            gap={15}
+            size={2}
+          />
+        </ReactFlow>
+      </div>
+    </ReactFlowProvider>
   );
 });

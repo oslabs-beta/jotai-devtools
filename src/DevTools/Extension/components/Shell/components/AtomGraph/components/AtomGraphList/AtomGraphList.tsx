@@ -114,13 +114,15 @@ export const AtomGraphList = () => {
   return (
     <>
       <SearchAtoms />
-      <ActionListItem
-        label="All"
-        onClick={handleOnClickReset}
-        id={'All'}
-        isActive={!selectedAtomData?.atomKey}
-      />
-      <Box className={classes.atomItemsWrapper}>{atomItems}</Box>
+      <Box className={classes.atomItemsWrapper}>
+        <ActionListItem
+          label="All"
+          onClick={handleOnClickReset}
+          id={'All'}
+          isActive={!selectedAtomData?.atomKey}
+        />
+        {atomItems}
+      </Box>
       {noResultsFound && (
         <Group mt={20} justify="center">
           <IconAlertCircle size={16} />
