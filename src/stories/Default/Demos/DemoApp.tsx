@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Grid, MantineProvider, Text, Title } from '@mantine/core';
+import { ReactFlowProvider } from 'reactflow';
 import { DevTools, DevToolsProps } from '../../../';
 import { Async } from './Async';
 import { Counter } from './Counter';
@@ -17,7 +18,9 @@ export const DemoApp = (props: DevToolsProps) => {
         }}
         defaultColorScheme={props.defaultColorScheme || 'dark'}
       >
-        <DevTools store={demoStore} {...props} />
+        <ReactFlowProvider>
+          <DevTools store={demoStore} {...props} />
+        </ReactFlowProvider>
         <div className="App">
           <React.Suspense
             fallback={

@@ -2,15 +2,15 @@
     font-size: 1em;
     text-align: center;
     overflow: hidden;
-    text-overflow: ellipsis ellipsis;
+    text-overflow: ellipsis;
     word-break: break-all;
     /* white-space: nowrap; */
     border: 1px solid black;
     border-radius: 6px;
-    block-size: fit-content;
-    /* width: 12em; */
+    /* block-size: fit-content; */
+    width: 12em;
     /* max-height: 3em; */
-    /* height: 3em; */
+    height: 6em;
     padding: 5%;
     display: flex;
     justify-content: center;
