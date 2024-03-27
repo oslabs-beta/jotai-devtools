@@ -42,6 +42,33 @@
     border-top-color: var(--mantine-color-gray-3);
 
     [data-mantine-color-scheme='dark'] & {
-        border-top-color: var(--mantine-color-dark-4);
+        border-top-color: #343a40;
     }
 }
+
+.navBtn[data-active]{
+    [data-mantine-color-scheme='dark'] & {
+      background-color: #353a3f;
+      color: #ffffff
+    }
+  }
+  
+  .navBtn:hover[data-active]{
+    [data-mantine-color-scheme='dark'] & {
+      background-color: #1e2124;
+    }
+  }
+  
+  .navBtn:disabled{
+    [data-mantine-color-scheme='dark'] & {
+      background-color: #353a3f;
+      color: #868e96;
+      
+    }
+  }
+  .navBtn:hover:disabled{
+    [data-mantine-color-scheme='dark'] & {
+      background-color: #353a3f;
+      color: #868e96;
+    }
+  }

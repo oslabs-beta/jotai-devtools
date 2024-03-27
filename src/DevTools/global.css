@@ -4,6 +4,14 @@
     }
   }
 
+  .jotai-devtools-shell h1,
+  .jotai-devtools-shell h3,
+  .jotai-devtools-shell p{
+    [data-mantine-color-scheme='dark'] & {
+      color: var(--mantine-color-white)
+     }
+  }
+
 .jotai-devtools-trigger-button {
     position: fixed;
     border-radius: 50%;
@@ -16,3 +24,5 @@
       height: 2rem;
     }
   }
+
+ 

@@ -57,7 +57,7 @@ const DevToolsMain = ({
       defaultRadius: 'md',
       colors: {
         dark: [
-          '#C1C2C5',
+          '#fff',
           '#A6A7AB',
           '#909296',
           '#5c5f66',
@@ -85,6 +85,7 @@ const DevToolsMain = ({
         theme={theme}
         defaultColorScheme={defaultColorScheme}
         getRootElement={getRootElement}
+        classNamesPrefix="jotai-devtools"
       >
         <Extension store={store} isInitialOpen={isInitialOpen} />
       </MantineProvider>

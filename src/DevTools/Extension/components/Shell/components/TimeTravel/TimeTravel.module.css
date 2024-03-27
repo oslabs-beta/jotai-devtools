@@ -14,3 +14,9 @@
 .panelGroup { 
     height: calc(100% - 56px) !important; 
 }
+
+h1, h3, h5{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+  }

@@ -4,6 +4,7 @@ import { IconFileCode, IconFileDiff } from '@tabler/icons-react';
 import { JSONTree } from '../../../../../../JSONTree';
 import { SelectedSnapshotDetail } from '../../../atoms';
 import { SnapshotValueViewer, useSnapshotValueViewer } from '../atoms';
+import classes from './SnapshotValue.module.css';
 import { TreeView } from './TreeView';
 
 type SnapshotValueProps = {
@@ -24,7 +25,7 @@ export const SnapshotValue = (props: SnapshotValueProps): JSX.Element => {
   );
   return (
     <Box>
-      <Title size="h5" mb={10}>
+      <Title size="h5" mb={10} className={classes.valueText}>
         Value
       </Title>
 
@@ -39,10 +40,12 @@ export const SnapshotValue = (props: SnapshotValueProps): JSX.Element => {
           <Tabs.Tab
             value="state"
             leftSection={<IconFileCode size="0.9rem" stroke="1.75" />}
+            className={classes.stateText}
           >
             State
           </Tabs.Tab>
           <Tabs.Tab
+            className={classes.diffText}
             value="diff"
             leftSection={<IconFileDiff size="0.9rem" stroke="1.75" />}
           >

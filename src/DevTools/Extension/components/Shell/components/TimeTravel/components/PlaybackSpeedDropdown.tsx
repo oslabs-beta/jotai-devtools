@@ -1,6 +1,7 @@
 import React from 'react';
 import { Select } from '@mantine/core';
 import { defaultPlaybackOptions, usePlaybackSpeedOption } from '../atoms';
+import './PlaybackSpeedDropdown.css';
 
 const options = Object.keys(
   defaultPlaybackOptions,

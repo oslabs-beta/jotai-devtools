@@ -21,6 +21,7 @@
     [data-mantine-color-scheme='dark'] & {
         border-color: var(--mantine-color-dark-4);
         background: var(--mantine-color-dark-7);
+        color: var(--mantine-color-white)
     }
 }
 
