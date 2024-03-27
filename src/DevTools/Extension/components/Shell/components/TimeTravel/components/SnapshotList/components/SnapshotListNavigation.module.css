@@ -1,5 +1,20 @@
+
 .navBtn:disabled{
     [data-mantine-color-scheme='dark'] & {
-      background-color: #373A40;
+      background-color: #353a3f;
+      color: #868e96;
     }
   }
+
+.navBtn {
+  [data-mantine-color-scheme='dark'] & {
+    background-color: #25262b;
+    color: #ffffff;
+  }
+}
+
+.navBtn:hover {
+  [data-mantine-color-scheme='dark'] & {
+    background-color: #353a3f;
+  }
+}

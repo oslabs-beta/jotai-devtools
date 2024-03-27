@@ -10,6 +10,6 @@
   background-color: var(--mantine-color-white);
 
   [data-mantine-color-scheme='dark'] & {
-    background-color: var(--mantine-color-dark-7);
+    background-color: #1a1b1e;
   }
 }

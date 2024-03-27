@@ -1,5 +1,8 @@
 .root {
   flex-grow: 1;
+  [data-mantine-color-scheme='dark'] & {
+    background-color: #191a1c
+  }
 }
 
 .markLabel {
@@ -13,6 +16,7 @@
     background-color: var(--mantine-color-gray-6);
   }
 }
+
 
 .mark {
   border-width: 0;
@@ -51,6 +55,20 @@
 
 .navBtn:disabled{
   [data-mantine-color-scheme='dark'] & {
-    background-color: #373A40;
+    background-color: #353a3f;
+    color: #868e96;
+  }
+}
+
+.navBtn{
+  [data-mantine-color-scheme='dark'] & {
+    background-color: #353a3f;
+    color: #ffffff
+  }
+}
+
+.navBtn:hover{
+  [data-mantine-color-scheme='dark'] & {
+    background-color: #1e2124;
   }
 }

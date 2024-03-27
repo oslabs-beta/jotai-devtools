@@ -2,7 +2,7 @@
   background: var(--mantine-color-gray-2);
 
   [data-mantine-color-scheme='dark'] & {
-    background: var(--mantine-color-dark-8);
+    background: #141516;
   }
 }
 
@@ -12,4 +12,11 @@
 
 .panelGroup {
   height: calc(100% - 56px) !important;
+  
+}
+
+h1, h3, h5{
+  display: flex;
+  text-align: center;
+  justify-content: center;
 }

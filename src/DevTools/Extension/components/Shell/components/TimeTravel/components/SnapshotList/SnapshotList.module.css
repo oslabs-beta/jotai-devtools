@@ -2,6 +2,12 @@
   overflow: auto;
   margin-top: 10px;
   [data-mantine-color-scheme='dark'] & {
+    color: #c1c2c5;
+  }
+}
+
+.snapshotHistoryListWrapper[data-active] {
+  [data-mantine-color-scheme='dark'] & {
     color: #fff;
   }
 }

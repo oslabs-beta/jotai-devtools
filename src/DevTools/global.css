@@ -1,18 +1,47 @@
 .jotai-devtools-shell {
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
   }
+}
 
 .jotai-devtools-trigger-button {
-    position: fixed;
-    border-radius: 50%;
-    border-width: 0;
-    width: 4rem;
-    height: 4rem;
-    z-index: 99999;
+  position: fixed;
+  border-radius: 50%;
+  border-width: 0;
+  width: 4rem;
+  height: 4rem;
+  z-index: 99999;
 
-    img {
-      height: 2rem;
-    }
+  img {
+    height: 2rem;
   }
+}
+
+.jotai-devtools-Tabs-list::before {
+  [data-mantine-color-scheme='dark'] & {
+    border-color: #383a3f;
+  }
+}
+
+.jotai-devtools-TextInput-input {
+  [data-mantine-color-scheme='dark'] & {
+    background-color: #25262b;
+  }
+}
+.jotai-devtools-NavLink-root:hover{
+  [data-mantine-color-scheme='dark'] & {
+    background-color: #25262b;
+  }
+}
+
+.jotai-devtools-CodeHighlight-pre{
+  [data-mantine-color-scheme='dark'] & {
+    background-color: #141516;
+  }
+}
+
+.jotai-devtools-Slider-track::before{
+  background-color: #303338
+}

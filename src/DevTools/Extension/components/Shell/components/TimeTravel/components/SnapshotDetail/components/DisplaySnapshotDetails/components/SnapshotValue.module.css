@@ -1,25 +1,49 @@
-.stateText[data-active='true'] {
-  [data-mantine-color-scheme='dark'] & {
-    color: #fff;
-  }
+:root {
+  --active-color: black;
+  --inactive-color: black;
+  --hover-bg-color: #f0f0f0;
+  --active-color-dark: #fff;
+  --inactive-color-dark: #c1c2c5;
+  --hover-color-dark: #c1c2c5;
+  --hover-bg-color-dark: #25262b;
 }
-.stateText {
-  [data-mantine-color-scheme='dark'] & {
-    color: #c1c2c5;
-  }
-}
-.diffText[data-active='true'] {
-  [data-mantine-color-scheme='dark'] & {
-    color: #fff;
-  }
-}
+
+.stateText,
 .diffText {
+  color: var(--inactive-color);
+  
   [data-mantine-color-scheme='dark'] & {
-    color: #c1c2c5;
+    color: var(--inactive-color-dark);
   }
 }
-.valueText {
+
+.stateText[data-active='true'],
+.diffText[data-active='true'] {
+  color: var(--active-color);
+  
   [data-mantine-color-scheme='dark'] & {
-    color: #fff;
+    color: var(--active-color-dark);
+  }
+}
+
+.stateText:hover,
+.diffText:hover {
+  background-color: var(--hover-bg-color);
+  
+  [data-mantine-color-scheme='dark'] & {
+    background-color: var(--hover-bg-color-dark);
+  }
+}
+
+.stateText[data-active='true']:hover,
+.diffText[data-active='true']:hover {
+  background-color: transparent;
+}
+
+.valueText {
+  color: var(--active-color);
+  
+  [data-mantine-color-scheme='dark'] & {
+    color: var(--active-color-dark);
   }
 }
