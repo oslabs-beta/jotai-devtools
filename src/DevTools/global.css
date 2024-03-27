@@ -30,18 +30,18 @@
     background-color: #25262b;
   }
 }
-.jotai-devtools-NavLink-root:hover{
+.jotai-devtools-NavLink-root:hover {
   [data-mantine-color-scheme='dark'] & {
     background-color: #25262b;
   }
 }
 
-.jotai-devtools-CodeHighlight-pre{
+.jotai-devtools-CodeHighlight-pre {
   [data-mantine-color-scheme='dark'] & {
     background-color: #141516;
   }
 }
 
-.jotai-devtools-Slider-track::before{
-  background-color: #303338
+.jotai-devtools-Slider-track::before {
+  background-color: #303338;
 }

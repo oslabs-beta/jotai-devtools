@@ -53,12 +53,6 @@
   }
 }
 
-.navBtn:disabled{
-  [data-mantine-color-scheme='dark'] & {
-    background-color: #353a3f;
-    color: #868e96;
-  }
-}
 
 .navBtn{
   [data-mantine-color-scheme='dark'] & {
@@ -70,5 +64,19 @@
 .navBtn:hover{
   [data-mantine-color-scheme='dark'] & {
     background-color: #1e2124;
+  }
+}
+
+.navBtn:disabled{
+  [data-mantine-color-scheme='dark'] & {
+    background-color: #353a3f;
+    color: #868e96;
+    
+  }
+}
+.navBtn:hover:disabled{
+  [data-mantine-color-scheme='dark'] & {
+    background-color: #353a3f;
+    color: #868e96;
   }
 }
