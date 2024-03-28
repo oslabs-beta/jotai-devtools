@@ -36,7 +36,6 @@ interface CustomEdge extends Edge<any> {
   };
   style?: object;
 }
-
 export const useCreateAtomNodes = (
   selectedAtomData: SelectedAtomAtomData | undefined,
   values: ValuesAtomTuple[],
@@ -44,6 +43,7 @@ export const useCreateAtomNodes = (
   const { dependents } = useAtomsSnapshots();
   const nodesArray: CustomNode[] = [];
   const edgesArray: CustomEdge[] = [];
+  const createdNodes = new Set<string>();
 
   const dagreGraph = new graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -60,15 +60,17 @@ export const useCreateAtomNodes = (
   const createNode = (atom: AnyAtom, i: number, isParent: boolean) => {
     const atomKey = atom.toString();
     const nodeId = `atom-list-item-${atomKey + i}`;
+    if (createdNodes.has(nodeId)) {
+      return nodeId;
+    }
+    createdNodes.add(nodeId);
     dagreGraph.setNode(nodeId, { width: 100, height: 50 });
-
     if (isParent) {
       dagreGraph.setNode(nodeId, { ParentNode: true, rank: i });
     } else {
       // Set the rank for child nodes based on their parent's rank
       dagreGraph.setNode(nodeId, { ParentNode: false });
     }
-
     nodesArray.push({
       id: nodeId,
       type: 'custom',
@@ -79,39 +81,19 @@ export const useCreateAtomNodes = (
     });
     return nodeId;
   };
+  const createNodesAndEdges = (
+    atom: AnyAtom,
+    i: number,
+    parentNodeId?: string,
+  ) => {
+    const nodeId = createNode(atom, i, !parentNodeId);
+    const isParentNode = dagreGraph.node(nodeId).ParentNode === true;
 
-  if (!selectedAtomData) {
-    values.forEach(([atom], i) => {
-      const nodeId = createNode(atom, i, true);
-      const depsForAtom = Array.from(dependents.get(atom) || []);
-      depsForAtom.forEach((depAtom) => {
-        const depNodeId = createNode(depAtom, i, false);
-        edgesArray.push({
-          id: `${nodeId}-${depNodeId}`,
-          source: nodeId,
-          target: depNodeId,
-          animated: true,
-          markerEnd: {
-            type: MarkerType.ArrowClosed,
-            width: 20,
-            height: 20,
-          },
-          style: {
-            strokeWidth: 2,
-          },
-        });
-      });
-    });
-  } else {
-    const atom = selectedAtomData.atom;
-    const nodeId = createNode(atom, 0, true);
-    const depsForAtom = Array.from(dependents.get(atom) || []);
-    depsForAtom.forEach((depAtom) => {
-      const depNodeId = createNode(depAtom, 0, false);
+    if (parentNodeId) {
       edgesArray.push({
-        id: `${nodeId}-${depNodeId}`,
-        source: nodeId,
-        target: depNodeId,
+        id: `${parentNodeId}-${nodeId}`,
+        source: parentNodeId,
+        target: nodeId,
         animated: true,
         markerEnd: {
           type: MarkerType.ArrowClosed,
@@ -122,7 +104,31 @@ export const useCreateAtomNodes = (
           strokeWidth: 2,
         },
       });
+    }
+
+    if (isParentNode) {
+      const depsForAtom = Array.from(dependents.get(atom) || []);
+      depsForAtom.forEach((depAtom) => {
+        createNodesAndEdges(depAtom, i, nodeId);
+      });
+    }
+  };
+
+  const processedDependents = new Set<AnyAtom>();
+
+  if (!selectedAtomData) {
+    values.forEach(([atom], i) => {
+      if (!processedDependents.has(atom)) {
+        createNodesAndEdges(atom, i);
+        const depsForAtom = Array.from(dependents.get(atom) || []);
+        depsForAtom.forEach((depAtom) => {
+          processedDependents.add(depAtom);
+        });
+      }
     });
+  } else {
+    const atom = selectedAtomData.atom;
+    createNodesAndEdges(atom, 0);
   }
 
   layout(dagreGraph);
@@ -134,16 +140,13 @@ export const useCreateAtomNodes = (
   const layoutedNodes = nodesArray.map((node, i) => {
     const nodeWithPosition = dagreGraph.node(node.id);
     const isParent = nodeWithPosition.ParentNode === true;
-
     let position;
-
     if (isParent) {
       position = {
         x: nodeWithPosition.x - node.width! / 2,
         y: lastParentY,
       };
       lastParentY += parentNodeSpacing;
-
       lastParent = node.id;
     } else {
       // this sets the position of the child node next to the parent node
@@ -153,7 +156,6 @@ export const useCreateAtomNodes = (
         y: lastParentY - node.height! / 2 - 125,
       };
     }
-
     return {
       ...node,
       targetPosition: Position.Top,
@@ -164,7 +166,6 @@ export const useCreateAtomNodes = (
 
   return { atomNodes: layoutedNodes, atomEdges: edgesArray };
 };
-
 //____
 // import * as React from 'react';
 // import { Edge } from 'reactflow';
