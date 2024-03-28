@@ -1,4 +1,4 @@
-/*! For license information please see stories-TodoApp-TodoDemo-stories.9ed1d487.iframe.bundle.js.LICENSE.txt */
+/*! For license information please see stories-TodoApp-TodoDemo-stories.bd5141ad.iframe.bundle.js.LICENSE.txt */
 'use strict';
 (self.webpackChunkjotai_devtools = self.webpackChunkjotai_devtools || []).push([
   [856],
@@ -854,7 +854,7 @@
             );
         });
     },
-    './dist/chunk-OI2TTQSM.cjs.js': (
+    './dist/chunk-DRF2GNCI.cjs.js': (
       __unused_webpack_module,
       exports,
       __webpack_require__,
@@ -6561,20 +6561,14 @@
                 edgesArray = [],
                 dagreGraph = new _dagre.graphlib.Graph();
               dagreGraph.setDefaultEdgeLabel(() => ({})),
-                dagreGraph.setGraph({
-                  rankdir: 'LR',
-                  nodesep: 150,
-                  ranksep: 100,
-                  edgesep: 100,
-                });
+                dagreGraph.setGraph({ rankdir: 'LR' });
               const createNode = (atom8, i, isParent) => {
                 const nodeId = `atom-list-item-${atom8.toString() + i}`;
                 return (
-                  dagreGraph.setNode(nodeId, {
-                    width: 100,
-                    height: 50,
-                    rank: i,
-                  }),
+                  dagreGraph.setNode(nodeId, { width: 100, height: 50 }),
+                  isParent
+                    ? dagreGraph.setNode(nodeId, { ParentNode: !0, rank: i })
+                    : dagreGraph.setNode(nodeId, { ParentNode: !1 }),
                   nodesArray.push({
                     id: nodeId,
                     type: 'custom',
@@ -6588,9 +6582,9 @@
               };
               if (selectedAtomData) {
                 const atom8 = selectedAtomData.atom,
-                  nodeId = createNode(atom8, 0);
+                  nodeId = createNode(atom8, 0, !0);
                 Array.from(dependents.get(atom8) || []).forEach((depAtom) => {
-                  const depNodeId = createNode(depAtom, 0);
+                  const depNodeId = createNode(depAtom, 0, !1);
                   edgesArray.push({
                     id: `${nodeId}-${depNodeId}`,
                     source: nodeId,
@@ -6606,13 +6600,14 @@
                 });
               } else
                 values.forEach(([atom8], i) => {
-                  const nodeId = createNode(atom8, i);
+                  const nodeId = createNode(atom8, i, !0);
                   Array.from(dependents.get(atom8) || []).forEach((depAtom) => {
-                    const depNodeId = createNode(depAtom, i);
+                    const depNodeId = createNode(depAtom, i, !1);
                     edgesArray.push({
                       id: `${nodeId}-${depNodeId}`,
                       source: nodeId,
                       target: depNodeId,
+                      animated: !0,
                       markerEnd: {
                         type: _reactflow.MarkerType.ArrowClosed,
                         width: 20,
@@ -6622,40 +6617,35 @@
                     });
                   });
                 });
-              return (
-                _dagre.layout.call(void 0, dagreGraph),
-                {
-                  atomNodes: nodesArray.map((node) => {
-                    const nodeWithPosition = dagreGraph.node(node.id);
-                    let position;
-                    if (void 0 !== nodeWithPosition.rank)
-                      position = {
-                        x: nodeWithPosition.x - node.width / 2,
-                        y: nodeWithPosition.y - node.height / 2,
-                      };
-                    else {
-                      console.log('child node activated');
-                      const parentNode = nodesArray.find(
-                        (n) =>
-                          dagreGraph.node(n.id).rank ===
-                          nodeWithPosition.rank - 1,
-                      );
-                      console.log('parentNode', parentNode),
-                        (position = {
-                          x: dagreGraph.node(parentNode.id).x + node.width,
-                          y: nodeWithPosition.y - node.height / 2,
-                        });
-                    }
-                    return {
+              let lastParent;
+              _dagre.layout.call(void 0, dagreGraph);
+              let lastParentY = 0;
+              return {
+                atomNodes: nodesArray.map((node, i) => {
+                  const nodeWithPosition = dagreGraph.node(node.id);
+                  let position;
+                  return (
+                    !0 === nodeWithPosition.ParentNode
+                      ? ((position = {
+                          x: nodeWithPosition.x - node.width / 2,
+                          y: lastParentY,
+                        }),
+                        (lastParentY += 150),
+                        (lastParent = node.id))
+                      : (position = {
+                          x: dagreGraph.node(lastParent).x + 2.5 * node.width,
+                          y: lastParentY - node.height / 2 - 125,
+                        }),
+                    {
                       ...node,
                       targetPosition: _reactflow.Position.Top,
                       sourcePosition: _reactflow.Position.Bottom,
                       position,
-                    };
-                  }),
-                  atomEdges: edgesArray,
-                }
-              );
+                    }
+                  );
+                }),
+                atomEdges: edgesArray,
+              };
             })(selectedAtomData, values),
             [nodes, setNodes, onNodesChange] = _reactflow.useNodesState.call(
               void 0,
@@ -9263,7 +9253,7 @@
       exports,
       __webpack_require__,
     ) => {
-      __webpack_require__('./dist/chunk-OI2TTQSM.cjs.js');
+      __webpack_require__('./dist/chunk-DRF2GNCI.cjs.js');
       var _chunk5K6HCVT2cjsjs = __webpack_require__(
         './dist/chunk-5K6HCVT2.cjs.js',
       );

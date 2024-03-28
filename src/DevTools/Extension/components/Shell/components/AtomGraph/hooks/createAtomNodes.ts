@@ -21,10 +21,12 @@ interface CustomNode extends Node<CustomNodeData, string> {
   sourcePosition?: Position;
 }
 
+// is this necessary? does react already have this type set up?
 interface CustomEdge extends Edge<any> {
   id: string;
   source: string;
   target: string;
+  animated?: boolean;
   markerEnd?: {
     type: string;
     width?: number;
@@ -125,9 +127,9 @@ export const useCreateAtomNodes = (
 
   layout(dagreGraph);
 
-  let lastParent;
+  let lastParent: string;
   let lastParentY = 0;
-  const parentNodeSpacing = 100;
+  const parentNodeSpacing = 150;
 
   const layoutedNodes = nodesArray.map((node, i) => {
     const nodeWithPosition = dagreGraph.node(node.id);
@@ -141,32 +143,14 @@ export const useCreateAtomNodes = (
         y: lastParentY,
       };
       lastParentY += parentNodeSpacing;
-      // const relativeNodePosition = dagreGraph.node(lastParent);
-      // if (i === 0) { // takes care of the first node in dagreGraph, since it has nothing to compare to
-      //   position = {
-      //     x: nodeWithPosition.x - node.width! / 2,
-      //     y: nodeWithPosition.y - node.height! / 2,
-      //   };
-      // } else if (nodeWithPosition.y - relativeNodePosition.y === 200) { // ideally this should take care of when there is a gap caused by a child node
-      //   position = {
-      //     x: relativeNodePosition.x - node.width! / 2,
-      //     y: relativeNodePosition.y - node.height! / 2 - 100,
-      //   };
-      // } else {
-      //   position = { // this should take care of the remaining parent nodes when there are no gaps caused by a child node
-      //     x: relativeNodePosition.x - node.width! / 2,
-      //     y: relativeNodePosition.y - node.height! / 2 - 100,
-      //   };
-      // }
 
       lastParent = node.id;
     } else {
       // this sets the position of the child node next to the parent node
       const parentNodePosition = dagreGraph.node(lastParent);
-
       position = {
         x: parentNodePosition.x + node.width! * 2.5,
-        y: lastParentY - node.height! / 2 - 75,
+        y: lastParentY - node.height! / 2 - 125,
       };
     }
 
