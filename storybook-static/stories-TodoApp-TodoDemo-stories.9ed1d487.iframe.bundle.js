@@ -1,4 +1,4 @@
-/*! For license information please see stories-TodoApp-TodoDemo-stories.b2dc730a.iframe.bundle.js.LICENSE.txt */
+/*! For license information please see stories-TodoApp-TodoDemo-stories.9ed1d487.iframe.bundle.js.LICENSE.txt */
 'use strict';
 (self.webpackChunkjotai_devtools = self.webpackChunkjotai_devtools || []).push([
   [856],
@@ -854,7 +854,7 @@
             );
         });
     },
-    './dist/chunk-NPYM43UG.cjs.js': (
+    './dist/chunk-OI2TTQSM.cjs.js': (
       __unused_webpack_module,
       exports,
       __webpack_require__,
@@ -6508,9 +6508,9 @@
         __webpack_require__('./node_modules/reactflow/dist/base.css'),
         _chunk5K6HCVT2cjsjs.init_react_shim.call(void 0);
       var _dagre = __webpack_require__('./node_modules/dagre/index.js'),
-        CustomNode_module_default = {},
         AtomGraphVisual_module_default = {};
       _chunk5K6HCVT2cjsjs.init_react_shim.call(void 0);
+      var CustomNode_module_default = {};
       var CustomNode_default = _react.memo.call(
           void 0,
           function CustomNode({ data }) {
@@ -6524,12 +6524,12 @@
               ),
               React42.default.createElement(_reactflow.Handle, {
                 type: 'target',
-                position: _reactflow.Position.Top,
+                position: _reactflow.Position.Left,
                 className: 'w-16 !bg-teal-500',
               }),
               React42.default.createElement(_reactflow.Handle, {
                 type: 'source',
-                position: _reactflow.Position.Bottom,
+                position: _reactflow.Position.Right,
                 className: 'w-16 !bg-teal-500',
               }),
             );
@@ -6565,11 +6565,16 @@
                   rankdir: 'LR',
                   nodesep: 150,
                   ranksep: 100,
+                  edgesep: 100,
                 });
-              const createNode = (atom8, i) => {
+              const createNode = (atom8, i, isParent) => {
                 const nodeId = `atom-list-item-${atom8.toString() + i}`;
                 return (
-                  dagreGraph.setNode(nodeId, { width: 100, height: 50 }),
+                  dagreGraph.setNode(nodeId, {
+                    width: 100,
+                    height: 50,
+                    rank: i,
+                  }),
                   nodesArray.push({
                     id: nodeId,
                     type: 'custom',
@@ -6590,13 +6595,13 @@
                     id: `${nodeId}-${depNodeId}`,
                     source: nodeId,
                     target: depNodeId,
+                    animated: !0,
                     markerEnd: {
                       type: _reactflow.MarkerType.ArrowClosed,
                       width: 20,
                       height: 20,
-                      color: '#000000',
                     },
-                    style: { strokeWidth: 2, stroke: '#000000' },
+                    style: { strokeWidth: 2 },
                   });
                 });
               } else
@@ -6612,9 +6617,8 @@
                         type: _reactflow.MarkerType.ArrowClosed,
                         width: 20,
                         height: 20,
-                        className: CustomNode_module_default.marketEnd,
                       },
-                      style: { strokeWidth: 2, stroke: '#FFFFFF' },
+                      style: { strokeWidth: 2 },
                     });
                   });
                 });
@@ -6623,14 +6627,30 @@
                 {
                   atomNodes: nodesArray.map((node) => {
                     const nodeWithPosition = dagreGraph.node(node.id);
+                    let position;
+                    if (void 0 !== nodeWithPosition.rank)
+                      position = {
+                        x: nodeWithPosition.x - node.width / 2,
+                        y: nodeWithPosition.y - node.height / 2,
+                      };
+                    else {
+                      console.log('child node activated');
+                      const parentNode = nodesArray.find(
+                        (n) =>
+                          dagreGraph.node(n.id).rank ===
+                          nodeWithPosition.rank - 1,
+                      );
+                      console.log('parentNode', parentNode),
+                        (position = {
+                          x: dagreGraph.node(parentNode.id).x + node.width,
+                          y: nodeWithPosition.y - node.height / 2,
+                        });
+                    }
                     return {
                       ...node,
                       targetPosition: _reactflow.Position.Top,
                       sourcePosition: _reactflow.Position.Bottom,
-                      position: {
-                        x: nodeWithPosition.x - node.width / 2,
-                        y: nodeWithPosition.y - node.height / 2,
-                      },
+                      position,
                     };
                   }),
                   atomEdges: edgesArray,
@@ -6666,7 +6686,7 @@
                     edges,
                     onNodesChange,
                     onEdgesChange,
-                    style: { background: useThemeMode('#E9ECEF', '#1F1F1F') },
+                    style: { background: useThemeMode('#FFFFFF', '#1F1F1F') },
                     minZoom: 0.15,
                     maxZoom: 1,
                     onlyRenderVisibleElements: !0,
@@ -9243,7 +9263,7 @@
       exports,
       __webpack_require__,
     ) => {
-      __webpack_require__('./dist/chunk-NPYM43UG.cjs.js');
+      __webpack_require__('./dist/chunk-OI2TTQSM.cjs.js');
       var _chunk5K6HCVT2cjsjs = __webpack_require__(
         './dist/chunk-5K6HCVT2.cjs.js',
       );
