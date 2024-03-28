@@ -1,9 +1,10 @@
 import { graphlib, layout } from 'dagre';
-import { Edge, Node, Position } from 'reactflow';
+import { Edge, MarkerType, Node, Position } from 'reactflow';
 import { AnyAtom, ValuesAtomTuple } from 'src/types';
 import { useAtomsSnapshots } from '../../../../../../hooks/useAtomsSnapshots';
 import { atomToPrintable } from '../../../../../../utils';
 import { SelectedAtomAtomData } from '../../atoms';
+import classes from '../components/AtomGraphVisual/CustomNode.module.css';
 
 interface CustomNodeData {
   label: string;
@@ -20,10 +21,20 @@ interface CustomNode extends Node<CustomNodeData, string> {
   sourcePosition?: Position;
 }
 
+// is this necessary? does react already have this type set up?
 interface CustomEdge extends Edge<any> {
   id: string;
   source: string;
   target: string;
+  animated?: boolean;
+  markerEnd?: {
+    type: string;
+    width?: number;
+    height?: number;
+    color?: string;
+    className?: any;
+  };
+  style?: object;
 }
 
 export const useCreateAtomNodes = (
@@ -33,20 +44,31 @@ export const useCreateAtomNodes = (
   const { dependents } = useAtomsSnapshots();
   const nodesArray: CustomNode[] = [];
   const edgesArray: CustomEdge[] = [];
+
   const dagreGraph = new graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
 
   // Set the node spacing
   dagreGraph.setGraph({
-    rankdir: 'TB',
-    nodesep: 100, // horiz spacing between nodes
-    ranksep: 100, // vert spacing between nodes
+    rankdir: 'LR',
+    // nodesep: 100, // horiz spacing between nodes
+    // ranksep: 100, // vert spacing between nodes
+    // edgesep: 100,
   });
 
-  const createNode = (atom: AnyAtom, i: number) => {
+  //helper function to create individual nodes
+  const createNode = (atom: AnyAtom, i: number, isParent: boolean) => {
     const atomKey = atom.toString();
     const nodeId = `atom-list-item-${atomKey + i}`;
     dagreGraph.setNode(nodeId, { width: 100, height: 50 });
+
+    if (isParent) {
+      dagreGraph.setNode(nodeId, { ParentNode: true, rank: i });
+    } else {
+      // Set the rank for child nodes based on their parent's rank
+      dagreGraph.setNode(nodeId, { ParentNode: false });
+    }
+
     nodesArray.push({
       id: nodeId,
       type: 'custom',
@@ -60,43 +82,83 @@ export const useCreateAtomNodes = (
 
   if (!selectedAtomData) {
     values.forEach(([atom], i) => {
-      const nodeId = createNode(atom, i);
+      const nodeId = createNode(atom, i, true);
       const depsForAtom = Array.from(dependents.get(atom) || []);
       depsForAtom.forEach((depAtom) => {
-        const depNodeId = createNode(depAtom, i);
+        const depNodeId = createNode(depAtom, i, false);
         edgesArray.push({
           id: `${nodeId}-${depNodeId}`,
           source: nodeId,
           target: depNodeId,
+          animated: true,
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            width: 20,
+            height: 20,
+          },
+          style: {
+            strokeWidth: 2,
+          },
         });
       });
     });
   } else {
     const atom = selectedAtomData.atom;
-    const nodeId = createNode(atom, 0);
+    const nodeId = createNode(atom, 0, true);
     const depsForAtom = Array.from(dependents.get(atom) || []);
     depsForAtom.forEach((depAtom) => {
-      const depNodeId = createNode(depAtom, 0);
+      const depNodeId = createNode(depAtom, 0, false);
       edgesArray.push({
         id: `${nodeId}-${depNodeId}`,
         source: nodeId,
         target: depNodeId,
+        animated: true,
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          width: 20,
+          height: 20,
+        },
+        style: {
+          strokeWidth: 2,
+        },
       });
     });
   }
 
   layout(dagreGraph);
 
-  const layoutedNodes = nodesArray.map((node) => {
+  let lastParent: string;
+  let lastParentY = 0;
+  const parentNodeSpacing = 150;
+
+  const layoutedNodes = nodesArray.map((node, i) => {
     const nodeWithPosition = dagreGraph.node(node.id);
+    const isParent = nodeWithPosition.ParentNode === true;
+
+    let position;
+
+    if (isParent) {
+      position = {
+        x: nodeWithPosition.x - node.width! / 2,
+        y: lastParentY,
+      };
+      lastParentY += parentNodeSpacing;
+
+      lastParent = node.id;
+    } else {
+      // this sets the position of the child node next to the parent node
+      const parentNodePosition = dagreGraph.node(lastParent);
+      position = {
+        x: parentNodePosition.x + node.width! * 2.5,
+        y: lastParentY - node.height! / 2 - 125,
+      };
+    }
+
     return {
       ...node,
       targetPosition: Position.Top,
       sourcePosition: Position.Bottom,
-      position: {
-        x: nodeWithPosition.x - node.width! / 2,
-        y: nodeWithPosition.y - node.height! / 2,
-      },
+      position,
     };
   });
 

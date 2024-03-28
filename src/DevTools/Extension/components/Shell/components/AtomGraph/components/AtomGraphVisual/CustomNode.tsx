@@ -23,12 +23,12 @@ function CustomNode({ data }: CustomNodeProps) {
       <div className={classes.CustomNode}>{data.label}</div>
       <Handle
         type="target"
-        position={Position.Top}
+        position={Position.Left}
         className="w-16 !bg-teal-500"
       />
       <Handle
         type="source"
-        position={Position.Bottom}
+        position={Position.Right}
         className="w-16 !bg-teal-500"
       />
     </div>

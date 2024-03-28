@@ -87,6 +87,8 @@ const DevToolsMain = ({
         theme={theme}
         defaultColorScheme={defaultColorScheme}
         getRootElement={getRootElement}
+        //this breaks the dark mode toggle
+        // classNamesPrefix="jotai-devtools"
       >
         <Extension store={store} isInitialOpen={isInitialOpen} />
       </MantineProvider>

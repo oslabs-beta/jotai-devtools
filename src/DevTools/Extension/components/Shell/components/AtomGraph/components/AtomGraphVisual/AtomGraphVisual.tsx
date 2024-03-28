@@ -99,7 +99,7 @@ export const AtomGraphVisual = React.memo(() => {
           onEdgesChange={onEdgesChange}
           // onConnect={onConnect}
           // mantine gray 2 for light, dark 8 for dark
-          style={{ background: useThemeMode('#E9ECEF', '#1F1F1F') }}
+          style={{ background: useThemeMode('#FFFFFF', '#1F1F1F') }}
           minZoom={0.15}
           maxZoom={1.0}
           onlyRenderVisibleElements={true}
