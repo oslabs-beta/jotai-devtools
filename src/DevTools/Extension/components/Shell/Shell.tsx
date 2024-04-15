@@ -6,6 +6,7 @@ import { shellStylesAtom } from '../../../atoms/shell-styles';
 import { TabKeys, shellStyleDefaults } from '../../../constants';
 import { useDevtoolsJotaiStoreOptions } from '../../../internal-jotai-store';
 import { useSelectedShellTab } from './atoms';
+import { AtomGraph } from './components/AtomGraph';
 import { AtomViewer } from './components/AtomViewer';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Header } from './components/Header';
@@ -70,6 +71,18 @@ export const Shell = () => {
           }}
         >
           <TimeTravel />
+        </Tabs.Panel>
+        <Tabs.Panel
+          value={TabKeys.AtomGraph}
+          h="100%"
+          style={{
+            overflow: 'hidden',
+            // Hide the overlap of this div's bg
+            borderBottomLeftRadius: '7px',
+            borderBottomRightRadius: '7px',
+          }}
+        >
+          <AtomGraph />
         </Tabs.Panel>
       </ErrorBoundary>
     </Tabs>

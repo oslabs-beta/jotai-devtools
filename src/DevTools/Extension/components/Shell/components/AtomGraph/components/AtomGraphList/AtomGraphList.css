@@ -1,0 +1,6 @@
+.internal-jotai-devtools-atom-graph-list-text {
+    position: sticky;
+    top: 0;
+}
+
+.internal-jotai-devtools-atom-items-wrapper { overflow: auto; }

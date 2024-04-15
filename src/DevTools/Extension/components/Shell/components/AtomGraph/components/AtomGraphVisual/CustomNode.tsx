@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { Background, Handle, Position } from 'reactflow';
 // import { useDarkModeValue } from '../../../../../atoms/dark-mode';
-import classes from './CustomNode.module.css';
+import './CustomNode.css';
 
 type CustomNodeData = {
   label: string;
@@ -20,7 +20,7 @@ function CustomNode({ data }: CustomNodeProps) {
 
   return (
     <div>
-      <div className={classes.CustomNode}>{data.label}</div>
+      <div className="internal-jotai-devtools-custom-node">{data.label}</div>
       <Handle
         type="target"
         position={Position.Left}

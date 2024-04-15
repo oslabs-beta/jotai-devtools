@@ -4,7 +4,7 @@
     height: '100%'; 
 } */
 
-.AtomGraph .AtomGraphLines{
+.internal-jotai-devtools-atom-graph .internal-jotai-devtools-atom-graph-lines{
     background: var(--mantine-color-dark-1);
     color: var(--mantine-color-dark-8);
     [data-mantine-color-scheme='dark'] & {
@@ -22,7 +22,7 @@
 /* } */
 
 /* adds background color to search panel */
-.atomListWrapper {
+.internal-jotai-devtools-atom-list-wrapper {
     background: var(--mantine-color-gray-2);
 
     [data-mantine-color-scheme='dark'] & {
@@ -31,6 +31,6 @@
 }
 
 /* allows the panel to have a scroll when there is content overflow */
-.panel { 
+.internal-jotai-devtools-atom-graph-panel { 
     overflow: auto !important;
 }

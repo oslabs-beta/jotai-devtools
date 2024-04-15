@@ -11,7 +11,7 @@ import {
   searchInputAtom,
   selectedAtomAtom,
 } from '../../../atoms';
-import classes from './AtomGraphList.module.css';
+import './AtomGraphList.css';
 
 const SearchAtoms = React.memo(() => {
   const [userInput, setUserInput] = useAtom(
@@ -34,7 +34,7 @@ const SearchAtoms = React.memo(() => {
       placeholder="atom debug label"
       pt={10}
       pb={10}
-      className={classes.text}
+      className="internal-jotai-devtools-atom-graph-list-text"
       value={userInput}
       onChange={handleOnChange}
       id="jotai-devtools-atom-debug-search-input"
@@ -113,7 +113,7 @@ export const AtomGraphList = () => {
   return (
     <>
       <SearchAtoms />
-      <Box className={classes.atomItemsWrapper}>
+      <Box className="internal-jotai-devtools-atom-items-wrapper">
         <ActionListItem
           label="All"
           onClick={handleOnClickReset}

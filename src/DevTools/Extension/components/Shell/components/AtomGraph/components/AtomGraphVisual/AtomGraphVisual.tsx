@@ -23,7 +23,7 @@ import { useDevtoolsJotaiStoreOptions } from '../../../../../../../internal-jota
 import { selectedAtomAtom } from '../../../atoms';
 import { useCreateAtomNodes } from '../../hooks/createAtomNodes';
 // import { useFocusNode } from '../../hooks/useAdjustViewport';
-import classes from './AtomGraphVisual.module.css';
+import './AtomGraphVisual.css';
 import CustomNode from './CustomNode';
 
 const allValues = atomWithDefault<ValuesAtomTuple[]>((get) => {
@@ -87,7 +87,7 @@ export const AtomGraphVisual = React.memo(() => {
 
   return (
     <ReactFlowProvider>
-      <div className={classes['graph-container']}>
+      <div className="internal-jotai-devtools-graph-container">
         <ReactFlow
           // fitView
           // className={styles.AtomGraph}
