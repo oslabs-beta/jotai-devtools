@@ -1,0 +1,36 @@
+/* TO FIX: migrate container height and width to module */
+/* .ContainerAtomGraph {
+    width: '100%';
+    height: '100%'; 
+} */
+
+.AtomGraph .AtomGraphLines{
+    background: var(--mantine-color-dark-1);
+    color: var(--mantine-color-dark-8);
+    [data-mantine-color-scheme='dark'] & {
+        background: var(--mantine-color-dark-8);
+        color: var(--mantine-color-blue-5);
+  }
+}
+
+/* .AtomGraphLines {
+    color: var(--mantine-color-blue-5);
+    [data-mantine-color-scheme='dark'] & {
+        background: var(--mantine-color-red-6);
+    }
+    /* color=darkMode ? '#252B37' : '#FFFFFF' */
+/* } */
+
+/* adds background color to search panel */
+.atomListWrapper {
+    background: var(--mantine-color-gray-2);
+
+    [data-mantine-color-scheme='dark'] & {
+        background: var(--mantine-color-dark-8);
+    }
+}
+
+/* allows the panel to have a scroll when there is content overflow */
+.panel { 
+    overflow: auto !important;
+}
