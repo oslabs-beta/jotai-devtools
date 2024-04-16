@@ -6,3 +6,4 @@ coverage
 react-shim.js
 __mocks__/styleMock.js
 postcss.config.js
+storybook-static
