@@ -113,15 +113,17 @@ export const AtomGraphList = () => {
   return (
     <>
       <SearchAtoms />
-      <Box className="internal-jotai-devtools-atom-items-wrapper">
-        <ActionListItem
-          label="All"
-          onClick={handleOnClickReset}
-          id={'All'}
-          isActive={!selectedAtomData?.atomKey}
-        />
-        {atomItems}
-      </Box>
+      {!noResultsFound && (
+        <Box className="internal-jotai-devtools-atom-items-wrapper">
+          <ActionListItem
+            label="All"
+            onClick={handleOnClickReset}
+            id={'All'}
+            isActive={!selectedAtomData?.atomKey}
+          />
+          {atomItems}
+        </Box>
+      )}
       {noResultsFound && (
         <Group mt={20} justify="center">
           <IconAlertCircle size={16} />
