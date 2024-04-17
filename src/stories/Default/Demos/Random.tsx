@@ -4,6 +4,35 @@ import { useAtom, useAtomValue } from 'jotai/react';
 import { atom } from 'jotai/vanilla';
 import { demoStoreOptions } from './demo-store';
 
+const aVeryBigSetOfAtoms = Array.from({ length: 10 }, (_, i) => {
+  const anAtom = atom(i);
+  anAtom.debugLabel = `anAtom${i}`;
+  return anAtom;
+});
+
+const anBigAtomHolder = atom((get) => {
+  return aVeryBigSetOfAtoms.map((a) => get(a));
+});
+
+anBigAtomHolder.debugLabel = 'anBigAtomHolder';
+
+const createDependentAtomChain = (depth, initialValue = 0) => {
+  if (depth === 0) {
+    const baseAtom = atom(initialValue);
+    baseAtom.debugLabel = `baseAtom-${initialValue}`;
+    return baseAtom;
+  }
+
+  const parentAtom = createDependentAtomChain(depth - 1, initialValue);
+  const childAtom = atom((get) => get(parentAtom) + 1);
+  childAtom.debugLabel = `childAtom-${depth}-${initialValue}`;
+  return childAtom;
+};
+
+const shallowChain = createDependentAtomChain(10);
+// const mediumChain = createDependentAtomChain(50);
+// const deepChain = createDependentAtomChain(100);
+
 const countAtom = atom(1);
 countAtom.debugLabel = 'randomCountAtom';
 
@@ -34,6 +63,15 @@ const nestedObjectAtom = atom((get) => {
 });
 
 nestedObjectAtom.debugLabel = 'nestedObjectAtom';
+
+const dependentOfNestedObjectAtom = atom((get) => {
+  const { nestedObject } = get(nestedObjectAtom);
+  return {
+    quadrupleCount: nestedObject.doubleCount * 2,
+    sixTimesCount: nestedObject.tripleCount * 2,
+  };
+});
+dependentOfNestedObjectAtom.debugLabel = 'dependentOfNestedObjectAtom';
 
 const atomsInAtomsCountAtom = atom(atom(atom((get) => get(countAtom))));
 atomsInAtomsCountAtom.debugLabel = 'atomsInAtomsCountAtom';
@@ -68,6 +106,11 @@ export const Random = () => {
   useAtomValue(atomReturnsUndefined, demoStoreOptions);
   useAtomValue(atomWithSomeSymbol, demoStoreOptions);
   useAtomValue(atomWithFunction, demoStoreOptions);
+  useAtomValue(dependentOfNestedObjectAtom, demoStoreOptions);
+  useAtomValue(anBigAtomHolder, demoStoreOptions);
+  useAtomValue(shallowChain, demoStoreOptions);
+  // useAtomValue(mediumChain, demoStoreOptions);
+  // useAtomValue(deepChain, demoStoreOptions);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const atomsInAtomsCount = useAtomValue(
