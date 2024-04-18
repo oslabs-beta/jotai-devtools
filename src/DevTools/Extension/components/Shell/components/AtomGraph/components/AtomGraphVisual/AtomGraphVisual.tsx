@@ -89,7 +89,7 @@ export const AtomGraphVisual = React.memo(() => {
       const bounds = getNodesBounds(nodes);
 
       setBoundry([
-        [-150 + bounds.x, 150 + bounds.y],
+        [-150 + bounds.x, -150 + bounds.y],
         [150 + bounds.width + bounds.x, 150 + bounds.height + bounds.y],
       ]);
     }
