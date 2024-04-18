@@ -6,9 +6,11 @@ import ReactFlow, {
   BackgroundVariant,
   Connection,
   Controls,
+  CoordinateExtent,
   Edge,
   ReactFlowProvider,
   addEdge,
+  getNodesBounds,
   useEdgesState,
   useNodesState,
   useReactFlow,
@@ -68,6 +70,10 @@ export const AtomGraphVisual = React.memo(() => {
 
   const [nodes, setNodes, onNodesChange] = useNodesState(atomNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(atomEdges);
+  const [boundry, setBoundry] = React.useState([
+    [-Infinity, -Infinity],
+    [+Infinity, +Infinity],
+  ]);
 
   // const reactFlowInstance = useReactFlow();
 
@@ -77,6 +83,17 @@ export const AtomGraphVisual = React.memo(() => {
     setNodes(atomNodes);
     setEdges(atomEdges);
   }, [values, selectedAtomData]);
+
+  React.useEffect(() => {
+    if (nodes.length > 0) {
+      const bounds = getNodesBounds(nodes);
+
+      setBoundry([
+        [-150 + bounds.x, -150 + bounds.y],
+        [150 + bounds.width + bounds.x, 150 + bounds.height + bounds.y],
+      ]);
+    }
+  }, [nodes]);
 
   // const onConnect = React.useCallback(
   //   (params) => setEdges((eds) => addEdge(params, eds)),
@@ -103,6 +120,7 @@ export const AtomGraphVisual = React.memo(() => {
           minZoom={0.15}
           maxZoom={1.0}
           onlyRenderVisibleElements={true}
+          translateExtent={boundry}
         >
           {/*proOptions={proOptions}  Arjun tbd */}
           {/* TODO: Controls are not responding to lightvsdark mode settings, need to fix  */}
