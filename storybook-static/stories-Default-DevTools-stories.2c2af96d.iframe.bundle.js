@@ -141,7 +141,28 @@
       var Divider = __webpack_require__(
         './node_modules/@mantine/core/esm/components/Divider/Divider.mjs',
       );
-      const Random_countAtom = (0, vanilla.eU)(1);
+      const aVeryBigSetOfAtoms = Array.from({ length: 10 }, (_, i) => {
+          const anAtom = (0, vanilla.eU)(i);
+          return (anAtom.debugLabel = `anAtom${i}`), anAtom;
+        }),
+        anBigAtomHolder = (0, vanilla.eU)((get) =>
+          aVeryBigSetOfAtoms.map((a) => get(a)),
+        );
+      anBigAtomHolder.debugLabel = 'anBigAtomHolder';
+      const createDependentAtomChain = (depth, initialValue = 0) => {
+          if (0 === depth) {
+            const baseAtom = (0, vanilla.eU)(initialValue);
+            return (baseAtom.debugLabel = `baseAtom-${initialValue}`), baseAtom;
+          }
+          const parentAtom = createDependentAtomChain(depth - 1, initialValue),
+            childAtom = (0, vanilla.eU)((get) => get(parentAtom) + 1);
+          return (
+            (childAtom.debugLabel = `childAtom-${depth}-${initialValue}`),
+            childAtom
+          );
+        },
+        shallowChain = createDependentAtomChain(10),
+        Random_countAtom = (0, vanilla.eU)(1);
       Random_countAtom.debugLabel = 'randomCountAtom';
       const textAtom = (0, vanilla.eU)('hello');
       textAtom.debugLabel = 'textAtom';
@@ -161,6 +182,14 @@
         foo: 'bar',
       }));
       nestedObjectAtom.debugLabel = 'nestedObjectAtom';
+      const dependentOfNestedObjectAtom = (0, vanilla.eU)((get) => {
+        const { nestedObject } = get(nestedObjectAtom);
+        return {
+          quadrupleCount: 2 * nestedObject.doubleCount,
+          sixTimesCount: 2 * nestedObject.tripleCount,
+        };
+      });
+      dependentOfNestedObjectAtom.debugLabel = 'dependentOfNestedObjectAtom';
       const atomsInAtomsCountAtom = (0, vanilla.eU)(
         (0, vanilla.eU)((0, vanilla.eU)((get) => get(Random_countAtom))),
       );
@@ -194,7 +223,10 @@
           (0, esm_react.md)(bigintAtom, demoStoreOptions),
           (0, esm_react.md)(atomReturnsUndefined, demoStoreOptions),
           (0, esm_react.md)(atomWithSomeSymbol, demoStoreOptions),
-          (0, esm_react.md)(atomWithFunction, demoStoreOptions);
+          (0, esm_react.md)(atomWithFunction, demoStoreOptions),
+          (0, esm_react.md)(dependentOfNestedObjectAtom, demoStoreOptions),
+          (0, esm_react.md)(anBigAtomHolder, demoStoreOptions),
+          (0, esm_react.md)(shallowChain, demoStoreOptions);
         (0, esm_react.md)(atomsInAtomsCountAtom, demoStoreOptions);
         return react.createElement(
           Box.a,
