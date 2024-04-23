@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Flex } from '@mantine/core';
 import { Panel, PanelGroup } from 'react-resizable-panels';
+import ReactFlow, { ReactFlowProvider } from 'reactflow';
 import { PanelResizeHandle } from '../PanelResizeHandle';
 import './AtomGraph.css';
 import { AtomGraphList } from './components/AtomGraphList/AtomGraphList';
@@ -30,7 +31,9 @@ export const AtomGraph = React.memo(() => {
         minSize={30}
         className="internal-jotai-devtools-atom-graph-panel"
       >
-        <AtomGraphVisual />
+        <ReactFlowProvider>
+          <AtomGraphVisual />
+        </ReactFlowProvider>
       </Panel>
     </PanelGroup>
   );

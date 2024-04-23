@@ -303,7 +303,7 @@ export const useCreateAtomNodes = (
   const dagreGraph = new graphlib.Graph();
   dagreGraph.setGraph({
     rankdir: 'LR',
-    nodesep: 100,
+    nodesep: 100, //nodesep, ranksep, and edgesep when added auto layouts which puts the nodes out of view
     ranksep: 150,
     edgesep: 150,
   });
