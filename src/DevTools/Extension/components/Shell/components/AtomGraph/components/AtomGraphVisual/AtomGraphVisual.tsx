@@ -24,7 +24,6 @@ import { useSyncSnapshotValuesToAtom } from '../../../../../../../hooks/useAtoms
 import { useDevtoolsJotaiStoreOptions } from '../../../../../../../internal-jotai-store';
 import { selectedAtomAtom } from '../../../atoms';
 import { useCreateAtomNodes } from '../../hooks/createAtomNodes';
-// import { useFocusNode } from '../../hooks/useAdjustViewport';
 import './AtomGraphVisual.css';
 import CustomNode from './CustomNode';
 
@@ -36,18 +35,6 @@ const allValues = atomWithDefault<ValuesAtomTuple[]>((get) => {
 const nodeTypes = {
   custom: CustomNode,
 };
-
-// export const useFocusNode = (nodes, reactFlowInstance) => {
-//   React.useEffect(() => {
-//     if (reactFlowInstance && nodes.length > 0) {
-//       const node = nodes[0];
-//       const x = node.position.x;
-//       const y = node.position.y;
-//       const zoom = 1.85;
-//       reactFlowInstance.setCenter(x, y, { zoom });
-//     }
-//   }, [nodes, reactFlowInstance]);
-// };
 
 export const AtomGraphVisual = React.memo(() => {
   useSyncSnapshotValuesToAtom();
@@ -75,9 +62,7 @@ export const AtomGraphVisual = React.memo(() => {
     [+Infinity, +Infinity],
   ]);
 
-  // const reactFlowInstance = useReactFlow();
-
-  // useFocusNode(nodes, reactFlowInstance);
+  const { fitBounds, setCenter } = useReactFlow();
 
   React.useEffect(() => {
     setNodes(atomNodes);
@@ -88,12 +73,33 @@ export const AtomGraphVisual = React.memo(() => {
     if (nodes.length > 0) {
       const bounds = getNodesBounds(nodes);
 
+      // setBoundry sets the boundry of the user's view so they cannot endlessly scroll
       setBoundry([
         [-150 + bounds.x, -150 + bounds.y],
-        [150 + bounds.width + bounds.x, 150 + bounds.height + bounds.y],
+        [100 + bounds.width + bounds.x, 100 + bounds.height + bounds.y],
       ]);
+      fitBounds(bounds);
     }
   }, [nodes]);
+
+  // React.useEffect(() => {
+  //   const bounds = getNodesBounds(nodes);
+  //   const centerHeight = bounds.y;
+  //   const centerWidth = bounds.x + bounds.width / 2;
+
+  //   // const centerWidth = bounds.x + bounds.width / 2;
+  //   // const zoom = 0.1;
+  //   // if (!selectedAtomData) {
+  //   //   setCenter(centerHeight, centerWidth, {
+  //   //     // zoom,
+  //   //     // duration: 1000,
+  //   //   });
+  //   //   fitBounds(bounds);
+  //   // } else {
+  //   fitBounds(bounds);
+  //   console.log('the second render');
+  //   // }
+  // }, [nodes]);
 
   // const onConnect = React.useCallback(
   //   (params) => setEdges((eds) => addEdge(params, eds)),
@@ -103,42 +109,42 @@ export const AtomGraphVisual = React.memo(() => {
   // const proOptions = { hideAttribution: true }; //Arjun tbd
 
   return (
-    <ReactFlowProvider>
-      <div className="internal-jotai-devtools-graph-container">
-        <ReactFlow
-          // fitView
-          // className={styles.AtomGraph}
-          nodes={nodes}
-          nodesDraggable={false}
-          nodeTypes={nodeTypes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          // onConnect={onConnect}
-          // mantine gray 2 for light, dark 8 for dark
-          style={{ background: useThemeMode('#FFFFFF', '#1F1F1F') }}
-          minZoom={0.15}
-          maxZoom={1.0}
-          onlyRenderVisibleElements={true}
-          translateExtent={boundry}
+    // <ReactFlowProvider>
+    <div className="internal-jotai-devtools-graph-container">
+      <ReactFlow
+        // fitView={true}
+        // className={styles.AtomGraph}
+        nodes={nodes}
+        nodesDraggable={false}
+        nodeTypes={nodeTypes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        // onConnect={onConnect}
+        // mantine gray 2 for light, dark 8 for dark
+        style={{ background: useThemeMode('#FFFFFF', '#1F1F1F') }}
+        minZoom={0.15}
+        // maxZoom={1.0}
+        // onlyRenderVisibleElements={true}
+        translateExtent={boundry}
+      >
+        {/*proOptions={proOptions}  Arjun tbd */}
+        {/* TODO: Controls are not responding to lightvsdark mode settings, need to fix  */}
+        <div
+          //   style={{ backgroundColor: darkMode ? '#C0C2C9' : '#F5F5F5' }}
+          style={{ backgroundColor: '#C0C2C9' }}
+          className="dark:bg-slate-900"
         >
-          {/*proOptions={proOptions}  Arjun tbd */}
-          {/* TODO: Controls are not responding to lightvsdark mode settings, need to fix  */}
-          <div
-            //   style={{ backgroundColor: darkMode ? '#C0C2C9' : '#F5F5F5' }}
-            style={{ backgroundColor: '#C0C2C9' }}
-            className="dark:bg-slate-900"
-          >
-            <Controls showInteractive={false} />
-          </div>
-          <Background
-            color={useThemeMode('#CED4DA', '#424242')}
-            variant={BackgroundVariant.Dots}
-            gap={15}
-            size={2}
-          />
-        </ReactFlow>
-      </div>
-    </ReactFlowProvider>
+          <Controls showInteractive={false} />
+        </div>
+        <Background
+          color={useThemeMode('#CED4DA', '#424242')}
+          variant={BackgroundVariant.Dots}
+          gap={15}
+          size={2}
+        />
+      </ReactFlow>
+    </div>
+    // </ReactFlowProvider>
   );
 });
