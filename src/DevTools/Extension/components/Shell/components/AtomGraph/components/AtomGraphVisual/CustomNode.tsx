@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
-import { Background, Handle, Position } from 'reactflow';
-// import { useDarkModeValue } from '../../../../../atoms/dark-mode';
+import { Handle, Position } from 'reactflow';
 import './CustomNode.css';
 
 type CustomNodeData = {
@@ -16,8 +15,6 @@ type CustomNodeProps = {
 };
 
 function CustomNode({ data }: CustomNodeProps) {
-  //   const darkMode = useDarkModeValue();
-
   return (
     <div>
       <div className="internal-jotai-devtools-custom-node">{data.label}</div>
