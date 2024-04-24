@@ -81,7 +81,6 @@ export const AtomGraphVisual = React.memo(() => {
       fitBounds(bounds);
     }
   }, [nodes]);
-
   // React.useEffect(() => {
   //   const bounds = getNodesBounds(nodes);
   //   const centerHeight = bounds.y;
@@ -109,7 +108,6 @@ export const AtomGraphVisual = React.memo(() => {
   // const proOptions = { hideAttribution: true }; //Arjun tbd
 
   return (
-    // <ReactFlowProvider>
     <div className="internal-jotai-devtools-graph-container">
       <ReactFlow
         // fitView={true}
@@ -145,6 +143,5 @@ export const AtomGraphVisual = React.memo(() => {
         />
       </ReactFlow>
     </div>
-    // </ReactFlowProvider>
   );
 });
