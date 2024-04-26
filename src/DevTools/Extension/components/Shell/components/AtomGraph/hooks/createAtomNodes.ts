@@ -78,7 +78,7 @@ const layoutNodes = (nodes: AtomNode[], dagreGraph: graphlib.Graph): void => {
   });
 };
 
-//Creates a node component for rendering in the visualization based on an atom node
+// Creates a node component for rendering in the visualization based on an atom node
 const createNodeComponent = (node: AtomNode): Node => {
   return {
     id: node.id,
