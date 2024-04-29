@@ -4,7 +4,6 @@ import { atomWithDefault } from 'jotai/vanilla/utils';
 import ReactFlow, {
   Background,
   BackgroundVariant,
-  ControlButton,
   Controls,
   getNodesBounds,
   useEdgesState,
@@ -94,13 +93,7 @@ export const AtomGraphVisual = React.memo(() => {
         // onlyRenderVisibleElements={true}
         translateExtent={boundry}
       >
-        {/* <div
-        // style={{ backgroundColor: darkMode ? '#C0C2C9' : '#F5F5F5' }}
-        // style={{ backgroundColor: '#C0C2C9' }}
-        // className="dark:bg-slate-900"
-        // > */}
         <Controls showInteractive={false} />
-        {/* </div> */}
         <Background
           color={useThemeMode('#CED4DA', '#424242')}
           variant={BackgroundVariant.Dots}
