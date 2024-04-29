@@ -26,7 +26,7 @@ describe('DevTools - basic', () => {
       ),
     ).toBeInTheDocument();
   });
-
+  //accurate test name 'should place trigger button on bottom left by default'
   it('should be placed on the bottom left by default', async () => {
     customRender(<DevTools />);
     expect(screen.getByTitle('Open Jotai Devtools')).toHaveStyle({
@@ -34,7 +34,7 @@ describe('DevTools - basic', () => {
       left: '0.2rem',
     });
   });
-
+  //readability 'testing if someone customized the override for devtools open button'
   it('should respect the position prop', async () => {
     customRender(<DevTools position="top-right" />);
     expect(screen.getByTitle('Open Jotai Devtools')).toHaveStyle({
