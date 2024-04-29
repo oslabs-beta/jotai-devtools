@@ -2,3 +2,40 @@
     width: 100%;
     height: 100%;
   }
+
+
+//react-flow_controls component styling override to match Mantine styling
+.react-flow__controls {
+  box-shadow: 0 0 0px 0px rgba(0, 0, 0, 0);
+}
+
+.react-flow__controls button {
+  color: var(--button-color, var(--mantine-color-white));
+  background: var(--button-bg, var(--mantine-primary-color-filled));
+  border: var(--button-bd, calc(0.0625rem * var(--mantine-scale)) solid transparent);
+  border-radius: var(--button-radius, var(--mantine-radius-default));
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+
+    [data-mantine-color-scheme='dark'] & {
+      background: var(--mantine-color-gray-1);
+  }
+}
+
+.react-flow__controls button:hover {
+  background: var(--mantine-color-dark-8);
+
+    [data-mantine-color-scheme='dark'] & {
+      background: var(--mantine-color-gray-1);
+  }
+} 
+
+.react-flow__controls button svg {
+  fill: var(--mantine-color-white);
+  width: 16px;
+  height: 16px;
+  
+    [data-mantine-color-scheme='dark'] & {
+      fill: var(--mantine-color-dark-6);
+  }
+}

@@ -57,7 +57,7 @@ export const AtomGraphVisual = React.memo(() => {
     [+Infinity, +Infinity],
   ]);
 
-  const { fitBounds } = useReactFlow();
+  const { fitView } = useReactFlow();
 
   React.useEffect(() => {
     setNodes(atomNodes);
@@ -73,7 +73,7 @@ export const AtomGraphVisual = React.memo(() => {
         [-150 + bounds.x, -150 + bounds.y],
         [100 + bounds.width + bounds.x, 100 + bounds.height + bounds.y],
       ]);
-      fitBounds(bounds);
+      fitView({ padding: 3, duration: 100 });
     }
   }, [nodes]);
 
@@ -93,13 +93,7 @@ export const AtomGraphVisual = React.memo(() => {
         // onlyRenderVisibleElements={true}
         translateExtent={boundry}
       >
-        <div
-          //   style={{ backgroundColor: darkMode ? '#C0C2C9' : '#F5F5F5' }}
-          style={{ backgroundColor: '#C0C2C9' }}
-          className="dark:bg-slate-900"
-        >
-          <Controls showInteractive={false} />
-        </div>
+        <Controls showInteractive={false} />
         <Background
           color={useThemeMode('#CED4DA', '#424242')}
           variant={BackgroundVariant.Dots}
