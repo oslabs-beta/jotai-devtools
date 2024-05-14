@@ -26,7 +26,7 @@ describe('DevTools - basic', () => {
       ),
     ).toBeInTheDocument();
   });
-  //accurate test name 'should place trigger button on bottom left by default'
+  //it 'should place trigger button on bottom left by default'
   it('should be placed on the bottom left by default', async () => {
     customRender(<DevTools />);
     expect(screen.getByTitle('Open Jotai Devtools')).toHaveStyle({

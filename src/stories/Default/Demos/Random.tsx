@@ -4,7 +4,7 @@ import { useAtom, useAtomValue } from 'jotai/react';
 import { atom } from 'jotai/vanilla';
 import { demoStoreOptions } from './demo-store';
 
-const aVeryBigSetOfAtoms = Array.from({ length: 10 }, (_, i) => {
+const aVeryBigSetOfAtoms = Array.from({ length: 12 }, (_, i) => {
   const anAtom = atom(i);
   anAtom.debugLabel = `anAtom${i}`;
   return anAtom;

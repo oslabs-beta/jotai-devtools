@@ -55,12 +55,14 @@ const buildAtomTree = (
   });
 
   relationships.forEach(([parentAtom, childAtom]) => {
-    const parentNode = atomMap.get(parentAtom)!;
-    const childNode = atomMap.get(childAtom)!;
-    if (!childNode.parent) {
-      childNode.parent = parentNode;
+    if (parentAtom !== childAtom) {
+      const parentNode = atomMap.get(parentAtom)!;
+      const childNode = atomMap.get(childAtom)!;
+      if (!childNode.parent) {
+        childNode.parent = parentNode;
+      }
+      parentNode.children.push(childNode);
     }
-    parentNode.children.push(childNode);
   });
 
   return Array.from(atomMap.values()).filter((node) => !node.parent);
