@@ -310,6 +310,2207 @@ var require_memoizerific = __commonJS({
     });
   },
 });
+var require_shams3 = __commonJS({
+  '../../node_modules/has-symbols/shams.js'(exports, module) {
+    'use strict';
+    module.exports = function () {
+      if (
+        typeof Symbol != 'function' ||
+        typeof Object.getOwnPropertySymbols != 'function'
+      )
+        return !1;
+      if (typeof Symbol.iterator == 'symbol') return !0;
+      var obj = {},
+        sym = Symbol('test'),
+        symObj = Object(sym);
+      if (
+        typeof sym == 'string' ||
+        Object.prototype.toString.call(sym) !== '[object Symbol]' ||
+        Object.prototype.toString.call(symObj) !== '[object Symbol]'
+      )
+        return !1;
+      var symVal = 42;
+      obj[sym] = symVal;
+      for (sym in obj) return !1;
+      if (
+        (typeof Object.keys == 'function' && Object.keys(obj).length !== 0) ||
+        (typeof Object.getOwnPropertyNames == 'function' &&
+          Object.getOwnPropertyNames(obj).length !== 0)
+      )
+        return !1;
+      var syms = Object.getOwnPropertySymbols(obj);
+      if (
+        syms.length !== 1 ||
+        syms[0] !== sym ||
+        !Object.prototype.propertyIsEnumerable.call(obj, sym)
+      )
+        return !1;
+      if (typeof Object.getOwnPropertyDescriptor == 'function') {
+        var descriptor = Object.getOwnPropertyDescriptor(obj, sym);
+        if (descriptor.value !== symVal || descriptor.enumerable !== !0)
+          return !1;
+      }
+      return !0;
+    };
+  },
+});
+var require_has_symbols2 = __commonJS({
+  '../../node_modules/has-symbols/index.js'(exports, module) {
+    'use strict';
+    var origSymbol = typeof Symbol < 'u' && Symbol,
+      hasSymbolSham = require_shams3();
+    module.exports = function () {
+      return typeof origSymbol != 'function' ||
+        typeof Symbol != 'function' ||
+        typeof origSymbol('foo') != 'symbol' ||
+        typeof Symbol('bar') != 'symbol'
+        ? !1
+        : hasSymbolSham();
+    };
+  },
+});
+var require_has_proto = __commonJS({
+  '../../node_modules/has-proto/index.js'(exports, module) {
+    'use strict';
+    var test = { foo: {} },
+      $Object = Object;
+    module.exports = function () {
+      return (
+        { __proto__: test }.foo === test.foo &&
+        !({ __proto__: null } instanceof $Object)
+      );
+    };
+  },
+});
+var require_implementation2 = __commonJS({
+  '../../node_modules/function-bind/implementation.js'(exports, module) {
+    'use strict';
+    var ERROR_MESSAGE = 'Function.prototype.bind called on incompatible ',
+      toStr = Object.prototype.toString,
+      max = Math.max,
+      funcType = '[object Function]',
+      concatty = function (a, b2) {
+        for (var arr = [], i = 0; i < a.length; i += 1) arr[i] = a[i];
+        for (var j = 0; j < b2.length; j += 1) arr[j + a.length] = b2[j];
+        return arr;
+      },
+      slicy = function (arrLike, offset) {
+        for (
+          var arr = [], i = offset || 0, j = 0;
+          i < arrLike.length;
+          i += 1, j += 1
+        )
+          arr[j] = arrLike[i];
+        return arr;
+      },
+      joiny = function (arr, joiner) {
+        for (var str = '', i = 0; i < arr.length; i += 1)
+          (str += arr[i]), i + 1 < arr.length && (str += joiner);
+        return str;
+      };
+    module.exports = function (that) {
+      var target = this;
+      if (typeof target != 'function' || toStr.apply(target) !== funcType)
+        throw new TypeError(ERROR_MESSAGE + target);
+      for (
+        var args2 = slicy(arguments, 1),
+          bound,
+          binder = function () {
+            if (this instanceof bound) {
+              var result2 = target.apply(this, concatty(args2, arguments));
+              return Object(result2) === result2 ? result2 : this;
+            }
+            return target.apply(that, concatty(args2, arguments));
+          },
+          boundLength = max(0, target.length - args2.length),
+          boundArgs = [],
+          i = 0;
+        i < boundLength;
+        i++
+      )
+        boundArgs[i] = '$' + i;
+      if (
+        ((bound = Function(
+          'binder',
+          'return function (' +
+            joiny(boundArgs, ',') +
+            '){ return binder.apply(this,arguments); }',
+        )(binder)),
+        target.prototype)
+      ) {
+        var Empty = function () {};
+        (Empty.prototype = target.prototype),
+          (bound.prototype = new Empty()),
+          (Empty.prototype = null);
+      }
+      return bound;
+    };
+  },
+});
+var require_function_bind2 = __commonJS({
+  '../../node_modules/function-bind/index.js'(exports, module) {
+    'use strict';
+    var implementation = require_implementation2();
+    module.exports = Function.prototype.bind || implementation;
+  },
+});
+var require_src2 = __commonJS({
+  '../../node_modules/has/src/index.js'(exports, module) {
+    'use strict';
+    var hasOwnProperty5 = {}.hasOwnProperty,
+      call = Function.prototype.call;
+    module.exports = call.bind
+      ? call.bind(hasOwnProperty5)
+      : function (O2, P2) {
+          return call.call(hasOwnProperty5, O2, P2);
+        };
+  },
+});
+var require_get_intrinsic2 = __commonJS({
+  '../../node_modules/get-intrinsic/index.js'(exports, module) {
+    'use strict';
+    var undefined2,
+      $SyntaxError = SyntaxError,
+      $Function = Function,
+      $TypeError = TypeError,
+      getEvalledConstructor = function (expressionSyntax) {
+        try {
+          return $Function(
+            '"use strict"; return (' + expressionSyntax + ').constructor;',
+          )();
+        } catch {}
+      },
+      $gOPD = Object.getOwnPropertyDescriptor;
+    if ($gOPD)
+      try {
+        $gOPD({}, '');
+      } catch {
+        $gOPD = null;
+      }
+    var throwTypeError = function () {
+        throw new $TypeError();
+      },
+      ThrowTypeError = $gOPD
+        ? (function () {
+            try {
+              return arguments.callee, throwTypeError;
+            } catch {
+              try {
+                return $gOPD(arguments, 'callee').get;
+              } catch {
+                return throwTypeError;
+              }
+            }
+          })()
+        : throwTypeError,
+      hasSymbols = require_has_symbols2()(),
+      hasProto = require_has_proto()(),
+      getProto =
+        Object.getPrototypeOf ||
+        (hasProto
+          ? function (x2) {
+              return x2.__proto__;
+            }
+          : null),
+      needsEval = {},
+      TypedArray =
+        typeof Uint8Array > 'u' || !getProto
+          ? undefined2
+          : getProto(Uint8Array),
+      INTRINSICS = {
+        '%AggregateError%':
+          typeof AggregateError > 'u' ? undefined2 : AggregateError,
+        '%Array%': Array,
+        '%ArrayBuffer%': typeof ArrayBuffer > 'u' ? undefined2 : ArrayBuffer,
+        '%ArrayIteratorPrototype%':
+          hasSymbols && getProto ? getProto([][Symbol.iterator]()) : undefined2,
+        '%AsyncFromSyncIteratorPrototype%': undefined2,
+        '%AsyncFunction%': needsEval,
+        '%AsyncGenerator%': needsEval,
+        '%AsyncGeneratorFunction%': needsEval,
+        '%AsyncIteratorPrototype%': needsEval,
+        '%Atomics%': typeof Atomics > 'u' ? undefined2 : Atomics,
+        '%BigInt%': typeof BigInt > 'u' ? undefined2 : BigInt,
+        '%BigInt64Array%':
+          typeof BigInt64Array > 'u' ? undefined2 : BigInt64Array,
+        '%BigUint64Array%':
+          typeof BigUint64Array > 'u' ? undefined2 : BigUint64Array,
+        '%Boolean%': Boolean,
+        '%DataView%': typeof DataView > 'u' ? undefined2 : DataView,
+        '%Date%': Date,
+        '%decodeURI%': decodeURI,
+        '%decodeURIComponent%': decodeURIComponent,
+        '%encodeURI%': encodeURI,
+        '%encodeURIComponent%': encodeURIComponent,
+        '%Error%': Error,
+        '%eval%': eval,
+        '%EvalError%': EvalError,
+        '%Float32Array%': typeof Float32Array > 'u' ? undefined2 : Float32Array,
+        '%Float64Array%': typeof Float64Array > 'u' ? undefined2 : Float64Array,
+        '%FinalizationRegistry%':
+          typeof FinalizationRegistry > 'u' ? undefined2 : FinalizationRegistry,
+        '%Function%': $Function,
+        '%GeneratorFunction%': needsEval,
+        '%Int8Array%': typeof Int8Array > 'u' ? undefined2 : Int8Array,
+        '%Int16Array%': typeof Int16Array > 'u' ? undefined2 : Int16Array,
+        '%Int32Array%': typeof Int32Array > 'u' ? undefined2 : Int32Array,
+        '%isFinite%': isFinite,
+        '%isNaN%': isNaN,
+        '%IteratorPrototype%':
+          hasSymbols && getProto
+            ? getProto(getProto([][Symbol.iterator]()))
+            : undefined2,
+        '%JSON%': typeof JSON == 'object' ? JSON : undefined2,
+        '%Map%': typeof Map > 'u' ? undefined2 : Map,
+        '%MapIteratorPrototype%':
+          typeof Map > 'u' || !hasSymbols || !getProto
+            ? undefined2
+            : getProto(new Map()[Symbol.iterator]()),
+        '%Math%': Math,
+        '%Number%': Number,
+        '%Object%': Object,
+        '%parseFloat%': parseFloat,
+        '%parseInt%': parseInt,
+        '%Promise%': typeof Promise > 'u' ? undefined2 : Promise,
+        '%Proxy%': typeof Proxy > 'u' ? undefined2 : Proxy,
+        '%RangeError%': RangeError,
+        '%ReferenceError%': ReferenceError,
+        '%Reflect%': typeof Reflect > 'u' ? undefined2 : Reflect,
+        '%RegExp%': RegExp,
+        '%Set%': typeof Set > 'u' ? undefined2 : Set,
+        '%SetIteratorPrototype%':
+          typeof Set > 'u' || !hasSymbols || !getProto
+            ? undefined2
+            : getProto(new Set()[Symbol.iterator]()),
+        '%SharedArrayBuffer%':
+          typeof SharedArrayBuffer > 'u' ? undefined2 : SharedArrayBuffer,
+        '%String%': String,
+        '%StringIteratorPrototype%':
+          hasSymbols && getProto ? getProto(''[Symbol.iterator]()) : undefined2,
+        '%Symbol%': hasSymbols ? Symbol : undefined2,
+        '%SyntaxError%': $SyntaxError,
+        '%ThrowTypeError%': ThrowTypeError,
+        '%TypedArray%': TypedArray,
+        '%TypeError%': $TypeError,
+        '%Uint8Array%': typeof Uint8Array > 'u' ? undefined2 : Uint8Array,
+        '%Uint8ClampedArray%':
+          typeof Uint8ClampedArray > 'u' ? undefined2 : Uint8ClampedArray,
+        '%Uint16Array%': typeof Uint16Array > 'u' ? undefined2 : Uint16Array,
+        '%Uint32Array%': typeof Uint32Array > 'u' ? undefined2 : Uint32Array,
+        '%URIError%': URIError,
+        '%WeakMap%': typeof WeakMap > 'u' ? undefined2 : WeakMap,
+        '%WeakRef%': typeof WeakRef > 'u' ? undefined2 : WeakRef,
+        '%WeakSet%': typeof WeakSet > 'u' ? undefined2 : WeakSet,
+      };
+    if (getProto)
+      try {
+        null.error;
+      } catch (e) {
+        (errorProto = getProto(getProto(e))),
+          (INTRINSICS['%Error.prototype%'] = errorProto);
+      }
+    var errorProto,
+      doEval = function doEval2(name2) {
+        var value2;
+        if (name2 === '%AsyncFunction%')
+          value2 = getEvalledConstructor('async function () {}');
+        else if (name2 === '%GeneratorFunction%')
+          value2 = getEvalledConstructor('function* () {}');
+        else if (name2 === '%AsyncGeneratorFunction%')
+          value2 = getEvalledConstructor('async function* () {}');
+        else if (name2 === '%AsyncGenerator%') {
+          var fn = doEval2('%AsyncGeneratorFunction%');
+          fn && (value2 = fn.prototype);
+        } else if (name2 === '%AsyncIteratorPrototype%') {
+          var gen = doEval2('%AsyncGenerator%');
+          gen && getProto && (value2 = getProto(gen.prototype));
+        }
+        return (INTRINSICS[name2] = value2), value2;
+      },
+      LEGACY_ALIASES = {
+        '%ArrayBufferPrototype%': ['ArrayBuffer', 'prototype'],
+        '%ArrayPrototype%': ['Array', 'prototype'],
+        '%ArrayProto_entries%': ['Array', 'prototype', 'entries'],
+        '%ArrayProto_forEach%': ['Array', 'prototype', 'forEach'],
+        '%ArrayProto_keys%': ['Array', 'prototype', 'keys'],
+        '%ArrayProto_values%': ['Array', 'prototype', 'values'],
+        '%AsyncFunctionPrototype%': ['AsyncFunction', 'prototype'],
+        '%AsyncGenerator%': ['AsyncGeneratorFunction', 'prototype'],
+        '%AsyncGeneratorPrototype%': [
+          'AsyncGeneratorFunction',
+          'prototype',
+          'prototype',
+        ],
+        '%BooleanPrototype%': ['Boolean', 'prototype'],
+        '%DataViewPrototype%': ['DataView', 'prototype'],
+        '%DatePrototype%': ['Date', 'prototype'],
+        '%ErrorPrototype%': ['Error', 'prototype'],
+        '%EvalErrorPrototype%': ['EvalError', 'prototype'],
+        '%Float32ArrayPrototype%': ['Float32Array', 'prototype'],
+        '%Float64ArrayPrototype%': ['Float64Array', 'prototype'],
+        '%FunctionPrototype%': ['Function', 'prototype'],
+        '%Generator%': ['GeneratorFunction', 'prototype'],
+        '%GeneratorPrototype%': ['GeneratorFunction', 'prototype', 'prototype'],
+        '%Int8ArrayPrototype%': ['Int8Array', 'prototype'],
+        '%Int16ArrayPrototype%': ['Int16Array', 'prototype'],
+        '%Int32ArrayPrototype%': ['Int32Array', 'prototype'],
+        '%JSONParse%': ['JSON', 'parse'],
+        '%JSONStringify%': ['JSON', 'stringify'],
+        '%MapPrototype%': ['Map', 'prototype'],
+        '%NumberPrototype%': ['Number', 'prototype'],
+        '%ObjectPrototype%': ['Object', 'prototype'],
+        '%ObjProto_toString%': ['Object', 'prototype', 'toString'],
+        '%ObjProto_valueOf%': ['Object', 'prototype', 'valueOf'],
+        '%PromisePrototype%': ['Promise', 'prototype'],
+        '%PromiseProto_then%': ['Promise', 'prototype', 'then'],
+        '%Promise_all%': ['Promise', 'all'],
+        '%Promise_reject%': ['Promise', 'reject'],
+        '%Promise_resolve%': ['Promise', 'resolve'],
+        '%RangeErrorPrototype%': ['RangeError', 'prototype'],
+        '%ReferenceErrorPrototype%': ['ReferenceError', 'prototype'],
+        '%RegExpPrototype%': ['RegExp', 'prototype'],
+        '%SetPrototype%': ['Set', 'prototype'],
+        '%SharedArrayBufferPrototype%': ['SharedArrayBuffer', 'prototype'],
+        '%StringPrototype%': ['String', 'prototype'],
+        '%SymbolPrototype%': ['Symbol', 'prototype'],
+        '%SyntaxErrorPrototype%': ['SyntaxError', 'prototype'],
+        '%TypedArrayPrototype%': ['TypedArray', 'prototype'],
+        '%TypeErrorPrototype%': ['TypeError', 'prototype'],
+        '%Uint8ArrayPrototype%': ['Uint8Array', 'prototype'],
+        '%Uint8ClampedArrayPrototype%': ['Uint8ClampedArray', 'prototype'],
+        '%Uint16ArrayPrototype%': ['Uint16Array', 'prototype'],
+        '%Uint32ArrayPrototype%': ['Uint32Array', 'prototype'],
+        '%URIErrorPrototype%': ['URIError', 'prototype'],
+        '%WeakMapPrototype%': ['WeakMap', 'prototype'],
+        '%WeakSetPrototype%': ['WeakSet', 'prototype'],
+      },
+      bind = require_function_bind2(),
+      hasOwn = require_src2(),
+      $concat = bind.call(Function.call, Array.prototype.concat),
+      $spliceApply = bind.call(Function.apply, Array.prototype.splice),
+      $replace = bind.call(Function.call, String.prototype.replace),
+      $strSlice = bind.call(Function.call, String.prototype.slice),
+      $exec = bind.call(Function.call, RegExp.prototype.exec),
+      rePropName2 =
+        /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g,
+      reEscapeChar2 = /\\(\\)?/g,
+      stringToPath2 = function (string) {
+        var first = $strSlice(string, 0, 1),
+          last = $strSlice(string, -1);
+        if (first === '%' && last !== '%')
+          throw new $SyntaxError(
+            'invalid intrinsic syntax, expected closing `%`',
+          );
+        if (last === '%' && first !== '%')
+          throw new $SyntaxError(
+            'invalid intrinsic syntax, expected opening `%`',
+          );
+        var result2 = [];
+        return (
+          $replace(
+            string,
+            rePropName2,
+            function (match, number, quote, subString) {
+              result2[result2.length] = quote
+                ? $replace(subString, reEscapeChar2, '$1')
+                : number || match;
+            },
+          ),
+          result2
+        );
+      },
+      getBaseIntrinsic = function (name2, allowMissing) {
+        var intrinsicName = name2,
+          alias;
+        if (
+          (hasOwn(LEGACY_ALIASES, intrinsicName) &&
+            ((alias = LEGACY_ALIASES[intrinsicName]),
+            (intrinsicName = '%' + alias[0] + '%')),
+          hasOwn(INTRINSICS, intrinsicName))
+        ) {
+          var value2 = INTRINSICS[intrinsicName];
+          if (
+            (value2 === needsEval && (value2 = doEval(intrinsicName)),
+            typeof value2 > 'u' && !allowMissing)
+          )
+            throw new $TypeError(
+              'intrinsic ' +
+                name2 +
+                ' exists, but is not available. Please file an issue!',
+            );
+          return { alias, name: intrinsicName, value: value2 };
+        }
+        throw new $SyntaxError('intrinsic ' + name2 + ' does not exist!');
+      };
+    module.exports = function (name2, allowMissing) {
+      if (typeof name2 != 'string' || name2.length === 0)
+        throw new $TypeError('intrinsic name must be a non-empty string');
+      if (arguments.length > 1 && typeof allowMissing != 'boolean')
+        throw new $TypeError('"allowMissing" argument must be a boolean');
+      if ($exec(/^%?[^%]*%?$/, name2) === null)
+        throw new $SyntaxError(
+          '`%` may not be present anywhere but at the beginning and end of the intrinsic name',
+        );
+      var parts = stringToPath2(name2),
+        intrinsicBaseName = parts.length > 0 ? parts[0] : '',
+        intrinsic = getBaseIntrinsic(
+          '%' + intrinsicBaseName + '%',
+          allowMissing,
+        ),
+        intrinsicRealName = intrinsic.name,
+        value2 = intrinsic.value,
+        skipFurtherCaching = !1,
+        alias = intrinsic.alias;
+      alias &&
+        ((intrinsicBaseName = alias[0]),
+        $spliceApply(parts, $concat([0, 1], alias)));
+      for (var i = 1, isOwn = !0; i < parts.length; i += 1) {
+        var part = parts[i],
+          first = $strSlice(part, 0, 1),
+          last = $strSlice(part, -1);
+        if (
+          (first === '"' ||
+            first === "'" ||
+            first === '`' ||
+            last === '"' ||
+            last === "'" ||
+            last === '`') &&
+          first !== last
+        )
+          throw new $SyntaxError(
+            'property names with quotes must have matching quotes',
+          );
+        if (
+          ((part === 'constructor' || !isOwn) && (skipFurtherCaching = !0),
+          (intrinsicBaseName += '.' + part),
+          (intrinsicRealName = '%' + intrinsicBaseName + '%'),
+          hasOwn(INTRINSICS, intrinsicRealName))
+        )
+          value2 = INTRINSICS[intrinsicRealName];
+        else if (value2 != null) {
+          if (!(part in value2)) {
+            if (!allowMissing)
+              throw new $TypeError(
+                'base intrinsic for ' +
+                  name2 +
+                  ' exists, but the property is not available.',
+              );
+            return;
+          }
+          if ($gOPD && i + 1 >= parts.length) {
+            var desc = $gOPD(value2, part);
+            (isOwn = !!desc),
+              isOwn && 'get' in desc && !('originalValue' in desc.get)
+                ? (value2 = desc.get)
+                : (value2 = value2[part]);
+          } else (isOwn = hasOwn(value2, part)), (value2 = value2[part]);
+          isOwn &&
+            !skipFurtherCaching &&
+            (INTRINSICS[intrinsicRealName] = value2);
+        }
+      }
+      return value2;
+    };
+  },
+});
+var require_has_property_descriptors = __commonJS({
+  '../../node_modules/has-property-descriptors/index.js'(exports, module) {
+    'use strict';
+    var GetIntrinsic = require_get_intrinsic2(),
+      $defineProperty = GetIntrinsic('%Object.defineProperty%', !0),
+      hasPropertyDescriptors = function () {
+        if ($defineProperty)
+          try {
+            return $defineProperty({}, 'a', { value: 1 }), !0;
+          } catch {
+            return !1;
+          }
+        return !1;
+      };
+    hasPropertyDescriptors.hasArrayLengthDefineBug = function () {
+      if (!hasPropertyDescriptors()) return null;
+      try {
+        return $defineProperty([], 'length', { value: 1 }).length !== 1;
+      } catch {
+        return !0;
+      }
+    };
+    module.exports = hasPropertyDescriptors;
+  },
+});
+var require_gopd = __commonJS({
+  '../../node_modules/gopd/index.js'(exports, module) {
+    'use strict';
+    var GetIntrinsic = require_get_intrinsic2(),
+      $gOPD = GetIntrinsic('%Object.getOwnPropertyDescriptor%', !0);
+    if ($gOPD)
+      try {
+        $gOPD([], 'length');
+      } catch {
+        $gOPD = null;
+      }
+    module.exports = $gOPD;
+  },
+});
+var require_define_data_property = __commonJS({
+  '../../node_modules/define-data-property/index.js'(exports, module) {
+    'use strict';
+    var hasPropertyDescriptors = require_has_property_descriptors()(),
+      GetIntrinsic = require_get_intrinsic2(),
+      $defineProperty =
+        hasPropertyDescriptors && GetIntrinsic('%Object.defineProperty%', !0);
+    if ($defineProperty)
+      try {
+        $defineProperty({}, 'a', { value: 1 });
+      } catch {
+        $defineProperty = !1;
+      }
+    var $SyntaxError = GetIntrinsic('%SyntaxError%'),
+      $TypeError = GetIntrinsic('%TypeError%'),
+      gopd = require_gopd();
+    module.exports = function (obj, property, value2) {
+      if (!obj || (typeof obj != 'object' && typeof obj != 'function'))
+        throw new $TypeError('`obj` must be an object or a function`');
+      if (typeof property != 'string' && typeof property != 'symbol')
+        throw new $TypeError('`property` must be a string or a symbol`');
+      if (
+        arguments.length > 3 &&
+        typeof arguments[3] != 'boolean' &&
+        arguments[3] !== null
+      )
+        throw new $TypeError(
+          '`nonEnumerable`, if provided, must be a boolean or null',
+        );
+      if (
+        arguments.length > 4 &&
+        typeof arguments[4] != 'boolean' &&
+        arguments[4] !== null
+      )
+        throw new $TypeError(
+          '`nonWritable`, if provided, must be a boolean or null',
+        );
+      if (
+        arguments.length > 5 &&
+        typeof arguments[5] != 'boolean' &&
+        arguments[5] !== null
+      )
+        throw new $TypeError(
+          '`nonConfigurable`, if provided, must be a boolean or null',
+        );
+      if (arguments.length > 6 && typeof arguments[6] != 'boolean')
+        throw new $TypeError('`loose`, if provided, must be a boolean');
+      var nonEnumerable = arguments.length > 3 ? arguments[3] : null,
+        nonWritable = arguments.length > 4 ? arguments[4] : null,
+        nonConfigurable = arguments.length > 5 ? arguments[5] : null,
+        loose = arguments.length > 6 ? arguments[6] : !1,
+        desc = !!gopd && gopd(obj, property);
+      if ($defineProperty)
+        $defineProperty(obj, property, {
+          configurable:
+            nonConfigurable === null && desc
+              ? desc.configurable
+              : !nonConfigurable,
+          enumerable:
+            nonEnumerable === null && desc ? desc.enumerable : !nonEnumerable,
+          value: value2,
+          writable: nonWritable === null && desc ? desc.writable : !nonWritable,
+        });
+      else if (loose || (!nonEnumerable && !nonWritable && !nonConfigurable))
+        obj[property] = value2;
+      else
+        throw new $SyntaxError(
+          'This environment does not support defining a property as non-configurable, non-writable, or non-enumerable.',
+        );
+    };
+  },
+});
+var require_set_function_length = __commonJS({
+  '../../node_modules/set-function-length/index.js'(exports, module) {
+    'use strict';
+    var GetIntrinsic = require_get_intrinsic2(),
+      define2 = require_define_data_property(),
+      hasDescriptors = require_has_property_descriptors()(),
+      gOPD = require_gopd(),
+      $TypeError = GetIntrinsic('%TypeError%'),
+      $floor = GetIntrinsic('%Math.floor%');
+    module.exports = function (fn, length) {
+      if (typeof fn != 'function')
+        throw new $TypeError('`fn` is not a function');
+      if (
+        typeof length != 'number' ||
+        length < 0 ||
+        length > 4294967295 ||
+        $floor(length) !== length
+      )
+        throw new $TypeError('`length` must be a positive 32-bit integer');
+      var loose = arguments.length > 2 && !!arguments[2],
+        functionLengthIsConfigurable = !0,
+        functionLengthIsWritable = !0;
+      if ('length' in fn && gOPD) {
+        var desc = gOPD(fn, 'length');
+        desc && !desc.configurable && (functionLengthIsConfigurable = !1),
+          desc && !desc.writable && (functionLengthIsWritable = !1);
+      }
+      return (
+        (functionLengthIsConfigurable || functionLengthIsWritable || !loose) &&
+          (hasDescriptors
+            ? define2(fn, 'length', length, !0, !0)
+            : define2(fn, 'length', length)),
+        fn
+      );
+    };
+  },
+});
+var require_call_bind2 = __commonJS({
+  '../../node_modules/call-bind/index.js'(exports, module) {
+    'use strict';
+    var bind = require_function_bind2(),
+      GetIntrinsic = require_get_intrinsic2(),
+      setFunctionLength = require_set_function_length(),
+      $TypeError = GetIntrinsic('%TypeError%'),
+      $apply = GetIntrinsic('%Function.prototype.apply%'),
+      $call = GetIntrinsic('%Function.prototype.call%'),
+      $reflectApply =
+        GetIntrinsic('%Reflect.apply%', !0) || bind.call($call, $apply),
+      $defineProperty = GetIntrinsic('%Object.defineProperty%', !0),
+      $max = GetIntrinsic('%Math.max%');
+    if ($defineProperty)
+      try {
+        $defineProperty({}, 'a', { value: 1 });
+      } catch {
+        $defineProperty = null;
+      }
+    module.exports = function (originalFunction) {
+      if (typeof originalFunction != 'function')
+        throw new $TypeError('a function is required');
+      var func = $reflectApply(bind, $call, arguments);
+      return setFunctionLength(
+        func,
+        1 + $max(0, originalFunction.length - (arguments.length - 1)),
+        !0,
+      );
+    };
+    var applyBind = function () {
+      return $reflectApply(bind, $apply, arguments);
+    };
+    $defineProperty
+      ? $defineProperty(module.exports, 'apply', { value: applyBind })
+      : (module.exports.apply = applyBind);
+  },
+});
+var require_callBound2 = __commonJS({
+  '../../node_modules/call-bind/callBound.js'(exports, module) {
+    'use strict';
+    var GetIntrinsic = require_get_intrinsic2(),
+      callBind = require_call_bind2(),
+      $indexOf = callBind(GetIntrinsic('String.prototype.indexOf'));
+    module.exports = function (name2, allowMissing) {
+      var intrinsic = GetIntrinsic(name2, !!allowMissing);
+      return typeof intrinsic == 'function' &&
+        $indexOf(name2, '.prototype.') > -1
+        ? callBind(intrinsic)
+        : intrinsic;
+    };
+  },
+});
+var require_util = __commonJS({
+  '(disabled):../../node_modules/object-inspect/util.inspect'() {
+    'use strict';
+  },
+});
+var require_object_inspect = __commonJS({
+  '../../node_modules/object-inspect/index.js'(exports, module) {
+    'use strict';
+    var hasMap = typeof Map == 'function' && Map.prototype,
+      mapSizeDescriptor =
+        Object.getOwnPropertyDescriptor && hasMap
+          ? Object.getOwnPropertyDescriptor(Map.prototype, 'size')
+          : null,
+      mapSize =
+        hasMap &&
+        mapSizeDescriptor &&
+        typeof mapSizeDescriptor.get == 'function'
+          ? mapSizeDescriptor.get
+          : null,
+      mapForEach = hasMap && Map.prototype.forEach,
+      hasSet = typeof Set == 'function' && Set.prototype,
+      setSizeDescriptor =
+        Object.getOwnPropertyDescriptor && hasSet
+          ? Object.getOwnPropertyDescriptor(Set.prototype, 'size')
+          : null,
+      setSize =
+        hasSet &&
+        setSizeDescriptor &&
+        typeof setSizeDescriptor.get == 'function'
+          ? setSizeDescriptor.get
+          : null,
+      setForEach = hasSet && Set.prototype.forEach,
+      hasWeakMap = typeof WeakMap == 'function' && WeakMap.prototype,
+      weakMapHas = hasWeakMap ? WeakMap.prototype.has : null,
+      hasWeakSet = typeof WeakSet == 'function' && WeakSet.prototype,
+      weakSetHas = hasWeakSet ? WeakSet.prototype.has : null,
+      hasWeakRef = typeof WeakRef == 'function' && WeakRef.prototype,
+      weakRefDeref = hasWeakRef ? WeakRef.prototype.deref : null,
+      booleanValueOf = Boolean.prototype.valueOf,
+      objectToString2 = Object.prototype.toString,
+      functionToString = Function.prototype.toString,
+      $match = String.prototype.match,
+      $slice = String.prototype.slice,
+      $replace = String.prototype.replace,
+      $toUpperCase = String.prototype.toUpperCase,
+      $toLowerCase = String.prototype.toLowerCase,
+      $test = RegExp.prototype.test,
+      $concat = Array.prototype.concat,
+      $join = Array.prototype.join,
+      $arrSlice = Array.prototype.slice,
+      $floor = Math.floor,
+      bigIntValueOf =
+        typeof BigInt == 'function' ? BigInt.prototype.valueOf : null,
+      gOPS = Object.getOwnPropertySymbols,
+      symToString =
+        typeof Symbol == 'function' && typeof Symbol.iterator == 'symbol'
+          ? Symbol.prototype.toString
+          : null,
+      hasShammedSymbols =
+        typeof Symbol == 'function' && typeof Symbol.iterator == 'object',
+      toStringTag =
+        typeof Symbol == 'function' &&
+        Symbol.toStringTag &&
+        (typeof Symbol.toStringTag === hasShammedSymbols || 'symbol')
+          ? Symbol.toStringTag
+          : null,
+      isEnumerable = Object.prototype.propertyIsEnumerable,
+      gPO =
+        (typeof Reflect == 'function'
+          ? Reflect.getPrototypeOf
+          : Object.getPrototypeOf) ||
+        ([].__proto__ === Array.prototype
+          ? function (O2) {
+              return O2.__proto__;
+            }
+          : null);
+    function addNumericSeparator(num, str) {
+      if (
+        num === 1 / 0 ||
+        num === -1 / 0 ||
+        num !== num ||
+        (num && num > -1e3 && num < 1e3) ||
+        $test.call(/e/, str)
+      )
+        return str;
+      var sepRegex = /[0-9](?=(?:[0-9]{3})+(?![0-9]))/g;
+      if (typeof num == 'number') {
+        var int = num < 0 ? -$floor(-num) : $floor(num);
+        if (int !== num) {
+          var intStr = String(int),
+            dec = $slice.call(str, intStr.length + 1);
+          return (
+            $replace.call(intStr, sepRegex, '$&_') +
+            '.' +
+            $replace.call($replace.call(dec, /([0-9]{3})/g, '$&_'), /_$/, '')
+          );
+        }
+      }
+      return $replace.call(str, sepRegex, '$&_');
+    }
+    var utilInspect = require_util(),
+      inspectCustom = utilInspect.custom,
+      inspectSymbol = isSymbol2(inspectCustom) ? inspectCustom : null;
+    module.exports = function inspect_(obj, options2, depth, seen) {
+      var opts = options2 || {};
+      if (
+        has2(opts, 'quoteStyle') &&
+        opts.quoteStyle !== 'single' &&
+        opts.quoteStyle !== 'double'
+      )
+        throw new TypeError('option "quoteStyle" must be "single" or "double"');
+      if (
+        has2(opts, 'maxStringLength') &&
+        (typeof opts.maxStringLength == 'number'
+          ? opts.maxStringLength < 0 && opts.maxStringLength !== 1 / 0
+          : opts.maxStringLength !== null)
+      )
+        throw new TypeError(
+          'option "maxStringLength", if provided, must be a positive integer, Infinity, or `null`',
+        );
+      var customInspect = has2(opts, 'customInspect') ? opts.customInspect : !0;
+      if (typeof customInspect != 'boolean' && customInspect !== 'symbol')
+        throw new TypeError(
+          'option "customInspect", if provided, must be `true`, `false`, or `\'symbol\'`',
+        );
+      if (
+        has2(opts, 'indent') &&
+        opts.indent !== null &&
+        opts.indent !== '	' &&
+        !(parseInt(opts.indent, 10) === opts.indent && opts.indent > 0)
+      )
+        throw new TypeError(
+          'option "indent" must be "\\t", an integer > 0, or `null`',
+        );
+      if (
+        has2(opts, 'numericSeparator') &&
+        typeof opts.numericSeparator != 'boolean'
+      )
+        throw new TypeError(
+          'option "numericSeparator", if provided, must be `true` or `false`',
+        );
+      var numericSeparator = opts.numericSeparator;
+      if (typeof obj > 'u') return 'undefined';
+      if (obj === null) return 'null';
+      if (typeof obj == 'boolean') return obj ? 'true' : 'false';
+      if (typeof obj == 'string') return inspectString(obj, opts);
+      if (typeof obj == 'number') {
+        if (obj === 0) return 1 / 0 / obj > 0 ? '0' : '-0';
+        var str = String(obj);
+        return numericSeparator ? addNumericSeparator(obj, str) : str;
+      }
+      if (typeof obj == 'bigint') {
+        var bigIntStr = String(obj) + 'n';
+        return numericSeparator
+          ? addNumericSeparator(obj, bigIntStr)
+          : bigIntStr;
+      }
+      var maxDepth = typeof opts.depth > 'u' ? 5 : opts.depth;
+      if (
+        (typeof depth > 'u' && (depth = 0),
+        depth >= maxDepth && maxDepth > 0 && typeof obj == 'object')
+      )
+        return isArray2(obj) ? '[Array]' : '[Object]';
+      var indent = getIndent(opts, depth);
+      if (typeof seen > 'u') seen = [];
+      else if (indexOf(seen, obj) >= 0) return '[Circular]';
+      function inspect(value2, from, noIndent) {
+        if (
+          (from && ((seen = $arrSlice.call(seen)), seen.push(from)), noIndent)
+        ) {
+          var newOpts = { depth: opts.depth };
+          return (
+            has2(opts, 'quoteStyle') && (newOpts.quoteStyle = opts.quoteStyle),
+            inspect_(value2, newOpts, depth + 1, seen)
+          );
+        }
+        return inspect_(value2, opts, depth + 1, seen);
+      }
+      if (typeof obj == 'function' && !isRegExp(obj)) {
+        var name2 = nameOf(obj),
+          keys = arrObjKeys(obj, inspect);
+        return (
+          '[Function' +
+          (name2 ? ': ' + name2 : ' (anonymous)') +
+          ']' +
+          (keys.length > 0 ? ' { ' + $join.call(keys, ', ') + ' }' : '')
+        );
+      }
+      if (isSymbol2(obj)) {
+        var symString = hasShammedSymbols
+          ? $replace.call(String(obj), /^(Symbol\(.*\))_[^)]*$/, '$1')
+          : symToString.call(obj);
+        return typeof obj == 'object' && !hasShammedSymbols
+          ? markBoxed(symString)
+          : symString;
+      }
+      if (isElement(obj)) {
+        for (
+          var s = '<' + $toLowerCase.call(String(obj.nodeName)),
+            attrs = obj.attributes || [],
+            i = 0;
+          i < attrs.length;
+          i++
+        )
+          s +=
+            ' ' +
+            attrs[i].name +
+            '=' +
+            wrapQuotes(quote(attrs[i].value), 'double', opts);
+        return (
+          (s += '>'),
+          obj.childNodes && obj.childNodes.length && (s += '...'),
+          (s += '</' + $toLowerCase.call(String(obj.nodeName)) + '>'),
+          s
+        );
+      }
+      if (isArray2(obj)) {
+        if (obj.length === 0) return '[]';
+        var xs = arrObjKeys(obj, inspect);
+        return indent && !singleLineValues(xs)
+          ? '[' + indentedJoin(xs, indent) + ']'
+          : '[ ' + $join.call(xs, ', ') + ' ]';
+      }
+      if (isError(obj)) {
+        var parts = arrObjKeys(obj, inspect);
+        return !('cause' in Error.prototype) &&
+          'cause' in obj &&
+          !isEnumerable.call(obj, 'cause')
+          ? '{ [' +
+              String(obj) +
+              '] ' +
+              $join.call(
+                $concat.call('[cause]: ' + inspect(obj.cause), parts),
+                ', ',
+              ) +
+              ' }'
+          : parts.length === 0
+            ? '[' + String(obj) + ']'
+            : '{ [' + String(obj) + '] ' + $join.call(parts, ', ') + ' }';
+      }
+      if (typeof obj == 'object' && customInspect) {
+        if (
+          inspectSymbol &&
+          typeof obj[inspectSymbol] == 'function' &&
+          utilInspect
+        )
+          return utilInspect(obj, { depth: maxDepth - depth });
+        if (customInspect !== 'symbol' && typeof obj.inspect == 'function')
+          return obj.inspect();
+      }
+      if (isMap(obj)) {
+        var mapParts = [];
+        return (
+          mapForEach &&
+            mapForEach.call(obj, function (value2, key2) {
+              mapParts.push(
+                inspect(key2, obj, !0) + ' => ' + inspect(value2, obj),
+              );
+            }),
+          collectionOf('Map', mapSize.call(obj), mapParts, indent)
+        );
+      }
+      if (isSet(obj)) {
+        var setParts = [];
+        return (
+          setForEach &&
+            setForEach.call(obj, function (value2) {
+              setParts.push(inspect(value2, obj));
+            }),
+          collectionOf('Set', setSize.call(obj), setParts, indent)
+        );
+      }
+      if (isWeakMap(obj)) return weakCollectionOf('WeakMap');
+      if (isWeakSet(obj)) return weakCollectionOf('WeakSet');
+      if (isWeakRef(obj)) return weakCollectionOf('WeakRef');
+      if (isNumber(obj)) return markBoxed(inspect(Number(obj)));
+      if (isBigInt(obj)) return markBoxed(inspect(bigIntValueOf.call(obj)));
+      if (isBoolean(obj)) return markBoxed(booleanValueOf.call(obj));
+      if (isString(obj)) return markBoxed(inspect(String(obj)));
+      if (typeof window < 'u' && obj === window) return '{ [object Window] }';
+      if (obj === global) return '{ [object globalThis] }';
+      if (!isDate(obj) && !isRegExp(obj)) {
+        var ys = arrObjKeys(obj, inspect),
+          isPlainObject3 = gPO
+            ? gPO(obj) === Object.prototype
+            : obj instanceof Object || obj.constructor === Object,
+          protoTag = obj instanceof Object ? '' : 'null prototype',
+          stringTag =
+            !isPlainObject3 &&
+            toStringTag &&
+            Object(obj) === obj &&
+            toStringTag in obj
+              ? $slice.call(toStr(obj), 8, -1)
+              : protoTag
+                ? 'Object'
+                : '',
+          constructorTag =
+            isPlainObject3 || typeof obj.constructor != 'function'
+              ? ''
+              : obj.constructor.name
+                ? obj.constructor.name + ' '
+                : '',
+          tag =
+            constructorTag +
+            (stringTag || protoTag
+              ? '[' +
+                $join.call(
+                  $concat.call([], stringTag || [], protoTag || []),
+                  ': ',
+                ) +
+                '] '
+              : '');
+        return ys.length === 0
+          ? tag + '{}'
+          : indent
+            ? tag + '{' + indentedJoin(ys, indent) + '}'
+            : tag + '{ ' + $join.call(ys, ', ') + ' }';
+      }
+      return String(obj);
+    };
+    function wrapQuotes(s, defaultStyle, opts) {
+      var quoteChar =
+        (opts.quoteStyle || defaultStyle) === 'double' ? '"' : "'";
+      return quoteChar + s + quoteChar;
+    }
+    function quote(s) {
+      return $replace.call(String(s), /"/g, '&quot;');
+    }
+    function isArray2(obj) {
+      return (
+        toStr(obj) === '[object Array]' &&
+        (!toStringTag || !(typeof obj == 'object' && toStringTag in obj))
+      );
+    }
+    function isDate(obj) {
+      return (
+        toStr(obj) === '[object Date]' &&
+        (!toStringTag || !(typeof obj == 'object' && toStringTag in obj))
+      );
+    }
+    function isRegExp(obj) {
+      return (
+        toStr(obj) === '[object RegExp]' &&
+        (!toStringTag || !(typeof obj == 'object' && toStringTag in obj))
+      );
+    }
+    function isError(obj) {
+      return (
+        toStr(obj) === '[object Error]' &&
+        (!toStringTag || !(typeof obj == 'object' && toStringTag in obj))
+      );
+    }
+    function isString(obj) {
+      return (
+        toStr(obj) === '[object String]' &&
+        (!toStringTag || !(typeof obj == 'object' && toStringTag in obj))
+      );
+    }
+    function isNumber(obj) {
+      return (
+        toStr(obj) === '[object Number]' &&
+        (!toStringTag || !(typeof obj == 'object' && toStringTag in obj))
+      );
+    }
+    function isBoolean(obj) {
+      return (
+        toStr(obj) === '[object Boolean]' &&
+        (!toStringTag || !(typeof obj == 'object' && toStringTag in obj))
+      );
+    }
+    function isSymbol2(obj) {
+      if (hasShammedSymbols)
+        return obj && typeof obj == 'object' && obj instanceof Symbol;
+      if (typeof obj == 'symbol') return !0;
+      if (!obj || typeof obj != 'object' || !symToString) return !1;
+      try {
+        return symToString.call(obj), !0;
+      } catch {}
+      return !1;
+    }
+    function isBigInt(obj) {
+      if (!obj || typeof obj != 'object' || !bigIntValueOf) return !1;
+      try {
+        return bigIntValueOf.call(obj), !0;
+      } catch {}
+      return !1;
+    }
+    var hasOwn =
+      Object.prototype.hasOwnProperty ||
+      function (key2) {
+        return key2 in this;
+      };
+    function has2(obj, key2) {
+      return hasOwn.call(obj, key2);
+    }
+    function toStr(obj) {
+      return objectToString2.call(obj);
+    }
+    function nameOf(f3) {
+      if (f3.name) return f3.name;
+      var m2 = $match.call(functionToString.call(f3), /^function\s*([\w$]+)/);
+      return m2 ? m2[1] : null;
+    }
+    function indexOf(xs, x2) {
+      if (xs.indexOf) return xs.indexOf(x2);
+      for (var i = 0, l = xs.length; i < l; i++) if (xs[i] === x2) return i;
+      return -1;
+    }
+    function isMap(x2) {
+      if (!mapSize || !x2 || typeof x2 != 'object') return !1;
+      try {
+        mapSize.call(x2);
+        try {
+          setSize.call(x2);
+        } catch {
+          return !0;
+        }
+        return x2 instanceof Map;
+      } catch {}
+      return !1;
+    }
+    function isWeakMap(x2) {
+      if (!weakMapHas || !x2 || typeof x2 != 'object') return !1;
+      try {
+        weakMapHas.call(x2, weakMapHas);
+        try {
+          weakSetHas.call(x2, weakSetHas);
+        } catch {
+          return !0;
+        }
+        return x2 instanceof WeakMap;
+      } catch {}
+      return !1;
+    }
+    function isWeakRef(x2) {
+      if (!weakRefDeref || !x2 || typeof x2 != 'object') return !1;
+      try {
+        return weakRefDeref.call(x2), !0;
+      } catch {}
+      return !1;
+    }
+    function isSet(x2) {
+      if (!setSize || !x2 || typeof x2 != 'object') return !1;
+      try {
+        setSize.call(x2);
+        try {
+          mapSize.call(x2);
+        } catch {
+          return !0;
+        }
+        return x2 instanceof Set;
+      } catch {}
+      return !1;
+    }
+    function isWeakSet(x2) {
+      if (!weakSetHas || !x2 || typeof x2 != 'object') return !1;
+      try {
+        weakSetHas.call(x2, weakSetHas);
+        try {
+          weakMapHas.call(x2, weakMapHas);
+        } catch {
+          return !0;
+        }
+        return x2 instanceof WeakSet;
+      } catch {}
+      return !1;
+    }
+    function isElement(x2) {
+      return !x2 || typeof x2 != 'object'
+        ? !1
+        : typeof HTMLElement < 'u' && x2 instanceof HTMLElement
+          ? !0
+          : typeof x2.nodeName == 'string' &&
+            typeof x2.getAttribute == 'function';
+    }
+    function inspectString(str, opts) {
+      if (str.length > opts.maxStringLength) {
+        var remaining = str.length - opts.maxStringLength,
+          trailer =
+            '... ' + remaining + ' more character' + (remaining > 1 ? 's' : '');
+        return (
+          inspectString($slice.call(str, 0, opts.maxStringLength), opts) +
+          trailer
+        );
+      }
+      var s = $replace.call(
+        $replace.call(str, /(['\\])/g, '\\$1'),
+        /[\x00-\x1f]/g,
+        lowbyte,
+      );
+      return wrapQuotes(s, 'single', opts);
+    }
+    function lowbyte(c2) {
+      var n = c2.charCodeAt(0),
+        x2 = { 8: 'b', 9: 't', 10: 'n', 12: 'f', 13: 'r' }[n];
+      return x2
+        ? '\\' + x2
+        : '\\x' + (n < 16 ? '0' : '') + $toUpperCase.call(n.toString(16));
+    }
+    function markBoxed(str) {
+      return 'Object(' + str + ')';
+    }
+    function weakCollectionOf(type) {
+      return type + ' { ? }';
+    }
+    function collectionOf(type, size, entries, indent) {
+      var joinedEntries = indent
+        ? indentedJoin(entries, indent)
+        : $join.call(entries, ', ');
+      return type + ' (' + size + ') {' + joinedEntries + '}';
+    }
+    function singleLineValues(xs) {
+      for (var i = 0; i < xs.length; i++)
+        if (
+          indexOf(
+            xs[i],
+            `
+`,
+          ) >= 0
+        )
+          return !1;
+      return !0;
+    }
+    function getIndent(opts, depth) {
+      var baseIndent;
+      if (opts.indent === '	') baseIndent = '	';
+      else if (typeof opts.indent == 'number' && opts.indent > 0)
+        baseIndent = $join.call(Array(opts.indent + 1), ' ');
+      else return null;
+      return {
+        base: baseIndent,
+        prev: $join.call(Array(depth + 1), baseIndent),
+      };
+    }
+    function indentedJoin(xs, indent) {
+      if (xs.length === 0) return '';
+      var lineJoiner =
+        `
+` +
+        indent.prev +
+        indent.base;
+      return (
+        lineJoiner +
+        $join.call(xs, ',' + lineJoiner) +
+        `
+` +
+        indent.prev
+      );
+    }
+    function arrObjKeys(obj, inspect) {
+      var isArr = isArray2(obj),
+        xs = [];
+      if (isArr) {
+        xs.length = obj.length;
+        for (var i = 0; i < obj.length; i++)
+          xs[i] = has2(obj, i) ? inspect(obj[i], obj) : '';
+      }
+      var syms = typeof gOPS == 'function' ? gOPS(obj) : [],
+        symMap;
+      if (hasShammedSymbols) {
+        symMap = {};
+        for (var k = 0; k < syms.length; k++) symMap['$' + syms[k]] = syms[k];
+      }
+      for (var key2 in obj)
+        has2(obj, key2) &&
+          ((isArr && String(Number(key2)) === key2 && key2 < obj.length) ||
+            (hasShammedSymbols && symMap['$' + key2] instanceof Symbol) ||
+            ($test.call(/[^\w$]/, key2)
+              ? xs.push(inspect(key2, obj) + ': ' + inspect(obj[key2], obj))
+              : xs.push(key2 + ': ' + inspect(obj[key2], obj))));
+      if (typeof gOPS == 'function')
+        for (var j = 0; j < syms.length; j++)
+          isEnumerable.call(obj, syms[j]) &&
+            xs.push(
+              '[' + inspect(syms[j]) + ']: ' + inspect(obj[syms[j]], obj),
+            );
+      return xs;
+    }
+  },
+});
+var require_side_channel = __commonJS({
+  '../../node_modules/side-channel/index.js'(exports, module) {
+    'use strict';
+    var GetIntrinsic = require_get_intrinsic2(),
+      callBound = require_callBound2(),
+      inspect = require_object_inspect(),
+      $TypeError = GetIntrinsic('%TypeError%'),
+      $WeakMap = GetIntrinsic('%WeakMap%', !0),
+      $Map = GetIntrinsic('%Map%', !0),
+      $weakMapGet = callBound('WeakMap.prototype.get', !0),
+      $weakMapSet = callBound('WeakMap.prototype.set', !0),
+      $weakMapHas = callBound('WeakMap.prototype.has', !0),
+      $mapGet = callBound('Map.prototype.get', !0),
+      $mapSet = callBound('Map.prototype.set', !0),
+      $mapHas = callBound('Map.prototype.has', !0),
+      listGetNode = function (list, key2) {
+        for (var prev = list, curr; (curr = prev.next) !== null; prev = curr)
+          if (curr.key === key2)
+            return (
+              (prev.next = curr.next),
+              (curr.next = list.next),
+              (list.next = curr),
+              curr
+            );
+      },
+      listGet = function (objects, key2) {
+        var node = listGetNode(objects, key2);
+        return node && node.value;
+      },
+      listSet = function (objects, key2, value2) {
+        var node = listGetNode(objects, key2);
+        node
+          ? (node.value = value2)
+          : (objects.next = { key: key2, next: objects.next, value: value2 });
+      },
+      listHas = function (objects, key2) {
+        return !!listGetNode(objects, key2);
+      };
+    module.exports = function () {
+      var $wm,
+        $m,
+        $o,
+        channel = {
+          assert: function (key2) {
+            if (!channel.has(key2))
+              throw new $TypeError(
+                'Side channel does not contain ' + inspect(key2),
+              );
+          },
+          get: function (key2) {
+            if (
+              $WeakMap &&
+              key2 &&
+              (typeof key2 == 'object' || typeof key2 == 'function')
+            ) {
+              if ($wm) return $weakMapGet($wm, key2);
+            } else if ($Map) {
+              if ($m) return $mapGet($m, key2);
+            } else if ($o) return listGet($o, key2);
+          },
+          has: function (key2) {
+            if (
+              $WeakMap &&
+              key2 &&
+              (typeof key2 == 'object' || typeof key2 == 'function')
+            ) {
+              if ($wm) return $weakMapHas($wm, key2);
+            } else if ($Map) {
+              if ($m) return $mapHas($m, key2);
+            } else if ($o) return listHas($o, key2);
+            return !1;
+          },
+          set: function (key2, value2) {
+            $WeakMap &&
+            key2 &&
+            (typeof key2 == 'object' || typeof key2 == 'function')
+              ? ($wm || ($wm = new $WeakMap()), $weakMapSet($wm, key2, value2))
+              : $Map
+                ? ($m || ($m = new $Map()), $mapSet($m, key2, value2))
+                : ($o || ($o = { key: {}, next: null }),
+                  listSet($o, key2, value2));
+          },
+        };
+      return channel;
+    };
+  },
+});
+var require_formats = __commonJS({
+  '../../node_modules/qs/lib/formats.js'(exports, module) {
+    'use strict';
+    var replace = String.prototype.replace,
+      percentTwenties = /%20/g,
+      Format = { RFC1738: 'RFC1738', RFC3986: 'RFC3986' };
+    module.exports = {
+      default: Format.RFC3986,
+      formatters: {
+        RFC1738: function (value2) {
+          return replace.call(value2, percentTwenties, '+');
+        },
+        RFC3986: function (value2) {
+          return String(value2);
+        },
+      },
+      RFC1738: Format.RFC1738,
+      RFC3986: Format.RFC3986,
+    };
+  },
+});
+var require_utils = __commonJS({
+  '../../node_modules/qs/lib/utils.js'(exports, module) {
+    'use strict';
+    var formats = require_formats(),
+      has2 = Object.prototype.hasOwnProperty,
+      isArray2 = Array.isArray,
+      hexTable = (function () {
+        for (var array = [], i = 0; i < 256; ++i)
+          array.push(
+            '%' + ((i < 16 ? '0' : '') + i.toString(16)).toUpperCase(),
+          );
+        return array;
+      })(),
+      compactQueue = function (queue) {
+        for (; queue.length > 1; ) {
+          var item = queue.pop(),
+            obj = item.obj[item.prop];
+          if (isArray2(obj)) {
+            for (var compacted = [], j = 0; j < obj.length; ++j)
+              typeof obj[j] < 'u' && compacted.push(obj[j]);
+            item.obj[item.prop] = compacted;
+          }
+        }
+      },
+      arrayToObject = function (source2, options2) {
+        for (
+          var obj =
+              options2 && options2.plainObjects ? Object.create(null) : {},
+            i = 0;
+          i < source2.length;
+          ++i
+        )
+          typeof source2[i] < 'u' && (obj[i] = source2[i]);
+        return obj;
+      },
+      merge = function merge2(target, source2, options2) {
+        if (!source2) return target;
+        if (typeof source2 != 'object') {
+          if (isArray2(target)) target.push(source2);
+          else if (target && typeof target == 'object')
+            ((options2 &&
+              (options2.plainObjects || options2.allowPrototypes)) ||
+              !has2.call(Object.prototype, source2)) &&
+              (target[source2] = !0);
+          else return [target, source2];
+          return target;
+        }
+        if (!target || typeof target != 'object')
+          return [target].concat(source2);
+        var mergeTarget = target;
+        return (
+          isArray2(target) &&
+            !isArray2(source2) &&
+            (mergeTarget = arrayToObject(target, options2)),
+          isArray2(target) && isArray2(source2)
+            ? (source2.forEach(function (item, i) {
+                if (has2.call(target, i)) {
+                  var targetItem = target[i];
+                  targetItem &&
+                  typeof targetItem == 'object' &&
+                  item &&
+                  typeof item == 'object'
+                    ? (target[i] = merge2(targetItem, item, options2))
+                    : target.push(item);
+                } else target[i] = item;
+              }),
+              target)
+            : Object.keys(source2).reduce(function (acc, key2) {
+                var value2 = source2[key2];
+                return (
+                  has2.call(acc, key2)
+                    ? (acc[key2] = merge2(acc[key2], value2, options2))
+                    : (acc[key2] = value2),
+                  acc
+                );
+              }, mergeTarget)
+        );
+      },
+      assign = function (target, source2) {
+        return Object.keys(source2).reduce(function (acc, key2) {
+          return (acc[key2] = source2[key2]), acc;
+        }, target);
+      },
+      decode = function (str, decoder, charset) {
+        var strWithoutPlus = str.replace(/\+/g, ' ');
+        if (charset === 'iso-8859-1')
+          return strWithoutPlus.replace(/%[0-9a-f]{2}/gi, unescape);
+        try {
+          return decodeURIComponent(strWithoutPlus);
+        } catch {
+          return strWithoutPlus;
+        }
+      },
+      encode = function (str, defaultEncoder, charset, kind, format) {
+        if (str.length === 0) return str;
+        var string = str;
+        if (
+          (typeof str == 'symbol'
+            ? (string = Symbol.prototype.toString.call(str))
+            : typeof str != 'string' && (string = String(str)),
+          charset === 'iso-8859-1')
+        )
+          return escape(string).replace(/%u[0-9a-f]{4}/gi, function ($0) {
+            return '%26%23' + parseInt($0.slice(2), 16) + '%3B';
+          });
+        for (var out = '', i = 0; i < string.length; ++i) {
+          var c2 = string.charCodeAt(i);
+          if (
+            c2 === 45 ||
+            c2 === 46 ||
+            c2 === 95 ||
+            c2 === 126 ||
+            (c2 >= 48 && c2 <= 57) ||
+            (c2 >= 65 && c2 <= 90) ||
+            (c2 >= 97 && c2 <= 122) ||
+            (format === formats.RFC1738 && (c2 === 40 || c2 === 41))
+          ) {
+            out += string.charAt(i);
+            continue;
+          }
+          if (c2 < 128) {
+            out = out + hexTable[c2];
+            continue;
+          }
+          if (c2 < 2048) {
+            out = out + (hexTable[192 | (c2 >> 6)] + hexTable[128 | (c2 & 63)]);
+            continue;
+          }
+          if (c2 < 55296 || c2 >= 57344) {
+            out =
+              out +
+              (hexTable[224 | (c2 >> 12)] +
+                hexTable[128 | ((c2 >> 6) & 63)] +
+                hexTable[128 | (c2 & 63)]);
+            continue;
+          }
+          (i += 1),
+            (c2 =
+              65536 + (((c2 & 1023) << 10) | (string.charCodeAt(i) & 1023))),
+            (out +=
+              hexTable[240 | (c2 >> 18)] +
+              hexTable[128 | ((c2 >> 12) & 63)] +
+              hexTable[128 | ((c2 >> 6) & 63)] +
+              hexTable[128 | (c2 & 63)]);
+        }
+        return out;
+      },
+      compact = function (value2) {
+        for (
+          var queue = [{ obj: { o: value2 }, prop: 'o' }], refs2 = [], i = 0;
+          i < queue.length;
+          ++i
+        )
+          for (
+            var item = queue[i],
+              obj = item.obj[item.prop],
+              keys = Object.keys(obj),
+              j = 0;
+            j < keys.length;
+            ++j
+          ) {
+            var key2 = keys[j],
+              val = obj[key2];
+            typeof val == 'object' &&
+              val !== null &&
+              refs2.indexOf(val) === -1 &&
+              (queue.push({ obj, prop: key2 }), refs2.push(val));
+          }
+        return compactQueue(queue), value2;
+      },
+      isRegExp = function (obj) {
+        return Object.prototype.toString.call(obj) === '[object RegExp]';
+      },
+      isBuffer = function (obj) {
+        return !obj || typeof obj != 'object'
+          ? !1
+          : !!(
+              obj.constructor &&
+              obj.constructor.isBuffer &&
+              obj.constructor.isBuffer(obj)
+            );
+      },
+      combine = function (a, b2) {
+        return [].concat(a, b2);
+      },
+      maybeMap = function (val, fn) {
+        if (isArray2(val)) {
+          for (var mapped = [], i = 0; i < val.length; i += 1)
+            mapped.push(fn(val[i]));
+          return mapped;
+        }
+        return fn(val);
+      };
+    module.exports = {
+      arrayToObject,
+      assign,
+      combine,
+      compact,
+      decode,
+      encode,
+      isBuffer,
+      isRegExp,
+      maybeMap,
+      merge,
+    };
+  },
+});
+var require_stringify = __commonJS({
+  '../../node_modules/qs/lib/stringify.js'(exports, module) {
+    'use strict';
+    var getSideChannel = require_side_channel(),
+      utils = require_utils(),
+      formats = require_formats(),
+      has2 = Object.prototype.hasOwnProperty,
+      arrayPrefixGenerators = {
+        brackets: function (prefix2) {
+          return prefix2 + '[]';
+        },
+        comma: 'comma',
+        indices: function (prefix2, key2) {
+          return prefix2 + '[' + key2 + ']';
+        },
+        repeat: function (prefix2) {
+          return prefix2;
+        },
+      },
+      isArray2 = Array.isArray,
+      push = Array.prototype.push,
+      pushToArray = function (arr, valueOrArray) {
+        push.apply(arr, isArray2(valueOrArray) ? valueOrArray : [valueOrArray]);
+      },
+      toISO = Date.prototype.toISOString,
+      defaultFormat = formats.default,
+      defaults = {
+        addQueryPrefix: !1,
+        allowDots: !1,
+        charset: 'utf-8',
+        charsetSentinel: !1,
+        delimiter: '&',
+        encode: !0,
+        encoder: utils.encode,
+        encodeValuesOnly: !1,
+        format: defaultFormat,
+        formatter: formats.formatters[defaultFormat],
+        indices: !1,
+        serializeDate: function (date) {
+          return toISO.call(date);
+        },
+        skipNulls: !1,
+        strictNullHandling: !1,
+      },
+      isNonNullishPrimitive = function (v2) {
+        return (
+          typeof v2 == 'string' ||
+          typeof v2 == 'number' ||
+          typeof v2 == 'boolean' ||
+          typeof v2 == 'symbol' ||
+          typeof v2 == 'bigint'
+        );
+      },
+      sentinel = {},
+      stringify2 = function stringify3(
+        object,
+        prefix2,
+        generateArrayPrefix,
+        commaRoundTrip,
+        strictNullHandling,
+        skipNulls,
+        encoder,
+        filter,
+        sort,
+        allowDots,
+        serializeDate,
+        format,
+        formatter,
+        encodeValuesOnly,
+        charset,
+        sideChannel,
+      ) {
+        for (
+          var obj = object, tmpSc = sideChannel, step = 0, findFlag = !1;
+          (tmpSc = tmpSc.get(sentinel)) !== void 0 && !findFlag;
+
+        ) {
+          var pos = tmpSc.get(object);
+          if (((step += 1), typeof pos < 'u')) {
+            if (pos === step) throw new RangeError('Cyclic object value');
+            findFlag = !0;
+          }
+          typeof tmpSc.get(sentinel) > 'u' && (step = 0);
+        }
+        if (
+          (typeof filter == 'function'
+            ? (obj = filter(prefix2, obj))
+            : obj instanceof Date
+              ? (obj = serializeDate(obj))
+              : generateArrayPrefix === 'comma' &&
+                isArray2(obj) &&
+                (obj = utils.maybeMap(obj, function (value3) {
+                  return value3 instanceof Date
+                    ? serializeDate(value3)
+                    : value3;
+                })),
+          obj === null)
+        ) {
+          if (strictNullHandling)
+            return encoder && !encodeValuesOnly
+              ? encoder(prefix2, defaults.encoder, charset, 'key', format)
+              : prefix2;
+          obj = '';
+        }
+        if (isNonNullishPrimitive(obj) || utils.isBuffer(obj)) {
+          if (encoder) {
+            var keyValue = encodeValuesOnly
+              ? prefix2
+              : encoder(prefix2, defaults.encoder, charset, 'key', format);
+            return [
+              formatter(keyValue) +
+                '=' +
+                formatter(
+                  encoder(obj, defaults.encoder, charset, 'value', format),
+                ),
+            ];
+          }
+          return [formatter(prefix2) + '=' + formatter(String(obj))];
+        }
+        var values = [];
+        if (typeof obj > 'u') return values;
+        var objKeys;
+        if (generateArrayPrefix === 'comma' && isArray2(obj))
+          encodeValuesOnly && encoder && (obj = utils.maybeMap(obj, encoder)),
+            (objKeys = [
+              { value: obj.length > 0 ? obj.join(',') || null : void 0 },
+            ]);
+        else if (isArray2(filter)) objKeys = filter;
+        else {
+          var keys = Object.keys(obj);
+          objKeys = sort ? keys.sort(sort) : keys;
+        }
+        for (
+          var adjustedPrefix =
+              commaRoundTrip && isArray2(obj) && obj.length === 1
+                ? prefix2 + '[]'
+                : prefix2,
+            j = 0;
+          j < objKeys.length;
+          ++j
+        ) {
+          var key2 = objKeys[j],
+            value2 =
+              typeof key2 == 'object' && typeof key2.value < 'u'
+                ? key2.value
+                : obj[key2];
+          if (!(skipNulls && value2 === null)) {
+            var keyPrefix = isArray2(obj)
+              ? typeof generateArrayPrefix == 'function'
+                ? generateArrayPrefix(adjustedPrefix, key2)
+                : adjustedPrefix
+              : adjustedPrefix + (allowDots ? '.' + key2 : '[' + key2 + ']');
+            sideChannel.set(object, step);
+            var valueSideChannel = getSideChannel();
+            valueSideChannel.set(sentinel, sideChannel),
+              pushToArray(
+                values,
+                stringify3(
+                  value2,
+                  keyPrefix,
+                  generateArrayPrefix,
+                  commaRoundTrip,
+                  strictNullHandling,
+                  skipNulls,
+                  generateArrayPrefix === 'comma' &&
+                    encodeValuesOnly &&
+                    isArray2(obj)
+                    ? null
+                    : encoder,
+                  filter,
+                  sort,
+                  allowDots,
+                  serializeDate,
+                  format,
+                  formatter,
+                  encodeValuesOnly,
+                  charset,
+                  valueSideChannel,
+                ),
+              );
+          }
+        }
+        return values;
+      },
+      normalizeStringifyOptions = function (opts) {
+        if (!opts) return defaults;
+        if (
+          opts.encoder !== null &&
+          typeof opts.encoder < 'u' &&
+          typeof opts.encoder != 'function'
+        )
+          throw new TypeError('Encoder has to be a function.');
+        var charset = opts.charset || defaults.charset;
+        if (
+          typeof opts.charset < 'u' &&
+          opts.charset !== 'utf-8' &&
+          opts.charset !== 'iso-8859-1'
+        )
+          throw new TypeError(
+            'The charset option must be either utf-8, iso-8859-1, or undefined',
+          );
+        var format = formats.default;
+        if (typeof opts.format < 'u') {
+          if (!has2.call(formats.formatters, opts.format))
+            throw new TypeError('Unknown format option provided.');
+          format = opts.format;
+        }
+        var formatter = formats.formatters[format],
+          filter = defaults.filter;
+        return (
+          (typeof opts.filter == 'function' || isArray2(opts.filter)) &&
+            (filter = opts.filter),
+          {
+            addQueryPrefix:
+              typeof opts.addQueryPrefix == 'boolean'
+                ? opts.addQueryPrefix
+                : defaults.addQueryPrefix,
+            allowDots:
+              typeof opts.allowDots > 'u'
+                ? defaults.allowDots
+                : !!opts.allowDots,
+            charset,
+            charsetSentinel:
+              typeof opts.charsetSentinel == 'boolean'
+                ? opts.charsetSentinel
+                : defaults.charsetSentinel,
+            delimiter:
+              typeof opts.delimiter > 'u' ? defaults.delimiter : opts.delimiter,
+            encode:
+              typeof opts.encode == 'boolean' ? opts.encode : defaults.encode,
+            encoder:
+              typeof opts.encoder == 'function'
+                ? opts.encoder
+                : defaults.encoder,
+            encodeValuesOnly:
+              typeof opts.encodeValuesOnly == 'boolean'
+                ? opts.encodeValuesOnly
+                : defaults.encodeValuesOnly,
+            filter,
+            format,
+            formatter,
+            serializeDate:
+              typeof opts.serializeDate == 'function'
+                ? opts.serializeDate
+                : defaults.serializeDate,
+            skipNulls:
+              typeof opts.skipNulls == 'boolean'
+                ? opts.skipNulls
+                : defaults.skipNulls,
+            sort: typeof opts.sort == 'function' ? opts.sort : null,
+            strictNullHandling:
+              typeof opts.strictNullHandling == 'boolean'
+                ? opts.strictNullHandling
+                : defaults.strictNullHandling,
+          }
+        );
+      };
+    module.exports = function (object, opts) {
+      var obj = object,
+        options2 = normalizeStringifyOptions(opts),
+        objKeys,
+        filter;
+      typeof options2.filter == 'function'
+        ? ((filter = options2.filter), (obj = filter('', obj)))
+        : isArray2(options2.filter) &&
+          ((filter = options2.filter), (objKeys = filter));
+      var keys = [];
+      if (typeof obj != 'object' || obj === null) return '';
+      var arrayFormat;
+      opts && opts.arrayFormat in arrayPrefixGenerators
+        ? (arrayFormat = opts.arrayFormat)
+        : opts && 'indices' in opts
+          ? (arrayFormat = opts.indices ? 'indices' : 'repeat')
+          : (arrayFormat = 'indices');
+      var generateArrayPrefix = arrayPrefixGenerators[arrayFormat];
+      if (
+        opts &&
+        'commaRoundTrip' in opts &&
+        typeof opts.commaRoundTrip != 'boolean'
+      )
+        throw new TypeError('`commaRoundTrip` must be a boolean, or absent');
+      var commaRoundTrip =
+        generateArrayPrefix === 'comma' && opts && opts.commaRoundTrip;
+      objKeys || (objKeys = Object.keys(obj)),
+        options2.sort && objKeys.sort(options2.sort);
+      for (var sideChannel = getSideChannel(), i = 0; i < objKeys.length; ++i) {
+        var key2 = objKeys[i];
+        (options2.skipNulls && obj[key2] === null) ||
+          pushToArray(
+            keys,
+            stringify2(
+              obj[key2],
+              key2,
+              generateArrayPrefix,
+              commaRoundTrip,
+              options2.strictNullHandling,
+              options2.skipNulls,
+              options2.encode ? options2.encoder : null,
+              options2.filter,
+              options2.sort,
+              options2.allowDots,
+              options2.serializeDate,
+              options2.format,
+              options2.formatter,
+              options2.encodeValuesOnly,
+              options2.charset,
+              sideChannel,
+            ),
+          );
+      }
+      var joined = keys.join(options2.delimiter),
+        prefix2 = options2.addQueryPrefix === !0 ? '?' : '';
+      return (
+        options2.charsetSentinel &&
+          (options2.charset === 'iso-8859-1'
+            ? (prefix2 += 'utf8=%26%2310003%3B&')
+            : (prefix2 += 'utf8=%E2%9C%93&')),
+        joined.length > 0 ? prefix2 + joined : ''
+      );
+    };
+  },
+});
+var require_parse = __commonJS({
+  '../../node_modules/qs/lib/parse.js'(exports, module) {
+    'use strict';
+    var utils = require_utils(),
+      has2 = Object.prototype.hasOwnProperty,
+      isArray2 = Array.isArray,
+      defaults = {
+        allowDots: !1,
+        allowPrototypes: !1,
+        allowSparse: !1,
+        arrayLimit: 20,
+        charset: 'utf-8',
+        charsetSentinel: !1,
+        comma: !1,
+        decoder: utils.decode,
+        delimiter: '&',
+        depth: 5,
+        ignoreQueryPrefix: !1,
+        interpretNumericEntities: !1,
+        parameterLimit: 1e3,
+        parseArrays: !0,
+        plainObjects: !1,
+        strictNullHandling: !1,
+      },
+      interpretNumericEntities = function (str) {
+        return str.replace(/&#(\d+);/g, function ($0, numberStr) {
+          return String.fromCharCode(parseInt(numberStr, 10));
+        });
+      },
+      parseArrayValue = function (val, options2) {
+        return val &&
+          typeof val == 'string' &&
+          options2.comma &&
+          val.indexOf(',') > -1
+          ? val.split(',')
+          : val;
+      },
+      isoSentinel = 'utf8=%26%2310003%3B',
+      charsetSentinel = 'utf8=%E2%9C%93',
+      parseValues = function (str, options2) {
+        var obj = { __proto__: null },
+          cleanStr = options2.ignoreQueryPrefix ? str.replace(/^\?/, '') : str,
+          limit =
+            options2.parameterLimit === 1 / 0
+              ? void 0
+              : options2.parameterLimit,
+          parts = cleanStr.split(options2.delimiter, limit),
+          skipIndex = -1,
+          i,
+          charset = options2.charset;
+        if (options2.charsetSentinel)
+          for (i = 0; i < parts.length; ++i)
+            parts[i].indexOf('utf8=') === 0 &&
+              (parts[i] === charsetSentinel
+                ? (charset = 'utf-8')
+                : parts[i] === isoSentinel && (charset = 'iso-8859-1'),
+              (skipIndex = i),
+              (i = parts.length));
+        for (i = 0; i < parts.length; ++i)
+          if (i !== skipIndex) {
+            var part = parts[i],
+              bracketEqualsPos = part.indexOf(']='),
+              pos =
+                bracketEqualsPos === -1
+                  ? part.indexOf('=')
+                  : bracketEqualsPos + 1,
+              key2,
+              val;
+            pos === -1
+              ? ((key2 = options2.decoder(
+                  part,
+                  defaults.decoder,
+                  charset,
+                  'key',
+                )),
+                (val = options2.strictNullHandling ? null : ''))
+              : ((key2 = options2.decoder(
+                  part.slice(0, pos),
+                  defaults.decoder,
+                  charset,
+                  'key',
+                )),
+                (val = utils.maybeMap(
+                  parseArrayValue(part.slice(pos + 1), options2),
+                  function (encodedVal) {
+                    return options2.decoder(
+                      encodedVal,
+                      defaults.decoder,
+                      charset,
+                      'value',
+                    );
+                  },
+                ))),
+              val &&
+                options2.interpretNumericEntities &&
+                charset === 'iso-8859-1' &&
+                (val = interpretNumericEntities(val)),
+              part.indexOf('[]=') > -1 && (val = isArray2(val) ? [val] : val),
+              has2.call(obj, key2)
+                ? (obj[key2] = utils.combine(obj[key2], val))
+                : (obj[key2] = val);
+          }
+        return obj;
+      },
+      parseObject = function (chain, val, options2, valuesParsed) {
+        for (
+          var leaf = valuesParsed ? val : parseArrayValue(val, options2),
+            i = chain.length - 1;
+          i >= 0;
+          --i
+        ) {
+          var obj,
+            root3 = chain[i];
+          if (root3 === '[]' && options2.parseArrays) obj = [].concat(leaf);
+          else {
+            obj = options2.plainObjects ? Object.create(null) : {};
+            var cleanRoot =
+                root3.charAt(0) === '[' &&
+                root3.charAt(root3.length - 1) === ']'
+                  ? root3.slice(1, -1)
+                  : root3,
+              index = parseInt(cleanRoot, 10);
+            !options2.parseArrays && cleanRoot === ''
+              ? (obj = { 0: leaf })
+              : !isNaN(index) &&
+                  root3 !== cleanRoot &&
+                  String(index) === cleanRoot &&
+                  index >= 0 &&
+                  options2.parseArrays &&
+                  index <= options2.arrayLimit
+                ? ((obj = []), (obj[index] = leaf))
+                : cleanRoot !== '__proto__' && (obj[cleanRoot] = leaf);
+          }
+          leaf = obj;
+        }
+        return leaf;
+      },
+      parseKeys = function (givenKey, val, options2, valuesParsed) {
+        if (givenKey) {
+          var key2 = options2.allowDots
+              ? givenKey.replace(/\.([^.[]+)/g, '[$1]')
+              : givenKey,
+            brackets = /(\[[^[\]]*])/,
+            child = /(\[[^[\]]*])/g,
+            segment = options2.depth > 0 && brackets.exec(key2),
+            parent = segment ? key2.slice(0, segment.index) : key2,
+            keys = [];
+          if (parent) {
+            if (
+              !options2.plainObjects &&
+              has2.call(Object.prototype, parent) &&
+              !options2.allowPrototypes
+            )
+              return;
+            keys.push(parent);
+          }
+          for (
+            var i = 0;
+            options2.depth > 0 &&
+            (segment = child.exec(key2)) !== null &&
+            i < options2.depth;
+
+          ) {
+            if (
+              ((i += 1),
+              !options2.plainObjects &&
+                has2.call(Object.prototype, segment[1].slice(1, -1)) &&
+                !options2.allowPrototypes)
+            )
+              return;
+            keys.push(segment[1]);
+          }
+          return (
+            segment && keys.push('[' + key2.slice(segment.index) + ']'),
+            parseObject(keys, val, options2, valuesParsed)
+          );
+        }
+      },
+      normalizeParseOptions = function (opts) {
+        if (!opts) return defaults;
+        if (
+          opts.decoder !== null &&
+          opts.decoder !== void 0 &&
+          typeof opts.decoder != 'function'
+        )
+          throw new TypeError('Decoder has to be a function.');
+        if (
+          typeof opts.charset < 'u' &&
+          opts.charset !== 'utf-8' &&
+          opts.charset !== 'iso-8859-1'
+        )
+          throw new TypeError(
+            'The charset option must be either utf-8, iso-8859-1, or undefined',
+          );
+        var charset =
+          typeof opts.charset > 'u' ? defaults.charset : opts.charset;
+        return {
+          allowDots:
+            typeof opts.allowDots > 'u' ? defaults.allowDots : !!opts.allowDots,
+          allowPrototypes:
+            typeof opts.allowPrototypes == 'boolean'
+              ? opts.allowPrototypes
+              : defaults.allowPrototypes,
+          allowSparse:
+            typeof opts.allowSparse == 'boolean'
+              ? opts.allowSparse
+              : defaults.allowSparse,
+          arrayLimit:
+            typeof opts.arrayLimit == 'number'
+              ? opts.arrayLimit
+              : defaults.arrayLimit,
+          charset,
+          charsetSentinel:
+            typeof opts.charsetSentinel == 'boolean'
+              ? opts.charsetSentinel
+              : defaults.charsetSentinel,
+          comma: typeof opts.comma == 'boolean' ? opts.comma : defaults.comma,
+          decoder:
+            typeof opts.decoder == 'function' ? opts.decoder : defaults.decoder,
+          delimiter:
+            typeof opts.delimiter == 'string' || utils.isRegExp(opts.delimiter)
+              ? opts.delimiter
+              : defaults.delimiter,
+          depth:
+            typeof opts.depth == 'number' || opts.depth === !1
+              ? +opts.depth
+              : defaults.depth,
+          ignoreQueryPrefix: opts.ignoreQueryPrefix === !0,
+          interpretNumericEntities:
+            typeof opts.interpretNumericEntities == 'boolean'
+              ? opts.interpretNumericEntities
+              : defaults.interpretNumericEntities,
+          parameterLimit:
+            typeof opts.parameterLimit == 'number'
+              ? opts.parameterLimit
+              : defaults.parameterLimit,
+          parseArrays: opts.parseArrays !== !1,
+          plainObjects:
+            typeof opts.plainObjects == 'boolean'
+              ? opts.plainObjects
+              : defaults.plainObjects,
+          strictNullHandling:
+            typeof opts.strictNullHandling == 'boolean'
+              ? opts.strictNullHandling
+              : defaults.strictNullHandling,
+        };
+      };
+    module.exports = function (str, opts) {
+      var options2 = normalizeParseOptions(opts);
+      if (str === '' || str === null || typeof str > 'u')
+        return options2.plainObjects ? Object.create(null) : {};
+      for (
+        var tempObj = typeof str == 'string' ? parseValues(str, options2) : str,
+          obj = options2.plainObjects ? Object.create(null) : {},
+          keys = Object.keys(tempObj),
+          i = 0;
+        i < keys.length;
+        ++i
+      ) {
+        var key2 = keys[i],
+          newObj = parseKeys(
+            key2,
+            tempObj[key2],
+            options2,
+            typeof str == 'string',
+          );
+        obj = utils.merge(obj, newObj, options2);
+      }
+      return options2.allowSparse === !0 ? obj : utils.compact(obj);
+    };
+  },
+});
+var require_lib = __commonJS({
+  '../../node_modules/qs/lib/index.js'(exports, module) {
+    'use strict';
+    var stringify2 = require_stringify(),
+      parse3 = require_parse(),
+      formats = require_formats();
+    module.exports = { formats, parse: parse3, stringify: stringify2 };
+  },
+});
 var require_freeGlobal = __commonJS({
   '../../node_modules/lodash/_freeGlobal.js'(exports, module) {
     'use strict';
@@ -2631,24 +4832,24 @@ var require_overRest = __commonJS({
     'use strict';
     var apply = require_apply(),
       nativeMax = Math.max;
-    function overRest(func, start, transform) {
+    function overRest(func, start2, transform) {
       return (
-        (start = nativeMax(start === void 0 ? func.length - 1 : start, 0)),
+        (start2 = nativeMax(start2 === void 0 ? func.length - 1 : start2, 0)),
         function () {
           for (
             var args2 = arguments,
               index = -1,
-              length = nativeMax(args2.length - start, 0),
+              length = nativeMax(args2.length - start2, 0),
               array = Array(length);
             ++index < length;
 
           )
-            array[index] = args2[start + index];
+            array[index] = args2[start2 + index];
           index = -1;
-          for (var otherArgs = Array(start + 1); ++index < start; )
+          for (var otherArgs = Array(start2 + 1); ++index < start2; )
             otherArgs[index] = args2[index];
           return (
-            (otherArgs[start] = transform(array)), apply(func, this, otherArgs)
+            (otherArgs[start2] = transform(array)), apply(func, this, otherArgs)
           );
         }
       );
@@ -2739,6 +4940,377 @@ var require_pick = __commonJS({
     module.exports = pick2;
   },
 });
+var require_synchronous_promise = __commonJS({
+  '../../node_modules/synchronous-promise/index.js'(exports, module) {
+    'use strict';
+    function makeArrayFrom(obj) {
+      return Array.prototype.slice.apply(obj);
+    }
+    var PENDING = 'pending',
+      RESOLVED = 'resolved',
+      REJECTED = 'rejected';
+    function SynchronousPromise4(handler) {
+      (this.status = PENDING),
+        (this._continuations = []),
+        (this._parent = null),
+        (this._paused = !1),
+        handler &&
+          handler.call(
+            this,
+            this._continueWith.bind(this),
+            this._failWith.bind(this),
+          );
+    }
+    function looksLikeAPromise(obj) {
+      return obj && typeof obj.then == 'function';
+    }
+    function passThrough(value2) {
+      return value2;
+    }
+    SynchronousPromise4.prototype = {
+      then: function (nextFn, catchFn) {
+        var next = SynchronousPromise4.unresolved()._setParent(this);
+        if (this._isRejected()) {
+          if (this._paused)
+            return (
+              this._continuations.push({ promise: next, nextFn, catchFn }), next
+            );
+          if (catchFn)
+            try {
+              var catchResult = catchFn(this._error);
+              return looksLikeAPromise(catchResult)
+                ? (this._chainPromiseData(catchResult, next), next)
+                : SynchronousPromise4.resolve(catchResult)._setParent(this);
+            } catch (e) {
+              return SynchronousPromise4.reject(e)._setParent(this);
+            }
+          return SynchronousPromise4.reject(this._error)._setParent(this);
+        }
+        return (
+          this._continuations.push({ promise: next, nextFn, catchFn }),
+          this._runResolutions(),
+          next
+        );
+      },
+      catch: function (handler) {
+        if (this._isResolved())
+          return SynchronousPromise4.resolve(this._data)._setParent(this);
+        var next = SynchronousPromise4.unresolved()._setParent(this);
+        return (
+          this._continuations.push({ promise: next, catchFn: handler }),
+          this._runRejections(),
+          next
+        );
+      },
+      finally: function (callback) {
+        var ran = !1;
+        function runFinally(result2, err) {
+          if (!ran) {
+            (ran = !0), callback || (callback = passThrough);
+            var callbackResult = callback(result2);
+            return looksLikeAPromise(callbackResult)
+              ? callbackResult.then(function () {
+                  if (err) throw err;
+                  return result2;
+                })
+              : result2;
+          }
+        }
+        return this.then(function (result2) {
+          return runFinally(result2);
+        }).catch(function (err) {
+          return runFinally(null, err);
+        });
+      },
+      pause: function () {
+        return (this._paused = !0), this;
+      },
+      resume: function () {
+        var firstPaused = this._findFirstPaused();
+        return (
+          firstPaused &&
+            ((firstPaused._paused = !1),
+            firstPaused._runResolutions(),
+            firstPaused._runRejections()),
+          this
+        );
+      },
+      _findAncestry: function () {
+        return this._continuations.reduce(function (acc, cur) {
+          if (cur.promise) {
+            var node = {
+              promise: cur.promise,
+              children: cur.promise._findAncestry(),
+            };
+            acc.push(node);
+          }
+          return acc;
+        }, []);
+      },
+      _setParent: function (parent) {
+        if (this._parent) throw new Error('parent already set');
+        return (this._parent = parent), this;
+      },
+      _continueWith: function (data) {
+        var firstPending = this._findFirstPending();
+        firstPending &&
+          ((firstPending._data = data), firstPending._setResolved());
+      },
+      _findFirstPending: function () {
+        return this._findFirstAncestor(function (test) {
+          return test._isPending && test._isPending();
+        });
+      },
+      _findFirstPaused: function () {
+        return this._findFirstAncestor(function (test) {
+          return test._paused;
+        });
+      },
+      _findFirstAncestor: function (matching) {
+        for (var test = this, result2; test; )
+          matching(test) && (result2 = test), (test = test._parent);
+        return result2;
+      },
+      _failWith: function (error) {
+        var firstRejected = this._findFirstPending();
+        firstRejected &&
+          ((firstRejected._error = error), firstRejected._setRejected());
+      },
+      _takeContinuations: function () {
+        return this._continuations.splice(0, this._continuations.length);
+      },
+      _runRejections: function () {
+        if (!(this._paused || !this._isRejected())) {
+          var error = this._error,
+            continuations = this._takeContinuations(),
+            self2 = this;
+          continuations.forEach(function (cont) {
+            if (cont.catchFn)
+              try {
+                var catchResult = cont.catchFn(error);
+                self2._handleUserFunctionResult(catchResult, cont.promise);
+              } catch (e) {
+                cont.promise.reject(e);
+              }
+            else cont.promise.reject(error);
+          });
+        }
+      },
+      _runResolutions: function () {
+        if (!(this._paused || !this._isResolved() || this._isPending())) {
+          var continuations = this._takeContinuations(),
+            data = this._data,
+            self2 = this;
+          if (
+            (continuations.forEach(function (cont) {
+              if (cont.nextFn)
+                try {
+                  var result2 = cont.nextFn(data);
+                  self2._handleUserFunctionResult(result2, cont.promise);
+                } catch (e) {
+                  self2._handleResolutionError(e, cont);
+                }
+              else cont.promise && cont.promise.resolve(data);
+            }),
+            looksLikeAPromise(this._data))
+          )
+            return this._handleWhenResolvedDataIsPromise(this._data);
+        }
+      },
+      _handleResolutionError: function (e, continuation) {
+        if ((this._setRejected(), continuation.catchFn))
+          try {
+            continuation.catchFn(e);
+            return;
+          } catch (e2) {
+            e = e2;
+          }
+        continuation.promise && continuation.promise.reject(e);
+      },
+      _handleWhenResolvedDataIsPromise: function (data) {
+        var self2 = this;
+        return data
+          .then(function (result2) {
+            (self2._data = result2), self2._runResolutions();
+          })
+          .catch(function (error) {
+            (self2._error = error),
+              self2._setRejected(),
+              self2._runRejections();
+          });
+      },
+      _handleUserFunctionResult: function (data, nextSynchronousPromise) {
+        looksLikeAPromise(data)
+          ? this._chainPromiseData(data, nextSynchronousPromise)
+          : nextSynchronousPromise.resolve(data);
+      },
+      _chainPromiseData: function (promiseData, nextSynchronousPromise) {
+        promiseData
+          .then(function (newData) {
+            nextSynchronousPromise.resolve(newData);
+          })
+          .catch(function (newError) {
+            nextSynchronousPromise.reject(newError);
+          });
+      },
+      _setResolved: function () {
+        (this.status = RESOLVED), this._paused || this._runResolutions();
+      },
+      _setRejected: function () {
+        (this.status = REJECTED), this._paused || this._runRejections();
+      },
+      _isPending: function () {
+        return this.status === PENDING;
+      },
+      _isResolved: function () {
+        return this.status === RESOLVED;
+      },
+      _isRejected: function () {
+        return this.status === REJECTED;
+      },
+    };
+    SynchronousPromise4.resolve = function (result2) {
+      return new SynchronousPromise4(function (resolve, reject) {
+        looksLikeAPromise(result2)
+          ? result2
+              .then(function (newResult) {
+                resolve(newResult);
+              })
+              .catch(function (error) {
+                reject(error);
+              })
+          : resolve(result2);
+      });
+    };
+    SynchronousPromise4.reject = function (result2) {
+      return new SynchronousPromise4(function (resolve, reject) {
+        reject(result2);
+      });
+    };
+    SynchronousPromise4.unresolved = function () {
+      return new SynchronousPromise4(function (resolve, reject) {
+        (this.resolve = resolve), (this.reject = reject);
+      });
+    };
+    SynchronousPromise4.all = function () {
+      var args2 = makeArrayFrom(arguments);
+      return (
+        Array.isArray(args2[0]) && (args2 = args2[0]),
+        args2.length
+          ? new SynchronousPromise4(function (resolve, reject) {
+              var allData = [],
+                numResolved = 0,
+                doResolve = function () {
+                  numResolved === args2.length && resolve(allData);
+                },
+                rejected = !1,
+                doReject = function (err) {
+                  rejected || ((rejected = !0), reject(err));
+                };
+              args2.forEach(function (arg, idx) {
+                SynchronousPromise4.resolve(arg)
+                  .then(function (thisResult) {
+                    (allData[idx] = thisResult),
+                      (numResolved += 1),
+                      doResolve();
+                  })
+                  .catch(function (err) {
+                    doReject(err);
+                  });
+              });
+            })
+          : SynchronousPromise4.resolve([])
+      );
+    };
+    function createAggregateErrorFrom(errors) {
+      return typeof window < 'u' && 'AggregateError' in window
+        ? new window.AggregateError(errors)
+        : { errors };
+    }
+    SynchronousPromise4.any = function () {
+      var args2 = makeArrayFrom(arguments);
+      return (
+        Array.isArray(args2[0]) && (args2 = args2[0]),
+        args2.length
+          ? new SynchronousPromise4(function (resolve, reject) {
+              var allErrors = [],
+                numRejected = 0,
+                doReject = function () {
+                  numRejected === args2.length &&
+                    reject(createAggregateErrorFrom(allErrors));
+                },
+                resolved = !1,
+                doResolve = function (result2) {
+                  resolved || ((resolved = !0), resolve(result2));
+                };
+              args2.forEach(function (arg, idx) {
+                SynchronousPromise4.resolve(arg)
+                  .then(function (thisResult) {
+                    doResolve(thisResult);
+                  })
+                  .catch(function (err) {
+                    (allErrors[idx] = err), (numRejected += 1), doReject();
+                  });
+              });
+            })
+          : SynchronousPromise4.reject(createAggregateErrorFrom([]))
+      );
+    };
+    SynchronousPromise4.allSettled = function () {
+      var args2 = makeArrayFrom(arguments);
+      return (
+        Array.isArray(args2[0]) && (args2 = args2[0]),
+        args2.length
+          ? new SynchronousPromise4(function (resolve) {
+              var allData = [],
+                numSettled = 0,
+                doSettled = function () {
+                  (numSettled += 1),
+                    numSettled === args2.length && resolve(allData);
+                };
+              args2.forEach(function (arg, idx) {
+                SynchronousPromise4.resolve(arg)
+                  .then(function (thisResult) {
+                    (allData[idx] = { status: 'fulfilled', value: thisResult }),
+                      doSettled();
+                  })
+                  .catch(function (err) {
+                    (allData[idx] = { status: 'rejected', reason: err }),
+                      doSettled();
+                  });
+              });
+            })
+          : SynchronousPromise4.resolve([])
+      );
+    };
+    if (Promise === SynchronousPromise4)
+      throw new Error(
+        'Please use SynchronousPromise.installGlobally() to install globally',
+      );
+    var RealPromise = Promise;
+    SynchronousPromise4.installGlobally = function (__awaiter) {
+      if (Promise === SynchronousPromise4) return __awaiter;
+      var result2 = patchAwaiterIfRequired(__awaiter);
+      return (Promise = SynchronousPromise4), result2;
+    };
+    SynchronousPromise4.uninstallGlobally = function () {
+      Promise === SynchronousPromise4 && (Promise = RealPromise);
+    };
+    function patchAwaiterIfRequired(__awaiter) {
+      if (typeof __awaiter > 'u' || __awaiter.__patched) return __awaiter;
+      var originalAwaiter = __awaiter;
+      return (
+        (__awaiter = function () {
+          var Promise2 = RealPromise;
+          originalAwaiter.apply(this, makeArrayFrom(arguments));
+        }),
+        (__awaiter.__patched = !0),
+        __awaiter
+      );
+    }
+    module.exports = { SynchronousPromise: SynchronousPromise4 };
+  },
+});
 var require_getPrototype = __commonJS({
   '../../node_modules/lodash/_getPrototype.js'(exports, module) {
     'use strict';
@@ -2759,7 +5331,7 @@ var require_isPlainObject = __commonJS({
       funcToString3 = funcProto3.toString,
       hasOwnProperty5 = objectProto6.hasOwnProperty,
       objectCtorString = funcToString3.call(Object);
-    function isPlainObject2(value2) {
+    function isPlainObject3(value2) {
       if (!isObjectLike2(value2) || baseGetTag2(value2) != objectTag) return !1;
       var proto = getPrototype(value2);
       if (proto === null) return !0;
@@ -2771,7 +5343,7 @@ var require_isPlainObject = __commonJS({
         funcToString3.call(Ctor) == objectCtorString
       );
     }
-    module.exports = isPlainObject2;
+    module.exports = isPlainObject3;
   },
 });
 var require_browser = __commonJS({
@@ -2899,2242 +5471,6 @@ var require_pickBy = __commonJS({
       );
     }
     module.exports = pickBy2;
-  },
-});
-var require_es_errors = __commonJS({
-  '../../node_modules/es-errors/index.js'(exports, module) {
-    'use strict';
-    module.exports = Error;
-  },
-});
-var require_eval = __commonJS({
-  '../../node_modules/es-errors/eval.js'(exports, module) {
-    'use strict';
-    module.exports = EvalError;
-  },
-});
-var require_range = __commonJS({
-  '../../node_modules/es-errors/range.js'(exports, module) {
-    'use strict';
-    module.exports = RangeError;
-  },
-});
-var require_ref = __commonJS({
-  '../../node_modules/es-errors/ref.js'(exports, module) {
-    'use strict';
-    module.exports = ReferenceError;
-  },
-});
-var require_syntax = __commonJS({
-  '../../node_modules/es-errors/syntax.js'(exports, module) {
-    'use strict';
-    module.exports = SyntaxError;
-  },
-});
-var require_type = __commonJS({
-  '../../node_modules/es-errors/type.js'(exports, module) {
-    'use strict';
-    module.exports = TypeError;
-  },
-});
-var require_uri = __commonJS({
-  '../../node_modules/es-errors/uri.js'(exports, module) {
-    'use strict';
-    module.exports = URIError;
-  },
-});
-var require_shams3 = __commonJS({
-  '../../node_modules/has-symbols/shams.js'(exports, module) {
-    'use strict';
-    module.exports = function () {
-      if (
-        typeof Symbol != 'function' ||
-        typeof Object.getOwnPropertySymbols != 'function'
-      )
-        return !1;
-      if (typeof Symbol.iterator == 'symbol') return !0;
-      var obj = {},
-        sym = Symbol('test'),
-        symObj = Object(sym);
-      if (
-        typeof sym == 'string' ||
-        Object.prototype.toString.call(sym) !== '[object Symbol]' ||
-        Object.prototype.toString.call(symObj) !== '[object Symbol]'
-      )
-        return !1;
-      var symVal = 42;
-      obj[sym] = symVal;
-      for (sym in obj) return !1;
-      if (
-        (typeof Object.keys == 'function' && Object.keys(obj).length !== 0) ||
-        (typeof Object.getOwnPropertyNames == 'function' &&
-          Object.getOwnPropertyNames(obj).length !== 0)
-      )
-        return !1;
-      var syms = Object.getOwnPropertySymbols(obj);
-      if (
-        syms.length !== 1 ||
-        syms[0] !== sym ||
-        !Object.prototype.propertyIsEnumerable.call(obj, sym)
-      )
-        return !1;
-      if (typeof Object.getOwnPropertyDescriptor == 'function') {
-        var descriptor = Object.getOwnPropertyDescriptor(obj, sym);
-        if (descriptor.value !== symVal || descriptor.enumerable !== !0)
-          return !1;
-      }
-      return !0;
-    };
-  },
-});
-var require_has_symbols2 = __commonJS({
-  '../../node_modules/has-symbols/index.js'(exports, module) {
-    'use strict';
-    var origSymbol = typeof Symbol < 'u' && Symbol,
-      hasSymbolSham = require_shams3();
-    module.exports = function () {
-      return typeof origSymbol != 'function' ||
-        typeof Symbol != 'function' ||
-        typeof origSymbol('foo') != 'symbol' ||
-        typeof Symbol('bar') != 'symbol'
-        ? !1
-        : hasSymbolSham();
-    };
-  },
-});
-var require_has_proto = __commonJS({
-  '../../node_modules/has-proto/index.js'(exports, module) {
-    'use strict';
-    var test = { __proto__: null, foo: {} },
-      $Object = Object;
-    module.exports = function () {
-      return { __proto__: test }.foo === test.foo && !(test instanceof $Object);
-    };
-  },
-});
-var require_implementation2 = __commonJS({
-  '../../node_modules/function-bind/implementation.js'(exports, module) {
-    'use strict';
-    var ERROR_MESSAGE = 'Function.prototype.bind called on incompatible ',
-      toStr = Object.prototype.toString,
-      max = Math.max,
-      funcType = '[object Function]',
-      concatty = function (a, b2) {
-        for (var arr = [], i = 0; i < a.length; i += 1) arr[i] = a[i];
-        for (var j = 0; j < b2.length; j += 1) arr[j + a.length] = b2[j];
-        return arr;
-      },
-      slicy = function (arrLike, offset) {
-        for (
-          var arr = [], i = offset || 0, j = 0;
-          i < arrLike.length;
-          i += 1, j += 1
-        )
-          arr[j] = arrLike[i];
-        return arr;
-      },
-      joiny = function (arr, joiner) {
-        for (var str = '', i = 0; i < arr.length; i += 1)
-          (str += arr[i]), i + 1 < arr.length && (str += joiner);
-        return str;
-      };
-    module.exports = function (that) {
-      var target = this;
-      if (typeof target != 'function' || toStr.apply(target) !== funcType)
-        throw new TypeError(ERROR_MESSAGE + target);
-      for (
-        var args2 = slicy(arguments, 1),
-          bound,
-          binder = function () {
-            if (this instanceof bound) {
-              var result2 = target.apply(this, concatty(args2, arguments));
-              return Object(result2) === result2 ? result2 : this;
-            }
-            return target.apply(that, concatty(args2, arguments));
-          },
-          boundLength = max(0, target.length - args2.length),
-          boundArgs = [],
-          i = 0;
-        i < boundLength;
-        i++
-      )
-        boundArgs[i] = '$' + i;
-      if (
-        ((bound = Function(
-          'binder',
-          'return function (' +
-            joiny(boundArgs, ',') +
-            '){ return binder.apply(this,arguments); }',
-        )(binder)),
-        target.prototype)
-      ) {
-        var Empty = function () {};
-        (Empty.prototype = target.prototype),
-          (bound.prototype = new Empty()),
-          (Empty.prototype = null);
-      }
-      return bound;
-    };
-  },
-});
-var require_function_bind2 = __commonJS({
-  '../../node_modules/function-bind/index.js'(exports, module) {
-    'use strict';
-    var implementation = require_implementation2();
-    module.exports = Function.prototype.bind || implementation;
-  },
-});
-var require_hasown = __commonJS({
-  '../../node_modules/hasown/index.js'(exports, module) {
-    'use strict';
-    var call = Function.prototype.call,
-      $hasOwn = Object.prototype.hasOwnProperty,
-      bind = require_function_bind2();
-    module.exports = bind.call(call, $hasOwn);
-  },
-});
-var require_get_intrinsic2 = __commonJS({
-  '../../node_modules/get-intrinsic/index.js'(exports, module) {
-    'use strict';
-    var undefined2,
-      $Error = require_es_errors(),
-      $EvalError = require_eval(),
-      $RangeError = require_range(),
-      $ReferenceError = require_ref(),
-      $SyntaxError = require_syntax(),
-      $TypeError = require_type(),
-      $URIError = require_uri(),
-      $Function = Function,
-      getEvalledConstructor = function (expressionSyntax) {
-        try {
-          return $Function(
-            '"use strict"; return (' + expressionSyntax + ').constructor;',
-          )();
-        } catch {}
-      },
-      $gOPD = Object.getOwnPropertyDescriptor;
-    if ($gOPD)
-      try {
-        $gOPD({}, '');
-      } catch {
-        $gOPD = null;
-      }
-    var throwTypeError = function () {
-        throw new $TypeError();
-      },
-      ThrowTypeError = $gOPD
-        ? (function () {
-            try {
-              return arguments.callee, throwTypeError;
-            } catch {
-              try {
-                return $gOPD(arguments, 'callee').get;
-              } catch {
-                return throwTypeError;
-              }
-            }
-          })()
-        : throwTypeError,
-      hasSymbols = require_has_symbols2()(),
-      hasProto = require_has_proto()(),
-      getProto =
-        Object.getPrototypeOf ||
-        (hasProto
-          ? function (x2) {
-              return x2.__proto__;
-            }
-          : null),
-      needsEval = {},
-      TypedArray =
-        typeof Uint8Array > 'u' || !getProto
-          ? undefined2
-          : getProto(Uint8Array),
-      INTRINSICS = {
-        __proto__: null,
-        '%AggregateError%':
-          typeof AggregateError > 'u' ? undefined2 : AggregateError,
-        '%Array%': Array,
-        '%ArrayBuffer%': typeof ArrayBuffer > 'u' ? undefined2 : ArrayBuffer,
-        '%ArrayIteratorPrototype%':
-          hasSymbols && getProto ? getProto([][Symbol.iterator]()) : undefined2,
-        '%AsyncFromSyncIteratorPrototype%': undefined2,
-        '%AsyncFunction%': needsEval,
-        '%AsyncGenerator%': needsEval,
-        '%AsyncGeneratorFunction%': needsEval,
-        '%AsyncIteratorPrototype%': needsEval,
-        '%Atomics%': typeof Atomics > 'u' ? undefined2 : Atomics,
-        '%BigInt%': typeof BigInt > 'u' ? undefined2 : BigInt,
-        '%BigInt64Array%':
-          typeof BigInt64Array > 'u' ? undefined2 : BigInt64Array,
-        '%BigUint64Array%':
-          typeof BigUint64Array > 'u' ? undefined2 : BigUint64Array,
-        '%Boolean%': Boolean,
-        '%DataView%': typeof DataView > 'u' ? undefined2 : DataView,
-        '%Date%': Date,
-        '%decodeURI%': decodeURI,
-        '%decodeURIComponent%': decodeURIComponent,
-        '%encodeURI%': encodeURI,
-        '%encodeURIComponent%': encodeURIComponent,
-        '%Error%': $Error,
-        '%eval%': eval,
-        '%EvalError%': $EvalError,
-        '%Float32Array%': typeof Float32Array > 'u' ? undefined2 : Float32Array,
-        '%Float64Array%': typeof Float64Array > 'u' ? undefined2 : Float64Array,
-        '%FinalizationRegistry%':
-          typeof FinalizationRegistry > 'u' ? undefined2 : FinalizationRegistry,
-        '%Function%': $Function,
-        '%GeneratorFunction%': needsEval,
-        '%Int8Array%': typeof Int8Array > 'u' ? undefined2 : Int8Array,
-        '%Int16Array%': typeof Int16Array > 'u' ? undefined2 : Int16Array,
-        '%Int32Array%': typeof Int32Array > 'u' ? undefined2 : Int32Array,
-        '%isFinite%': isFinite,
-        '%isNaN%': isNaN,
-        '%IteratorPrototype%':
-          hasSymbols && getProto
-            ? getProto(getProto([][Symbol.iterator]()))
-            : undefined2,
-        '%JSON%': typeof JSON == 'object' ? JSON : undefined2,
-        '%Map%': typeof Map > 'u' ? undefined2 : Map,
-        '%MapIteratorPrototype%':
-          typeof Map > 'u' || !hasSymbols || !getProto
-            ? undefined2
-            : getProto(new Map()[Symbol.iterator]()),
-        '%Math%': Math,
-        '%Number%': Number,
-        '%Object%': Object,
-        '%parseFloat%': parseFloat,
-        '%parseInt%': parseInt,
-        '%Promise%': typeof Promise > 'u' ? undefined2 : Promise,
-        '%Proxy%': typeof Proxy > 'u' ? undefined2 : Proxy,
-        '%RangeError%': $RangeError,
-        '%ReferenceError%': $ReferenceError,
-        '%Reflect%': typeof Reflect > 'u' ? undefined2 : Reflect,
-        '%RegExp%': RegExp,
-        '%Set%': typeof Set > 'u' ? undefined2 : Set,
-        '%SetIteratorPrototype%':
-          typeof Set > 'u' || !hasSymbols || !getProto
-            ? undefined2
-            : getProto(new Set()[Symbol.iterator]()),
-        '%SharedArrayBuffer%':
-          typeof SharedArrayBuffer > 'u' ? undefined2 : SharedArrayBuffer,
-        '%String%': String,
-        '%StringIteratorPrototype%':
-          hasSymbols && getProto ? getProto(''[Symbol.iterator]()) : undefined2,
-        '%Symbol%': hasSymbols ? Symbol : undefined2,
-        '%SyntaxError%': $SyntaxError,
-        '%ThrowTypeError%': ThrowTypeError,
-        '%TypedArray%': TypedArray,
-        '%TypeError%': $TypeError,
-        '%Uint8Array%': typeof Uint8Array > 'u' ? undefined2 : Uint8Array,
-        '%Uint8ClampedArray%':
-          typeof Uint8ClampedArray > 'u' ? undefined2 : Uint8ClampedArray,
-        '%Uint16Array%': typeof Uint16Array > 'u' ? undefined2 : Uint16Array,
-        '%Uint32Array%': typeof Uint32Array > 'u' ? undefined2 : Uint32Array,
-        '%URIError%': $URIError,
-        '%WeakMap%': typeof WeakMap > 'u' ? undefined2 : WeakMap,
-        '%WeakRef%': typeof WeakRef > 'u' ? undefined2 : WeakRef,
-        '%WeakSet%': typeof WeakSet > 'u' ? undefined2 : WeakSet,
-      };
-    if (getProto)
-      try {
-        null.error;
-      } catch (e) {
-        (errorProto = getProto(getProto(e))),
-          (INTRINSICS['%Error.prototype%'] = errorProto);
-      }
-    var errorProto,
-      doEval = function doEval2(name2) {
-        var value2;
-        if (name2 === '%AsyncFunction%')
-          value2 = getEvalledConstructor('async function () {}');
-        else if (name2 === '%GeneratorFunction%')
-          value2 = getEvalledConstructor('function* () {}');
-        else if (name2 === '%AsyncGeneratorFunction%')
-          value2 = getEvalledConstructor('async function* () {}');
-        else if (name2 === '%AsyncGenerator%') {
-          var fn = doEval2('%AsyncGeneratorFunction%');
-          fn && (value2 = fn.prototype);
-        } else if (name2 === '%AsyncIteratorPrototype%') {
-          var gen = doEval2('%AsyncGenerator%');
-          gen && getProto && (value2 = getProto(gen.prototype));
-        }
-        return (INTRINSICS[name2] = value2), value2;
-      },
-      LEGACY_ALIASES = {
-        __proto__: null,
-        '%ArrayBufferPrototype%': ['ArrayBuffer', 'prototype'],
-        '%ArrayPrototype%': ['Array', 'prototype'],
-        '%ArrayProto_entries%': ['Array', 'prototype', 'entries'],
-        '%ArrayProto_forEach%': ['Array', 'prototype', 'forEach'],
-        '%ArrayProto_keys%': ['Array', 'prototype', 'keys'],
-        '%ArrayProto_values%': ['Array', 'prototype', 'values'],
-        '%AsyncFunctionPrototype%': ['AsyncFunction', 'prototype'],
-        '%AsyncGenerator%': ['AsyncGeneratorFunction', 'prototype'],
-        '%AsyncGeneratorPrototype%': [
-          'AsyncGeneratorFunction',
-          'prototype',
-          'prototype',
-        ],
-        '%BooleanPrototype%': ['Boolean', 'prototype'],
-        '%DataViewPrototype%': ['DataView', 'prototype'],
-        '%DatePrototype%': ['Date', 'prototype'],
-        '%ErrorPrototype%': ['Error', 'prototype'],
-        '%EvalErrorPrototype%': ['EvalError', 'prototype'],
-        '%Float32ArrayPrototype%': ['Float32Array', 'prototype'],
-        '%Float64ArrayPrototype%': ['Float64Array', 'prototype'],
-        '%FunctionPrototype%': ['Function', 'prototype'],
-        '%Generator%': ['GeneratorFunction', 'prototype'],
-        '%GeneratorPrototype%': ['GeneratorFunction', 'prototype', 'prototype'],
-        '%Int8ArrayPrototype%': ['Int8Array', 'prototype'],
-        '%Int16ArrayPrototype%': ['Int16Array', 'prototype'],
-        '%Int32ArrayPrototype%': ['Int32Array', 'prototype'],
-        '%JSONParse%': ['JSON', 'parse'],
-        '%JSONStringify%': ['JSON', 'stringify'],
-        '%MapPrototype%': ['Map', 'prototype'],
-        '%NumberPrototype%': ['Number', 'prototype'],
-        '%ObjectPrototype%': ['Object', 'prototype'],
-        '%ObjProto_toString%': ['Object', 'prototype', 'toString'],
-        '%ObjProto_valueOf%': ['Object', 'prototype', 'valueOf'],
-        '%PromisePrototype%': ['Promise', 'prototype'],
-        '%PromiseProto_then%': ['Promise', 'prototype', 'then'],
-        '%Promise_all%': ['Promise', 'all'],
-        '%Promise_reject%': ['Promise', 'reject'],
-        '%Promise_resolve%': ['Promise', 'resolve'],
-        '%RangeErrorPrototype%': ['RangeError', 'prototype'],
-        '%ReferenceErrorPrototype%': ['ReferenceError', 'prototype'],
-        '%RegExpPrototype%': ['RegExp', 'prototype'],
-        '%SetPrototype%': ['Set', 'prototype'],
-        '%SharedArrayBufferPrototype%': ['SharedArrayBuffer', 'prototype'],
-        '%StringPrototype%': ['String', 'prototype'],
-        '%SymbolPrototype%': ['Symbol', 'prototype'],
-        '%SyntaxErrorPrototype%': ['SyntaxError', 'prototype'],
-        '%TypedArrayPrototype%': ['TypedArray', 'prototype'],
-        '%TypeErrorPrototype%': ['TypeError', 'prototype'],
-        '%Uint8ArrayPrototype%': ['Uint8Array', 'prototype'],
-        '%Uint8ClampedArrayPrototype%': ['Uint8ClampedArray', 'prototype'],
-        '%Uint16ArrayPrototype%': ['Uint16Array', 'prototype'],
-        '%Uint32ArrayPrototype%': ['Uint32Array', 'prototype'],
-        '%URIErrorPrototype%': ['URIError', 'prototype'],
-        '%WeakMapPrototype%': ['WeakMap', 'prototype'],
-        '%WeakSetPrototype%': ['WeakSet', 'prototype'],
-      },
-      bind = require_function_bind2(),
-      hasOwn = require_hasown(),
-      $concat = bind.call(Function.call, Array.prototype.concat),
-      $spliceApply = bind.call(Function.apply, Array.prototype.splice),
-      $replace = bind.call(Function.call, String.prototype.replace),
-      $strSlice = bind.call(Function.call, String.prototype.slice),
-      $exec = bind.call(Function.call, RegExp.prototype.exec),
-      rePropName2 =
-        /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g,
-      reEscapeChar2 = /\\(\\)?/g,
-      stringToPath2 = function (string) {
-        var first = $strSlice(string, 0, 1),
-          last = $strSlice(string, -1);
-        if (first === '%' && last !== '%')
-          throw new $SyntaxError(
-            'invalid intrinsic syntax, expected closing `%`',
-          );
-        if (last === '%' && first !== '%')
-          throw new $SyntaxError(
-            'invalid intrinsic syntax, expected opening `%`',
-          );
-        var result2 = [];
-        return (
-          $replace(
-            string,
-            rePropName2,
-            function (match, number, quote, subString) {
-              result2[result2.length] = quote
-                ? $replace(subString, reEscapeChar2, '$1')
-                : number || match;
-            },
-          ),
-          result2
-        );
-      },
-      getBaseIntrinsic = function (name2, allowMissing) {
-        var intrinsicName = name2,
-          alias;
-        if (
-          (hasOwn(LEGACY_ALIASES, intrinsicName) &&
-            ((alias = LEGACY_ALIASES[intrinsicName]),
-            (intrinsicName = '%' + alias[0] + '%')),
-          hasOwn(INTRINSICS, intrinsicName))
-        ) {
-          var value2 = INTRINSICS[intrinsicName];
-          if (
-            (value2 === needsEval && (value2 = doEval(intrinsicName)),
-            typeof value2 > 'u' && !allowMissing)
-          )
-            throw new $TypeError(
-              'intrinsic ' +
-                name2 +
-                ' exists, but is not available. Please file an issue!',
-            );
-          return { alias, name: intrinsicName, value: value2 };
-        }
-        throw new $SyntaxError('intrinsic ' + name2 + ' does not exist!');
-      };
-    module.exports = function (name2, allowMissing) {
-      if (typeof name2 != 'string' || name2.length === 0)
-        throw new $TypeError('intrinsic name must be a non-empty string');
-      if (arguments.length > 1 && typeof allowMissing != 'boolean')
-        throw new $TypeError('"allowMissing" argument must be a boolean');
-      if ($exec(/^%?[^%]*%?$/, name2) === null)
-        throw new $SyntaxError(
-          '`%` may not be present anywhere but at the beginning and end of the intrinsic name',
-        );
-      var parts = stringToPath2(name2),
-        intrinsicBaseName = parts.length > 0 ? parts[0] : '',
-        intrinsic = getBaseIntrinsic(
-          '%' + intrinsicBaseName + '%',
-          allowMissing,
-        ),
-        intrinsicRealName = intrinsic.name,
-        value2 = intrinsic.value,
-        skipFurtherCaching = !1,
-        alias = intrinsic.alias;
-      alias &&
-        ((intrinsicBaseName = alias[0]),
-        $spliceApply(parts, $concat([0, 1], alias)));
-      for (var i = 1, isOwn = !0; i < parts.length; i += 1) {
-        var part = parts[i],
-          first = $strSlice(part, 0, 1),
-          last = $strSlice(part, -1);
-        if (
-          (first === '"' ||
-            first === "'" ||
-            first === '`' ||
-            last === '"' ||
-            last === "'" ||
-            last === '`') &&
-          first !== last
-        )
-          throw new $SyntaxError(
-            'property names with quotes must have matching quotes',
-          );
-        if (
-          ((part === 'constructor' || !isOwn) && (skipFurtherCaching = !0),
-          (intrinsicBaseName += '.' + part),
-          (intrinsicRealName = '%' + intrinsicBaseName + '%'),
-          hasOwn(INTRINSICS, intrinsicRealName))
-        )
-          value2 = INTRINSICS[intrinsicRealName];
-        else if (value2 != null) {
-          if (!(part in value2)) {
-            if (!allowMissing)
-              throw new $TypeError(
-                'base intrinsic for ' +
-                  name2 +
-                  ' exists, but the property is not available.',
-              );
-            return;
-          }
-          if ($gOPD && i + 1 >= parts.length) {
-            var desc = $gOPD(value2, part);
-            (isOwn = !!desc),
-              isOwn && 'get' in desc && !('originalValue' in desc.get)
-                ? (value2 = desc.get)
-                : (value2 = value2[part]);
-          } else (isOwn = hasOwn(value2, part)), (value2 = value2[part]);
-          isOwn &&
-            !skipFurtherCaching &&
-            (INTRINSICS[intrinsicRealName] = value2);
-        }
-      }
-      return value2;
-    };
-  },
-});
-var require_es_define_property = __commonJS({
-  '../../node_modules/es-define-property/index.js'(exports, module) {
-    'use strict';
-    var GetIntrinsic = require_get_intrinsic2(),
-      $defineProperty = GetIntrinsic('%Object.defineProperty%', !0) || !1;
-    if ($defineProperty)
-      try {
-        $defineProperty({}, 'a', { value: 1 });
-      } catch {
-        $defineProperty = !1;
-      }
-    module.exports = $defineProperty;
-  },
-});
-var require_gopd = __commonJS({
-  '../../node_modules/gopd/index.js'(exports, module) {
-    'use strict';
-    var GetIntrinsic = require_get_intrinsic2(),
-      $gOPD = GetIntrinsic('%Object.getOwnPropertyDescriptor%', !0);
-    if ($gOPD)
-      try {
-        $gOPD([], 'length');
-      } catch {
-        $gOPD = null;
-      }
-    module.exports = $gOPD;
-  },
-});
-var require_define_data_property = __commonJS({
-  '../../node_modules/define-data-property/index.js'(exports, module) {
-    'use strict';
-    var $defineProperty = require_es_define_property(),
-      $SyntaxError = require_syntax(),
-      $TypeError = require_type(),
-      gopd = require_gopd();
-    module.exports = function (obj, property, value2) {
-      if (!obj || (typeof obj != 'object' && typeof obj != 'function'))
-        throw new $TypeError('`obj` must be an object or a function`');
-      if (typeof property != 'string' && typeof property != 'symbol')
-        throw new $TypeError('`property` must be a string or a symbol`');
-      if (
-        arguments.length > 3 &&
-        typeof arguments[3] != 'boolean' &&
-        arguments[3] !== null
-      )
-        throw new $TypeError(
-          '`nonEnumerable`, if provided, must be a boolean or null',
-        );
-      if (
-        arguments.length > 4 &&
-        typeof arguments[4] != 'boolean' &&
-        arguments[4] !== null
-      )
-        throw new $TypeError(
-          '`nonWritable`, if provided, must be a boolean or null',
-        );
-      if (
-        arguments.length > 5 &&
-        typeof arguments[5] != 'boolean' &&
-        arguments[5] !== null
-      )
-        throw new $TypeError(
-          '`nonConfigurable`, if provided, must be a boolean or null',
-        );
-      if (arguments.length > 6 && typeof arguments[6] != 'boolean')
-        throw new $TypeError('`loose`, if provided, must be a boolean');
-      var nonEnumerable = arguments.length > 3 ? arguments[3] : null,
-        nonWritable = arguments.length > 4 ? arguments[4] : null,
-        nonConfigurable = arguments.length > 5 ? arguments[5] : null,
-        loose = arguments.length > 6 ? arguments[6] : !1,
-        desc = !!gopd && gopd(obj, property);
-      if ($defineProperty)
-        $defineProperty(obj, property, {
-          configurable:
-            nonConfigurable === null && desc
-              ? desc.configurable
-              : !nonConfigurable,
-          enumerable:
-            nonEnumerable === null && desc ? desc.enumerable : !nonEnumerable,
-          value: value2,
-          writable: nonWritable === null && desc ? desc.writable : !nonWritable,
-        });
-      else if (loose || (!nonEnumerable && !nonWritable && !nonConfigurable))
-        obj[property] = value2;
-      else
-        throw new $SyntaxError(
-          'This environment does not support defining a property as non-configurable, non-writable, or non-enumerable.',
-        );
-    };
-  },
-});
-var require_has_property_descriptors = __commonJS({
-  '../../node_modules/has-property-descriptors/index.js'(exports, module) {
-    'use strict';
-    var $defineProperty = require_es_define_property(),
-      hasPropertyDescriptors = function () {
-        return !!$defineProperty;
-      };
-    hasPropertyDescriptors.hasArrayLengthDefineBug = function () {
-      if (!$defineProperty) return null;
-      try {
-        return $defineProperty([], 'length', { value: 1 }).length !== 1;
-      } catch {
-        return !0;
-      }
-    };
-    module.exports = hasPropertyDescriptors;
-  },
-});
-var require_set_function_length = __commonJS({
-  '../../node_modules/set-function-length/index.js'(exports, module) {
-    'use strict';
-    var GetIntrinsic = require_get_intrinsic2(),
-      define2 = require_define_data_property(),
-      hasDescriptors = require_has_property_descriptors()(),
-      gOPD = require_gopd(),
-      $TypeError = require_type(),
-      $floor = GetIntrinsic('%Math.floor%');
-    module.exports = function (fn, length) {
-      if (typeof fn != 'function')
-        throw new $TypeError('`fn` is not a function');
-      if (
-        typeof length != 'number' ||
-        length < 0 ||
-        length > 4294967295 ||
-        $floor(length) !== length
-      )
-        throw new $TypeError('`length` must be a positive 32-bit integer');
-      var loose = arguments.length > 2 && !!arguments[2],
-        functionLengthIsConfigurable = !0,
-        functionLengthIsWritable = !0;
-      if ('length' in fn && gOPD) {
-        var desc = gOPD(fn, 'length');
-        desc && !desc.configurable && (functionLengthIsConfigurable = !1),
-          desc && !desc.writable && (functionLengthIsWritable = !1);
-      }
-      return (
-        (functionLengthIsConfigurable || functionLengthIsWritable || !loose) &&
-          (hasDescriptors
-            ? define2(fn, 'length', length, !0, !0)
-            : define2(fn, 'length', length)),
-        fn
-      );
-    };
-  },
-});
-var require_call_bind2 = __commonJS({
-  '../../node_modules/call-bind/index.js'(exports, module) {
-    'use strict';
-    var bind = require_function_bind2(),
-      GetIntrinsic = require_get_intrinsic2(),
-      setFunctionLength = require_set_function_length(),
-      $TypeError = require_type(),
-      $apply = GetIntrinsic('%Function.prototype.apply%'),
-      $call = GetIntrinsic('%Function.prototype.call%'),
-      $reflectApply =
-        GetIntrinsic('%Reflect.apply%', !0) || bind.call($call, $apply),
-      $defineProperty = require_es_define_property(),
-      $max = GetIntrinsic('%Math.max%');
-    module.exports = function (originalFunction) {
-      if (typeof originalFunction != 'function')
-        throw new $TypeError('a function is required');
-      var func = $reflectApply(bind, $call, arguments);
-      return setFunctionLength(
-        func,
-        1 + $max(0, originalFunction.length - (arguments.length - 1)),
-        !0,
-      );
-    };
-    var applyBind = function () {
-      return $reflectApply(bind, $apply, arguments);
-    };
-    $defineProperty
-      ? $defineProperty(module.exports, 'apply', { value: applyBind })
-      : (module.exports.apply = applyBind);
-  },
-});
-var require_callBound2 = __commonJS({
-  '../../node_modules/call-bind/callBound.js'(exports, module) {
-    'use strict';
-    var GetIntrinsic = require_get_intrinsic2(),
-      callBind = require_call_bind2(),
-      $indexOf = callBind(GetIntrinsic('String.prototype.indexOf'));
-    module.exports = function (name2, allowMissing) {
-      var intrinsic = GetIntrinsic(name2, !!allowMissing);
-      return typeof intrinsic == 'function' &&
-        $indexOf(name2, '.prototype.') > -1
-        ? callBind(intrinsic)
-        : intrinsic;
-    };
-  },
-});
-var require_util = __commonJS({
-  '(disabled):../../node_modules/object-inspect/util.inspect'() {
-    'use strict';
-  },
-});
-var require_object_inspect = __commonJS({
-  '../../node_modules/object-inspect/index.js'(exports, module) {
-    'use strict';
-    var hasMap = typeof Map == 'function' && Map.prototype,
-      mapSizeDescriptor =
-        Object.getOwnPropertyDescriptor && hasMap
-          ? Object.getOwnPropertyDescriptor(Map.prototype, 'size')
-          : null,
-      mapSize =
-        hasMap &&
-        mapSizeDescriptor &&
-        typeof mapSizeDescriptor.get == 'function'
-          ? mapSizeDescriptor.get
-          : null,
-      mapForEach = hasMap && Map.prototype.forEach,
-      hasSet = typeof Set == 'function' && Set.prototype,
-      setSizeDescriptor =
-        Object.getOwnPropertyDescriptor && hasSet
-          ? Object.getOwnPropertyDescriptor(Set.prototype, 'size')
-          : null,
-      setSize =
-        hasSet &&
-        setSizeDescriptor &&
-        typeof setSizeDescriptor.get == 'function'
-          ? setSizeDescriptor.get
-          : null,
-      setForEach = hasSet && Set.prototype.forEach,
-      hasWeakMap = typeof WeakMap == 'function' && WeakMap.prototype,
-      weakMapHas = hasWeakMap ? WeakMap.prototype.has : null,
-      hasWeakSet = typeof WeakSet == 'function' && WeakSet.prototype,
-      weakSetHas = hasWeakSet ? WeakSet.prototype.has : null,
-      hasWeakRef = typeof WeakRef == 'function' && WeakRef.prototype,
-      weakRefDeref = hasWeakRef ? WeakRef.prototype.deref : null,
-      booleanValueOf = Boolean.prototype.valueOf,
-      objectToString2 = Object.prototype.toString,
-      functionToString = Function.prototype.toString,
-      $match = String.prototype.match,
-      $slice = String.prototype.slice,
-      $replace = String.prototype.replace,
-      $toUpperCase = String.prototype.toUpperCase,
-      $toLowerCase = String.prototype.toLowerCase,
-      $test = RegExp.prototype.test,
-      $concat = Array.prototype.concat,
-      $join = Array.prototype.join,
-      $arrSlice = Array.prototype.slice,
-      $floor = Math.floor,
-      bigIntValueOf =
-        typeof BigInt == 'function' ? BigInt.prototype.valueOf : null,
-      gOPS = Object.getOwnPropertySymbols,
-      symToString =
-        typeof Symbol == 'function' && typeof Symbol.iterator == 'symbol'
-          ? Symbol.prototype.toString
-          : null,
-      hasShammedSymbols =
-        typeof Symbol == 'function' && typeof Symbol.iterator == 'object',
-      toStringTag =
-        typeof Symbol == 'function' &&
-        Symbol.toStringTag &&
-        (typeof Symbol.toStringTag === hasShammedSymbols || !0)
-          ? Symbol.toStringTag
-          : null,
-      isEnumerable = Object.prototype.propertyIsEnumerable,
-      gPO =
-        (typeof Reflect == 'function'
-          ? Reflect.getPrototypeOf
-          : Object.getPrototypeOf) ||
-        ([].__proto__ === Array.prototype
-          ? function (O2) {
-              return O2.__proto__;
-            }
-          : null);
-    function addNumericSeparator(num, str) {
-      if (
-        num === 1 / 0 ||
-        num === -1 / 0 ||
-        num !== num ||
-        (num && num > -1e3 && num < 1e3) ||
-        $test.call(/e/, str)
-      )
-        return str;
-      var sepRegex = /[0-9](?=(?:[0-9]{3})+(?![0-9]))/g;
-      if (typeof num == 'number') {
-        var int = num < 0 ? -$floor(-num) : $floor(num);
-        if (int !== num) {
-          var intStr = String(int),
-            dec = $slice.call(str, intStr.length + 1);
-          return (
-            $replace.call(intStr, sepRegex, '$&_') +
-            '.' +
-            $replace.call($replace.call(dec, /([0-9]{3})/g, '$&_'), /_$/, '')
-          );
-        }
-      }
-      return $replace.call(str, sepRegex, '$&_');
-    }
-    var utilInspect = require_util(),
-      inspectCustom = utilInspect.custom,
-      inspectSymbol = isSymbol2(inspectCustom) ? inspectCustom : null;
-    module.exports = function inspect_(obj, options2, depth, seen) {
-      var opts = options2 || {};
-      if (
-        has2(opts, 'quoteStyle') &&
-        opts.quoteStyle !== 'single' &&
-        opts.quoteStyle !== 'double'
-      )
-        throw new TypeError('option "quoteStyle" must be "single" or "double"');
-      if (
-        has2(opts, 'maxStringLength') &&
-        (typeof opts.maxStringLength == 'number'
-          ? opts.maxStringLength < 0 && opts.maxStringLength !== 1 / 0
-          : opts.maxStringLength !== null)
-      )
-        throw new TypeError(
-          'option "maxStringLength", if provided, must be a positive integer, Infinity, or `null`',
-        );
-      var customInspect = has2(opts, 'customInspect') ? opts.customInspect : !0;
-      if (typeof customInspect != 'boolean' && customInspect !== 'symbol')
-        throw new TypeError(
-          'option "customInspect", if provided, must be `true`, `false`, or `\'symbol\'`',
-        );
-      if (
-        has2(opts, 'indent') &&
-        opts.indent !== null &&
-        opts.indent !== '	' &&
-        !(parseInt(opts.indent, 10) === opts.indent && opts.indent > 0)
-      )
-        throw new TypeError(
-          'option "indent" must be "\\t", an integer > 0, or `null`',
-        );
-      if (
-        has2(opts, 'numericSeparator') &&
-        typeof opts.numericSeparator != 'boolean'
-      )
-        throw new TypeError(
-          'option "numericSeparator", if provided, must be `true` or `false`',
-        );
-      var numericSeparator = opts.numericSeparator;
-      if (typeof obj > 'u') return 'undefined';
-      if (obj === null) return 'null';
-      if (typeof obj == 'boolean') return obj ? 'true' : 'false';
-      if (typeof obj == 'string') return inspectString(obj, opts);
-      if (typeof obj == 'number') {
-        if (obj === 0) return 1 / 0 / obj > 0 ? '0' : '-0';
-        var str = String(obj);
-        return numericSeparator ? addNumericSeparator(obj, str) : str;
-      }
-      if (typeof obj == 'bigint') {
-        var bigIntStr = String(obj) + 'n';
-        return numericSeparator
-          ? addNumericSeparator(obj, bigIntStr)
-          : bigIntStr;
-      }
-      var maxDepth = typeof opts.depth > 'u' ? 5 : opts.depth;
-      if (
-        (typeof depth > 'u' && (depth = 0),
-        depth >= maxDepth && maxDepth > 0 && typeof obj == 'object')
-      )
-        return isArray2(obj) ? '[Array]' : '[Object]';
-      var indent = getIndent(opts, depth);
-      if (typeof seen > 'u') seen = [];
-      else if (indexOf(seen, obj) >= 0) return '[Circular]';
-      function inspect(value2, from, noIndent) {
-        if (
-          (from && ((seen = $arrSlice.call(seen)), seen.push(from)), noIndent)
-        ) {
-          var newOpts = { depth: opts.depth };
-          return (
-            has2(opts, 'quoteStyle') && (newOpts.quoteStyle = opts.quoteStyle),
-            inspect_(value2, newOpts, depth + 1, seen)
-          );
-        }
-        return inspect_(value2, opts, depth + 1, seen);
-      }
-      if (typeof obj == 'function' && !isRegExp(obj)) {
-        var name2 = nameOf(obj),
-          keys = arrObjKeys(obj, inspect);
-        return (
-          '[Function' +
-          (name2 ? ': ' + name2 : ' (anonymous)') +
-          ']' +
-          (keys.length > 0 ? ' { ' + $join.call(keys, ', ') + ' }' : '')
-        );
-      }
-      if (isSymbol2(obj)) {
-        var symString = hasShammedSymbols
-          ? $replace.call(String(obj), /^(Symbol\(.*\))_[^)]*$/, '$1')
-          : symToString.call(obj);
-        return typeof obj == 'object' && !hasShammedSymbols
-          ? markBoxed(symString)
-          : symString;
-      }
-      if (isElement(obj)) {
-        for (
-          var s = '<' + $toLowerCase.call(String(obj.nodeName)),
-            attrs = obj.attributes || [],
-            i = 0;
-          i < attrs.length;
-          i++
-        )
-          s +=
-            ' ' +
-            attrs[i].name +
-            '=' +
-            wrapQuotes(quote(attrs[i].value), 'double', opts);
-        return (
-          (s += '>'),
-          obj.childNodes && obj.childNodes.length && (s += '...'),
-          (s += '</' + $toLowerCase.call(String(obj.nodeName)) + '>'),
-          s
-        );
-      }
-      if (isArray2(obj)) {
-        if (obj.length === 0) return '[]';
-        var xs = arrObjKeys(obj, inspect);
-        return indent && !singleLineValues(xs)
-          ? '[' + indentedJoin(xs, indent) + ']'
-          : '[ ' + $join.call(xs, ', ') + ' ]';
-      }
-      if (isError(obj)) {
-        var parts = arrObjKeys(obj, inspect);
-        return !('cause' in Error.prototype) &&
-          'cause' in obj &&
-          !isEnumerable.call(obj, 'cause')
-          ? '{ [' +
-              String(obj) +
-              '] ' +
-              $join.call(
-                $concat.call('[cause]: ' + inspect(obj.cause), parts),
-                ', ',
-              ) +
-              ' }'
-          : parts.length === 0
-            ? '[' + String(obj) + ']'
-            : '{ [' + String(obj) + '] ' + $join.call(parts, ', ') + ' }';
-      }
-      if (typeof obj == 'object' && customInspect) {
-        if (
-          inspectSymbol &&
-          typeof obj[inspectSymbol] == 'function' &&
-          utilInspect
-        )
-          return utilInspect(obj, { depth: maxDepth - depth });
-        if (customInspect !== 'symbol' && typeof obj.inspect == 'function')
-          return obj.inspect();
-      }
-      if (isMap(obj)) {
-        var mapParts = [];
-        return (
-          mapForEach &&
-            mapForEach.call(obj, function (value2, key2) {
-              mapParts.push(
-                inspect(key2, obj, !0) + ' => ' + inspect(value2, obj),
-              );
-            }),
-          collectionOf('Map', mapSize.call(obj), mapParts, indent)
-        );
-      }
-      if (isSet(obj)) {
-        var setParts = [];
-        return (
-          setForEach &&
-            setForEach.call(obj, function (value2) {
-              setParts.push(inspect(value2, obj));
-            }),
-          collectionOf('Set', setSize.call(obj), setParts, indent)
-        );
-      }
-      if (isWeakMap(obj)) return weakCollectionOf('WeakMap');
-      if (isWeakSet(obj)) return weakCollectionOf('WeakSet');
-      if (isWeakRef(obj)) return weakCollectionOf('WeakRef');
-      if (isNumber(obj)) return markBoxed(inspect(Number(obj)));
-      if (isBigInt(obj)) return markBoxed(inspect(bigIntValueOf.call(obj)));
-      if (isBoolean(obj)) return markBoxed(booleanValueOf.call(obj));
-      if (isString(obj)) return markBoxed(inspect(String(obj)));
-      if (typeof window < 'u' && obj === window) return '{ [object Window] }';
-      if (obj === global) return '{ [object globalThis] }';
-      if (!isDate(obj) && !isRegExp(obj)) {
-        var ys = arrObjKeys(obj, inspect),
-          isPlainObject2 = gPO
-            ? gPO(obj) === Object.prototype
-            : obj instanceof Object || obj.constructor === Object,
-          protoTag = obj instanceof Object ? '' : 'null prototype',
-          stringTag =
-            !isPlainObject2 &&
-            toStringTag &&
-            Object(obj) === obj &&
-            toStringTag in obj
-              ? $slice.call(toStr(obj), 8, -1)
-              : protoTag
-                ? 'Object'
-                : '',
-          constructorTag =
-            isPlainObject2 || typeof obj.constructor != 'function'
-              ? ''
-              : obj.constructor.name
-                ? obj.constructor.name + ' '
-                : '',
-          tag =
-            constructorTag +
-            (stringTag || protoTag
-              ? '[' +
-                $join.call(
-                  $concat.call([], stringTag || [], protoTag || []),
-                  ': ',
-                ) +
-                '] '
-              : '');
-        return ys.length === 0
-          ? tag + '{}'
-          : indent
-            ? tag + '{' + indentedJoin(ys, indent) + '}'
-            : tag + '{ ' + $join.call(ys, ', ') + ' }';
-      }
-      return String(obj);
-    };
-    function wrapQuotes(s, defaultStyle, opts) {
-      var quoteChar =
-        (opts.quoteStyle || defaultStyle) === 'double' ? '"' : "'";
-      return quoteChar + s + quoteChar;
-    }
-    function quote(s) {
-      return $replace.call(String(s), /"/g, '&quot;');
-    }
-    function isArray2(obj) {
-      return (
-        toStr(obj) === '[object Array]' &&
-        (!toStringTag || !(typeof obj == 'object' && toStringTag in obj))
-      );
-    }
-    function isDate(obj) {
-      return (
-        toStr(obj) === '[object Date]' &&
-        (!toStringTag || !(typeof obj == 'object' && toStringTag in obj))
-      );
-    }
-    function isRegExp(obj) {
-      return (
-        toStr(obj) === '[object RegExp]' &&
-        (!toStringTag || !(typeof obj == 'object' && toStringTag in obj))
-      );
-    }
-    function isError(obj) {
-      return (
-        toStr(obj) === '[object Error]' &&
-        (!toStringTag || !(typeof obj == 'object' && toStringTag in obj))
-      );
-    }
-    function isString(obj) {
-      return (
-        toStr(obj) === '[object String]' &&
-        (!toStringTag || !(typeof obj == 'object' && toStringTag in obj))
-      );
-    }
-    function isNumber(obj) {
-      return (
-        toStr(obj) === '[object Number]' &&
-        (!toStringTag || !(typeof obj == 'object' && toStringTag in obj))
-      );
-    }
-    function isBoolean(obj) {
-      return (
-        toStr(obj) === '[object Boolean]' &&
-        (!toStringTag || !(typeof obj == 'object' && toStringTag in obj))
-      );
-    }
-    function isSymbol2(obj) {
-      if (hasShammedSymbols)
-        return obj && typeof obj == 'object' && obj instanceof Symbol;
-      if (typeof obj == 'symbol') return !0;
-      if (!obj || typeof obj != 'object' || !symToString) return !1;
-      try {
-        return symToString.call(obj), !0;
-      } catch {}
-      return !1;
-    }
-    function isBigInt(obj) {
-      if (!obj || typeof obj != 'object' || !bigIntValueOf) return !1;
-      try {
-        return bigIntValueOf.call(obj), !0;
-      } catch {}
-      return !1;
-    }
-    var hasOwn =
-      Object.prototype.hasOwnProperty ||
-      function (key2) {
-        return key2 in this;
-      };
-    function has2(obj, key2) {
-      return hasOwn.call(obj, key2);
-    }
-    function toStr(obj) {
-      return objectToString2.call(obj);
-    }
-    function nameOf(f3) {
-      if (f3.name) return f3.name;
-      var m2 = $match.call(functionToString.call(f3), /^function\s*([\w$]+)/);
-      return m2 ? m2[1] : null;
-    }
-    function indexOf(xs, x2) {
-      if (xs.indexOf) return xs.indexOf(x2);
-      for (var i = 0, l = xs.length; i < l; i++) if (xs[i] === x2) return i;
-      return -1;
-    }
-    function isMap(x2) {
-      if (!mapSize || !x2 || typeof x2 != 'object') return !1;
-      try {
-        mapSize.call(x2);
-        try {
-          setSize.call(x2);
-        } catch {
-          return !0;
-        }
-        return x2 instanceof Map;
-      } catch {}
-      return !1;
-    }
-    function isWeakMap(x2) {
-      if (!weakMapHas || !x2 || typeof x2 != 'object') return !1;
-      try {
-        weakMapHas.call(x2, weakMapHas);
-        try {
-          weakSetHas.call(x2, weakSetHas);
-        } catch {
-          return !0;
-        }
-        return x2 instanceof WeakMap;
-      } catch {}
-      return !1;
-    }
-    function isWeakRef(x2) {
-      if (!weakRefDeref || !x2 || typeof x2 != 'object') return !1;
-      try {
-        return weakRefDeref.call(x2), !0;
-      } catch {}
-      return !1;
-    }
-    function isSet(x2) {
-      if (!setSize || !x2 || typeof x2 != 'object') return !1;
-      try {
-        setSize.call(x2);
-        try {
-          mapSize.call(x2);
-        } catch {
-          return !0;
-        }
-        return x2 instanceof Set;
-      } catch {}
-      return !1;
-    }
-    function isWeakSet(x2) {
-      if (!weakSetHas || !x2 || typeof x2 != 'object') return !1;
-      try {
-        weakSetHas.call(x2, weakSetHas);
-        try {
-          weakMapHas.call(x2, weakMapHas);
-        } catch {
-          return !0;
-        }
-        return x2 instanceof WeakSet;
-      } catch {}
-      return !1;
-    }
-    function isElement(x2) {
-      return !x2 || typeof x2 != 'object'
-        ? !1
-        : typeof HTMLElement < 'u' && x2 instanceof HTMLElement
-          ? !0
-          : typeof x2.nodeName == 'string' &&
-            typeof x2.getAttribute == 'function';
-    }
-    function inspectString(str, opts) {
-      if (str.length > opts.maxStringLength) {
-        var remaining = str.length - opts.maxStringLength,
-          trailer =
-            '... ' + remaining + ' more character' + (remaining > 1 ? 's' : '');
-        return (
-          inspectString($slice.call(str, 0, opts.maxStringLength), opts) +
-          trailer
-        );
-      }
-      var s = $replace.call(
-        $replace.call(str, /(['\\])/g, '\\$1'),
-        /[\x00-\x1f]/g,
-        lowbyte,
-      );
-      return wrapQuotes(s, 'single', opts);
-    }
-    function lowbyte(c2) {
-      var n = c2.charCodeAt(0),
-        x2 = { 8: 'b', 9: 't', 10: 'n', 12: 'f', 13: 'r' }[n];
-      return x2
-        ? '\\' + x2
-        : '\\x' + (n < 16 ? '0' : '') + $toUpperCase.call(n.toString(16));
-    }
-    function markBoxed(str) {
-      return 'Object(' + str + ')';
-    }
-    function weakCollectionOf(type) {
-      return type + ' { ? }';
-    }
-    function collectionOf(type, size, entries, indent) {
-      var joinedEntries = indent
-        ? indentedJoin(entries, indent)
-        : $join.call(entries, ', ');
-      return type + ' (' + size + ') {' + joinedEntries + '}';
-    }
-    function singleLineValues(xs) {
-      for (var i = 0; i < xs.length; i++)
-        if (
-          indexOf(
-            xs[i],
-            `
-`,
-          ) >= 0
-        )
-          return !1;
-      return !0;
-    }
-    function getIndent(opts, depth) {
-      var baseIndent;
-      if (opts.indent === '	') baseIndent = '	';
-      else if (typeof opts.indent == 'number' && opts.indent > 0)
-        baseIndent = $join.call(Array(opts.indent + 1), ' ');
-      else return null;
-      return {
-        base: baseIndent,
-        prev: $join.call(Array(depth + 1), baseIndent),
-      };
-    }
-    function indentedJoin(xs, indent) {
-      if (xs.length === 0) return '';
-      var lineJoiner =
-        `
-` +
-        indent.prev +
-        indent.base;
-      return (
-        lineJoiner +
-        $join.call(xs, ',' + lineJoiner) +
-        `
-` +
-        indent.prev
-      );
-    }
-    function arrObjKeys(obj, inspect) {
-      var isArr = isArray2(obj),
-        xs = [];
-      if (isArr) {
-        xs.length = obj.length;
-        for (var i = 0; i < obj.length; i++)
-          xs[i] = has2(obj, i) ? inspect(obj[i], obj) : '';
-      }
-      var syms = typeof gOPS == 'function' ? gOPS(obj) : [],
-        symMap;
-      if (hasShammedSymbols) {
-        symMap = {};
-        for (var k = 0; k < syms.length; k++) symMap['$' + syms[k]] = syms[k];
-      }
-      for (var key2 in obj)
-        has2(obj, key2) &&
-          ((isArr && String(Number(key2)) === key2 && key2 < obj.length) ||
-            (hasShammedSymbols && symMap['$' + key2] instanceof Symbol) ||
-            ($test.call(/[^\w$]/, key2)
-              ? xs.push(inspect(key2, obj) + ': ' + inspect(obj[key2], obj))
-              : xs.push(key2 + ': ' + inspect(obj[key2], obj))));
-      if (typeof gOPS == 'function')
-        for (var j = 0; j < syms.length; j++)
-          isEnumerable.call(obj, syms[j]) &&
-            xs.push(
-              '[' + inspect(syms[j]) + ']: ' + inspect(obj[syms[j]], obj),
-            );
-      return xs;
-    }
-  },
-});
-var require_side_channel = __commonJS({
-  '../../node_modules/side-channel/index.js'(exports, module) {
-    'use strict';
-    var GetIntrinsic = require_get_intrinsic2(),
-      callBound = require_callBound2(),
-      inspect = require_object_inspect(),
-      $TypeError = GetIntrinsic('%TypeError%'),
-      $WeakMap = GetIntrinsic('%WeakMap%', !0),
-      $Map = GetIntrinsic('%Map%', !0),
-      $weakMapGet = callBound('WeakMap.prototype.get', !0),
-      $weakMapSet = callBound('WeakMap.prototype.set', !0),
-      $weakMapHas = callBound('WeakMap.prototype.has', !0),
-      $mapGet = callBound('Map.prototype.get', !0),
-      $mapSet = callBound('Map.prototype.set', !0),
-      $mapHas = callBound('Map.prototype.has', !0),
-      listGetNode = function (list, key2) {
-        for (var prev = list, curr; (curr = prev.next) !== null; prev = curr)
-          if (curr.key === key2)
-            return (
-              (prev.next = curr.next),
-              (curr.next = list.next),
-              (list.next = curr),
-              curr
-            );
-      },
-      listGet = function (objects, key2) {
-        var node = listGetNode(objects, key2);
-        return node && node.value;
-      },
-      listSet = function (objects, key2, value2) {
-        var node = listGetNode(objects, key2);
-        node
-          ? (node.value = value2)
-          : (objects.next = { key: key2, next: objects.next, value: value2 });
-      },
-      listHas = function (objects, key2) {
-        return !!listGetNode(objects, key2);
-      };
-    module.exports = function () {
-      var $wm,
-        $m,
-        $o,
-        channel = {
-          assert: function (key2) {
-            if (!channel.has(key2))
-              throw new $TypeError(
-                'Side channel does not contain ' + inspect(key2),
-              );
-          },
-          get: function (key2) {
-            if (
-              $WeakMap &&
-              key2 &&
-              (typeof key2 == 'object' || typeof key2 == 'function')
-            ) {
-              if ($wm) return $weakMapGet($wm, key2);
-            } else if ($Map) {
-              if ($m) return $mapGet($m, key2);
-            } else if ($o) return listGet($o, key2);
-          },
-          has: function (key2) {
-            if (
-              $WeakMap &&
-              key2 &&
-              (typeof key2 == 'object' || typeof key2 == 'function')
-            ) {
-              if ($wm) return $weakMapHas($wm, key2);
-            } else if ($Map) {
-              if ($m) return $mapHas($m, key2);
-            } else if ($o) return listHas($o, key2);
-            return !1;
-          },
-          set: function (key2, value2) {
-            $WeakMap &&
-            key2 &&
-            (typeof key2 == 'object' || typeof key2 == 'function')
-              ? ($wm || ($wm = new $WeakMap()), $weakMapSet($wm, key2, value2))
-              : $Map
-                ? ($m || ($m = new $Map()), $mapSet($m, key2, value2))
-                : ($o || ($o = { key: {}, next: null }),
-                  listSet($o, key2, value2));
-          },
-        };
-      return channel;
-    };
-  },
-});
-var require_formats = __commonJS({
-  '../../node_modules/qs/lib/formats.js'(exports, module) {
-    'use strict';
-    var replace = String.prototype.replace,
-      percentTwenties = /%20/g,
-      Format = { RFC1738: 'RFC1738', RFC3986: 'RFC3986' };
-    module.exports = {
-      default: Format.RFC3986,
-      formatters: {
-        RFC1738: function (value2) {
-          return replace.call(value2, percentTwenties, '+');
-        },
-        RFC3986: function (value2) {
-          return String(value2);
-        },
-      },
-      RFC1738: Format.RFC1738,
-      RFC3986: Format.RFC3986,
-    };
-  },
-});
-var require_utils = __commonJS({
-  '../../node_modules/qs/lib/utils.js'(exports, module) {
-    'use strict';
-    var formats = require_formats(),
-      has2 = Object.prototype.hasOwnProperty,
-      isArray2 = Array.isArray,
-      hexTable = (function () {
-        for (var array = [], i = 0; i < 256; ++i)
-          array.push(
-            '%' + ((i < 16 ? '0' : '') + i.toString(16)).toUpperCase(),
-          );
-        return array;
-      })(),
-      compactQueue = function (queue) {
-        for (; queue.length > 1; ) {
-          var item = queue.pop(),
-            obj = item.obj[item.prop];
-          if (isArray2(obj)) {
-            for (var compacted = [], j = 0; j < obj.length; ++j)
-              typeof obj[j] < 'u' && compacted.push(obj[j]);
-            item.obj[item.prop] = compacted;
-          }
-        }
-      },
-      arrayToObject = function (source2, options2) {
-        for (
-          var obj =
-              options2 && options2.plainObjects ? Object.create(null) : {},
-            i = 0;
-          i < source2.length;
-          ++i
-        )
-          typeof source2[i] < 'u' && (obj[i] = source2[i]);
-        return obj;
-      },
-      merge = function merge2(target, source2, options2) {
-        if (!source2) return target;
-        if (typeof source2 != 'object') {
-          if (isArray2(target)) target.push(source2);
-          else if (target && typeof target == 'object')
-            ((options2 &&
-              (options2.plainObjects || options2.allowPrototypes)) ||
-              !has2.call(Object.prototype, source2)) &&
-              (target[source2] = !0);
-          else return [target, source2];
-          return target;
-        }
-        if (!target || typeof target != 'object')
-          return [target].concat(source2);
-        var mergeTarget = target;
-        return (
-          isArray2(target) &&
-            !isArray2(source2) &&
-            (mergeTarget = arrayToObject(target, options2)),
-          isArray2(target) && isArray2(source2)
-            ? (source2.forEach(function (item, i) {
-                if (has2.call(target, i)) {
-                  var targetItem = target[i];
-                  targetItem &&
-                  typeof targetItem == 'object' &&
-                  item &&
-                  typeof item == 'object'
-                    ? (target[i] = merge2(targetItem, item, options2))
-                    : target.push(item);
-                } else target[i] = item;
-              }),
-              target)
-            : Object.keys(source2).reduce(function (acc, key2) {
-                var value2 = source2[key2];
-                return (
-                  has2.call(acc, key2)
-                    ? (acc[key2] = merge2(acc[key2], value2, options2))
-                    : (acc[key2] = value2),
-                  acc
-                );
-              }, mergeTarget)
-        );
-      },
-      assign = function (target, source2) {
-        return Object.keys(source2).reduce(function (acc, key2) {
-          return (acc[key2] = source2[key2]), acc;
-        }, target);
-      },
-      decode = function (str, decoder, charset) {
-        var strWithoutPlus = str.replace(/\+/g, ' ');
-        if (charset === 'iso-8859-1')
-          return strWithoutPlus.replace(/%[0-9a-f]{2}/gi, unescape);
-        try {
-          return decodeURIComponent(strWithoutPlus);
-        } catch {
-          return strWithoutPlus;
-        }
-      },
-      encode = function (str, defaultEncoder, charset, kind, format) {
-        if (str.length === 0) return str;
-        var string = str;
-        if (
-          (typeof str == 'symbol'
-            ? (string = Symbol.prototype.toString.call(str))
-            : typeof str != 'string' && (string = String(str)),
-          charset === 'iso-8859-1')
-        )
-          return escape(string).replace(/%u[0-9a-f]{4}/gi, function ($0) {
-            return '%26%23' + parseInt($0.slice(2), 16) + '%3B';
-          });
-        for (var out = '', i = 0; i < string.length; ++i) {
-          var c2 = string.charCodeAt(i);
-          if (
-            c2 === 45 ||
-            c2 === 46 ||
-            c2 === 95 ||
-            c2 === 126 ||
-            (c2 >= 48 && c2 <= 57) ||
-            (c2 >= 65 && c2 <= 90) ||
-            (c2 >= 97 && c2 <= 122) ||
-            (format === formats.RFC1738 && (c2 === 40 || c2 === 41))
-          ) {
-            out += string.charAt(i);
-            continue;
-          }
-          if (c2 < 128) {
-            out = out + hexTable[c2];
-            continue;
-          }
-          if (c2 < 2048) {
-            out = out + (hexTable[192 | (c2 >> 6)] + hexTable[128 | (c2 & 63)]);
-            continue;
-          }
-          if (c2 < 55296 || c2 >= 57344) {
-            out =
-              out +
-              (hexTable[224 | (c2 >> 12)] +
-                hexTable[128 | ((c2 >> 6) & 63)] +
-                hexTable[128 | (c2 & 63)]);
-            continue;
-          }
-          (i += 1),
-            (c2 =
-              65536 + (((c2 & 1023) << 10) | (string.charCodeAt(i) & 1023))),
-            (out +=
-              hexTable[240 | (c2 >> 18)] +
-              hexTable[128 | ((c2 >> 12) & 63)] +
-              hexTable[128 | ((c2 >> 6) & 63)] +
-              hexTable[128 | (c2 & 63)]);
-        }
-        return out;
-      },
-      compact = function (value2) {
-        for (
-          var queue = [{ obj: { o: value2 }, prop: 'o' }], refs2 = [], i = 0;
-          i < queue.length;
-          ++i
-        )
-          for (
-            var item = queue[i],
-              obj = item.obj[item.prop],
-              keys = Object.keys(obj),
-              j = 0;
-            j < keys.length;
-            ++j
-          ) {
-            var key2 = keys[j],
-              val = obj[key2];
-            typeof val == 'object' &&
-              val !== null &&
-              refs2.indexOf(val) === -1 &&
-              (queue.push({ obj, prop: key2 }), refs2.push(val));
-          }
-        return compactQueue(queue), value2;
-      },
-      isRegExp = function (obj) {
-        return Object.prototype.toString.call(obj) === '[object RegExp]';
-      },
-      isBuffer = function (obj) {
-        return !obj || typeof obj != 'object'
-          ? !1
-          : !!(
-              obj.constructor &&
-              obj.constructor.isBuffer &&
-              obj.constructor.isBuffer(obj)
-            );
-      },
-      combine = function (a, b2) {
-        return [].concat(a, b2);
-      },
-      maybeMap = function (val, fn) {
-        if (isArray2(val)) {
-          for (var mapped = [], i = 0; i < val.length; i += 1)
-            mapped.push(fn(val[i]));
-          return mapped;
-        }
-        return fn(val);
-      };
-    module.exports = {
-      arrayToObject,
-      assign,
-      combine,
-      compact,
-      decode,
-      encode,
-      isBuffer,
-      isRegExp,
-      maybeMap,
-      merge,
-    };
-  },
-});
-var require_stringify = __commonJS({
-  '../../node_modules/qs/lib/stringify.js'(exports, module) {
-    'use strict';
-    var getSideChannel = require_side_channel(),
-      utils = require_utils(),
-      formats = require_formats(),
-      has2 = Object.prototype.hasOwnProperty,
-      arrayPrefixGenerators = {
-        brackets: function (prefix2) {
-          return prefix2 + '[]';
-        },
-        comma: 'comma',
-        indices: function (prefix2, key2) {
-          return prefix2 + '[' + key2 + ']';
-        },
-        repeat: function (prefix2) {
-          return prefix2;
-        },
-      },
-      isArray2 = Array.isArray,
-      push = Array.prototype.push,
-      pushToArray = function (arr, valueOrArray) {
-        push.apply(arr, isArray2(valueOrArray) ? valueOrArray : [valueOrArray]);
-      },
-      toISO = Date.prototype.toISOString,
-      defaultFormat = formats.default,
-      defaults = {
-        addQueryPrefix: !1,
-        allowDots: !1,
-        charset: 'utf-8',
-        charsetSentinel: !1,
-        delimiter: '&',
-        encode: !0,
-        encoder: utils.encode,
-        encodeValuesOnly: !1,
-        format: defaultFormat,
-        formatter: formats.formatters[defaultFormat],
-        indices: !1,
-        serializeDate: function (date) {
-          return toISO.call(date);
-        },
-        skipNulls: !1,
-        strictNullHandling: !1,
-      },
-      isNonNullishPrimitive = function (v2) {
-        return (
-          typeof v2 == 'string' ||
-          typeof v2 == 'number' ||
-          typeof v2 == 'boolean' ||
-          typeof v2 == 'symbol' ||
-          typeof v2 == 'bigint'
-        );
-      },
-      sentinel = {},
-      stringify2 = function stringify3(
-        object,
-        prefix2,
-        generateArrayPrefix,
-        commaRoundTrip,
-        strictNullHandling,
-        skipNulls,
-        encoder,
-        filter,
-        sort,
-        allowDots,
-        serializeDate,
-        format,
-        formatter,
-        encodeValuesOnly,
-        charset,
-        sideChannel,
-      ) {
-        for (
-          var obj = object, tmpSc = sideChannel, step = 0, findFlag = !1;
-          (tmpSc = tmpSc.get(sentinel)) !== void 0 && !findFlag;
-
-        ) {
-          var pos = tmpSc.get(object);
-          if (((step += 1), typeof pos < 'u')) {
-            if (pos === step) throw new RangeError('Cyclic object value');
-            findFlag = !0;
-          }
-          typeof tmpSc.get(sentinel) > 'u' && (step = 0);
-        }
-        if (
-          (typeof filter == 'function'
-            ? (obj = filter(prefix2, obj))
-            : obj instanceof Date
-              ? (obj = serializeDate(obj))
-              : generateArrayPrefix === 'comma' &&
-                isArray2(obj) &&
-                (obj = utils.maybeMap(obj, function (value3) {
-                  return value3 instanceof Date
-                    ? serializeDate(value3)
-                    : value3;
-                })),
-          obj === null)
-        ) {
-          if (strictNullHandling)
-            return encoder && !encodeValuesOnly
-              ? encoder(prefix2, defaults.encoder, charset, 'key', format)
-              : prefix2;
-          obj = '';
-        }
-        if (isNonNullishPrimitive(obj) || utils.isBuffer(obj)) {
-          if (encoder) {
-            var keyValue = encodeValuesOnly
-              ? prefix2
-              : encoder(prefix2, defaults.encoder, charset, 'key', format);
-            return [
-              formatter(keyValue) +
-                '=' +
-                formatter(
-                  encoder(obj, defaults.encoder, charset, 'value', format),
-                ),
-            ];
-          }
-          return [formatter(prefix2) + '=' + formatter(String(obj))];
-        }
-        var values = [];
-        if (typeof obj > 'u') return values;
-        var objKeys;
-        if (generateArrayPrefix === 'comma' && isArray2(obj))
-          encodeValuesOnly && encoder && (obj = utils.maybeMap(obj, encoder)),
-            (objKeys = [
-              { value: obj.length > 0 ? obj.join(',') || null : void 0 },
-            ]);
-        else if (isArray2(filter)) objKeys = filter;
-        else {
-          var keys = Object.keys(obj);
-          objKeys = sort ? keys.sort(sort) : keys;
-        }
-        for (
-          var adjustedPrefix =
-              commaRoundTrip && isArray2(obj) && obj.length === 1
-                ? prefix2 + '[]'
-                : prefix2,
-            j = 0;
-          j < objKeys.length;
-          ++j
-        ) {
-          var key2 = objKeys[j],
-            value2 =
-              typeof key2 == 'object' && typeof key2.value < 'u'
-                ? key2.value
-                : obj[key2];
-          if (!(skipNulls && value2 === null)) {
-            var keyPrefix = isArray2(obj)
-              ? typeof generateArrayPrefix == 'function'
-                ? generateArrayPrefix(adjustedPrefix, key2)
-                : adjustedPrefix
-              : adjustedPrefix + (allowDots ? '.' + key2 : '[' + key2 + ']');
-            sideChannel.set(object, step);
-            var valueSideChannel = getSideChannel();
-            valueSideChannel.set(sentinel, sideChannel),
-              pushToArray(
-                values,
-                stringify3(
-                  value2,
-                  keyPrefix,
-                  generateArrayPrefix,
-                  commaRoundTrip,
-                  strictNullHandling,
-                  skipNulls,
-                  generateArrayPrefix === 'comma' &&
-                    encodeValuesOnly &&
-                    isArray2(obj)
-                    ? null
-                    : encoder,
-                  filter,
-                  sort,
-                  allowDots,
-                  serializeDate,
-                  format,
-                  formatter,
-                  encodeValuesOnly,
-                  charset,
-                  valueSideChannel,
-                ),
-              );
-          }
-        }
-        return values;
-      },
-      normalizeStringifyOptions = function (opts) {
-        if (!opts) return defaults;
-        if (
-          opts.encoder !== null &&
-          typeof opts.encoder < 'u' &&
-          typeof opts.encoder != 'function'
-        )
-          throw new TypeError('Encoder has to be a function.');
-        var charset = opts.charset || defaults.charset;
-        if (
-          typeof opts.charset < 'u' &&
-          opts.charset !== 'utf-8' &&
-          opts.charset !== 'iso-8859-1'
-        )
-          throw new TypeError(
-            'The charset option must be either utf-8, iso-8859-1, or undefined',
-          );
-        var format = formats.default;
-        if (typeof opts.format < 'u') {
-          if (!has2.call(formats.formatters, opts.format))
-            throw new TypeError('Unknown format option provided.');
-          format = opts.format;
-        }
-        var formatter = formats.formatters[format],
-          filter = defaults.filter;
-        return (
-          (typeof opts.filter == 'function' || isArray2(opts.filter)) &&
-            (filter = opts.filter),
-          {
-            addQueryPrefix:
-              typeof opts.addQueryPrefix == 'boolean'
-                ? opts.addQueryPrefix
-                : defaults.addQueryPrefix,
-            allowDots:
-              typeof opts.allowDots > 'u'
-                ? defaults.allowDots
-                : !!opts.allowDots,
-            charset,
-            charsetSentinel:
-              typeof opts.charsetSentinel == 'boolean'
-                ? opts.charsetSentinel
-                : defaults.charsetSentinel,
-            delimiter:
-              typeof opts.delimiter > 'u' ? defaults.delimiter : opts.delimiter,
-            encode:
-              typeof opts.encode == 'boolean' ? opts.encode : defaults.encode,
-            encoder:
-              typeof opts.encoder == 'function'
-                ? opts.encoder
-                : defaults.encoder,
-            encodeValuesOnly:
-              typeof opts.encodeValuesOnly == 'boolean'
-                ? opts.encodeValuesOnly
-                : defaults.encodeValuesOnly,
-            filter,
-            format,
-            formatter,
-            serializeDate:
-              typeof opts.serializeDate == 'function'
-                ? opts.serializeDate
-                : defaults.serializeDate,
-            skipNulls:
-              typeof opts.skipNulls == 'boolean'
-                ? opts.skipNulls
-                : defaults.skipNulls,
-            sort: typeof opts.sort == 'function' ? opts.sort : null,
-            strictNullHandling:
-              typeof opts.strictNullHandling == 'boolean'
-                ? opts.strictNullHandling
-                : defaults.strictNullHandling,
-          }
-        );
-      };
-    module.exports = function (object, opts) {
-      var obj = object,
-        options2 = normalizeStringifyOptions(opts),
-        objKeys,
-        filter;
-      typeof options2.filter == 'function'
-        ? ((filter = options2.filter), (obj = filter('', obj)))
-        : isArray2(options2.filter) &&
-          ((filter = options2.filter), (objKeys = filter));
-      var keys = [];
-      if (typeof obj != 'object' || obj === null) return '';
-      var arrayFormat;
-      opts && opts.arrayFormat in arrayPrefixGenerators
-        ? (arrayFormat = opts.arrayFormat)
-        : opts && 'indices' in opts
-          ? (arrayFormat = opts.indices ? 'indices' : 'repeat')
-          : (arrayFormat = 'indices');
-      var generateArrayPrefix = arrayPrefixGenerators[arrayFormat];
-      if (
-        opts &&
-        'commaRoundTrip' in opts &&
-        typeof opts.commaRoundTrip != 'boolean'
-      )
-        throw new TypeError('`commaRoundTrip` must be a boolean, or absent');
-      var commaRoundTrip =
-        generateArrayPrefix === 'comma' && opts && opts.commaRoundTrip;
-      objKeys || (objKeys = Object.keys(obj)),
-        options2.sort && objKeys.sort(options2.sort);
-      for (var sideChannel = getSideChannel(), i = 0; i < objKeys.length; ++i) {
-        var key2 = objKeys[i];
-        (options2.skipNulls && obj[key2] === null) ||
-          pushToArray(
-            keys,
-            stringify2(
-              obj[key2],
-              key2,
-              generateArrayPrefix,
-              commaRoundTrip,
-              options2.strictNullHandling,
-              options2.skipNulls,
-              options2.encode ? options2.encoder : null,
-              options2.filter,
-              options2.sort,
-              options2.allowDots,
-              options2.serializeDate,
-              options2.format,
-              options2.formatter,
-              options2.encodeValuesOnly,
-              options2.charset,
-              sideChannel,
-            ),
-          );
-      }
-      var joined = keys.join(options2.delimiter),
-        prefix2 = options2.addQueryPrefix === !0 ? '?' : '';
-      return (
-        options2.charsetSentinel &&
-          (options2.charset === 'iso-8859-1'
-            ? (prefix2 += 'utf8=%26%2310003%3B&')
-            : (prefix2 += 'utf8=%E2%9C%93&')),
-        joined.length > 0 ? prefix2 + joined : ''
-      );
-    };
-  },
-});
-var require_parse = __commonJS({
-  '../../node_modules/qs/lib/parse.js'(exports, module) {
-    'use strict';
-    var utils = require_utils(),
-      has2 = Object.prototype.hasOwnProperty,
-      isArray2 = Array.isArray,
-      defaults = {
-        allowDots: !1,
-        allowPrototypes: !1,
-        allowSparse: !1,
-        arrayLimit: 20,
-        charset: 'utf-8',
-        charsetSentinel: !1,
-        comma: !1,
-        decoder: utils.decode,
-        delimiter: '&',
-        depth: 5,
-        ignoreQueryPrefix: !1,
-        interpretNumericEntities: !1,
-        parameterLimit: 1e3,
-        parseArrays: !0,
-        plainObjects: !1,
-        strictNullHandling: !1,
-      },
-      interpretNumericEntities = function (str) {
-        return str.replace(/&#(\d+);/g, function ($0, numberStr) {
-          return String.fromCharCode(parseInt(numberStr, 10));
-        });
-      },
-      parseArrayValue = function (val, options2) {
-        return val &&
-          typeof val == 'string' &&
-          options2.comma &&
-          val.indexOf(',') > -1
-          ? val.split(',')
-          : val;
-      },
-      isoSentinel = 'utf8=%26%2310003%3B',
-      charsetSentinel = 'utf8=%E2%9C%93',
-      parseValues = function (str, options2) {
-        var obj = { __proto__: null },
-          cleanStr = options2.ignoreQueryPrefix ? str.replace(/^\?/, '') : str,
-          limit =
-            options2.parameterLimit === 1 / 0
-              ? void 0
-              : options2.parameterLimit,
-          parts = cleanStr.split(options2.delimiter, limit),
-          skipIndex = -1,
-          i,
-          charset = options2.charset;
-        if (options2.charsetSentinel)
-          for (i = 0; i < parts.length; ++i)
-            parts[i].indexOf('utf8=') === 0 &&
-              (parts[i] === charsetSentinel
-                ? (charset = 'utf-8')
-                : parts[i] === isoSentinel && (charset = 'iso-8859-1'),
-              (skipIndex = i),
-              (i = parts.length));
-        for (i = 0; i < parts.length; ++i)
-          if (i !== skipIndex) {
-            var part = parts[i],
-              bracketEqualsPos = part.indexOf(']='),
-              pos =
-                bracketEqualsPos === -1
-                  ? part.indexOf('=')
-                  : bracketEqualsPos + 1,
-              key2,
-              val;
-            pos === -1
-              ? ((key2 = options2.decoder(
-                  part,
-                  defaults.decoder,
-                  charset,
-                  'key',
-                )),
-                (val = options2.strictNullHandling ? null : ''))
-              : ((key2 = options2.decoder(
-                  part.slice(0, pos),
-                  defaults.decoder,
-                  charset,
-                  'key',
-                )),
-                (val = utils.maybeMap(
-                  parseArrayValue(part.slice(pos + 1), options2),
-                  function (encodedVal) {
-                    return options2.decoder(
-                      encodedVal,
-                      defaults.decoder,
-                      charset,
-                      'value',
-                    );
-                  },
-                ))),
-              val &&
-                options2.interpretNumericEntities &&
-                charset === 'iso-8859-1' &&
-                (val = interpretNumericEntities(val)),
-              part.indexOf('[]=') > -1 && (val = isArray2(val) ? [val] : val),
-              has2.call(obj, key2)
-                ? (obj[key2] = utils.combine(obj[key2], val))
-                : (obj[key2] = val);
-          }
-        return obj;
-      },
-      parseObject = function (chain, val, options2, valuesParsed) {
-        for (
-          var leaf = valuesParsed ? val : parseArrayValue(val, options2),
-            i = chain.length - 1;
-          i >= 0;
-          --i
-        ) {
-          var obj,
-            root3 = chain[i];
-          if (root3 === '[]' && options2.parseArrays) obj = [].concat(leaf);
-          else {
-            obj = options2.plainObjects ? Object.create(null) : {};
-            var cleanRoot =
-                root3.charAt(0) === '[' &&
-                root3.charAt(root3.length - 1) === ']'
-                  ? root3.slice(1, -1)
-                  : root3,
-              index = parseInt(cleanRoot, 10);
-            !options2.parseArrays && cleanRoot === ''
-              ? (obj = { 0: leaf })
-              : !isNaN(index) &&
-                  root3 !== cleanRoot &&
-                  String(index) === cleanRoot &&
-                  index >= 0 &&
-                  options2.parseArrays &&
-                  index <= options2.arrayLimit
-                ? ((obj = []), (obj[index] = leaf))
-                : cleanRoot !== '__proto__' && (obj[cleanRoot] = leaf);
-          }
-          leaf = obj;
-        }
-        return leaf;
-      },
-      parseKeys = function (givenKey, val, options2, valuesParsed) {
-        if (givenKey) {
-          var key2 = options2.allowDots
-              ? givenKey.replace(/\.([^.[]+)/g, '[$1]')
-              : givenKey,
-            brackets = /(\[[^[\]]*])/,
-            child = /(\[[^[\]]*])/g,
-            segment = options2.depth > 0 && brackets.exec(key2),
-            parent = segment ? key2.slice(0, segment.index) : key2,
-            keys = [];
-          if (parent) {
-            if (
-              !options2.plainObjects &&
-              has2.call(Object.prototype, parent) &&
-              !options2.allowPrototypes
-            )
-              return;
-            keys.push(parent);
-          }
-          for (
-            var i = 0;
-            options2.depth > 0 &&
-            (segment = child.exec(key2)) !== null &&
-            i < options2.depth;
-
-          ) {
-            if (
-              ((i += 1),
-              !options2.plainObjects &&
-                has2.call(Object.prototype, segment[1].slice(1, -1)) &&
-                !options2.allowPrototypes)
-            )
-              return;
-            keys.push(segment[1]);
-          }
-          return (
-            segment && keys.push('[' + key2.slice(segment.index) + ']'),
-            parseObject(keys, val, options2, valuesParsed)
-          );
-        }
-      },
-      normalizeParseOptions = function (opts) {
-        if (!opts) return defaults;
-        if (
-          opts.decoder !== null &&
-          opts.decoder !== void 0 &&
-          typeof opts.decoder != 'function'
-        )
-          throw new TypeError('Decoder has to be a function.');
-        if (
-          typeof opts.charset < 'u' &&
-          opts.charset !== 'utf-8' &&
-          opts.charset !== 'iso-8859-1'
-        )
-          throw new TypeError(
-            'The charset option must be either utf-8, iso-8859-1, or undefined',
-          );
-        var charset =
-          typeof opts.charset > 'u' ? defaults.charset : opts.charset;
-        return {
-          allowDots:
-            typeof opts.allowDots > 'u' ? defaults.allowDots : !!opts.allowDots,
-          allowPrototypes:
-            typeof opts.allowPrototypes == 'boolean'
-              ? opts.allowPrototypes
-              : defaults.allowPrototypes,
-          allowSparse:
-            typeof opts.allowSparse == 'boolean'
-              ? opts.allowSparse
-              : defaults.allowSparse,
-          arrayLimit:
-            typeof opts.arrayLimit == 'number'
-              ? opts.arrayLimit
-              : defaults.arrayLimit,
-          charset,
-          charsetSentinel:
-            typeof opts.charsetSentinel == 'boolean'
-              ? opts.charsetSentinel
-              : defaults.charsetSentinel,
-          comma: typeof opts.comma == 'boolean' ? opts.comma : defaults.comma,
-          decoder:
-            typeof opts.decoder == 'function' ? opts.decoder : defaults.decoder,
-          delimiter:
-            typeof opts.delimiter == 'string' || utils.isRegExp(opts.delimiter)
-              ? opts.delimiter
-              : defaults.delimiter,
-          depth:
-            typeof opts.depth == 'number' || opts.depth === !1
-              ? +opts.depth
-              : defaults.depth,
-          ignoreQueryPrefix: opts.ignoreQueryPrefix === !0,
-          interpretNumericEntities:
-            typeof opts.interpretNumericEntities == 'boolean'
-              ? opts.interpretNumericEntities
-              : defaults.interpretNumericEntities,
-          parameterLimit:
-            typeof opts.parameterLimit == 'number'
-              ? opts.parameterLimit
-              : defaults.parameterLimit,
-          parseArrays: opts.parseArrays !== !1,
-          plainObjects:
-            typeof opts.plainObjects == 'boolean'
-              ? opts.plainObjects
-              : defaults.plainObjects,
-          strictNullHandling:
-            typeof opts.strictNullHandling == 'boolean'
-              ? opts.strictNullHandling
-              : defaults.strictNullHandling,
-        };
-      };
-    module.exports = function (str, opts) {
-      var options2 = normalizeParseOptions(opts);
-      if (str === '' || str === null || typeof str > 'u')
-        return options2.plainObjects ? Object.create(null) : {};
-      for (
-        var tempObj = typeof str == 'string' ? parseValues(str, options2) : str,
-          obj = options2.plainObjects ? Object.create(null) : {},
-          keys = Object.keys(tempObj),
-          i = 0;
-        i < keys.length;
-        ++i
-      ) {
-        var key2 = keys[i],
-          newObj = parseKeys(
-            key2,
-            tempObj[key2],
-            options2,
-            typeof str == 'string',
-          );
-        obj = utils.merge(obj, newObj, options2);
-      }
-      return options2.allowSparse === !0 ? obj : utils.compact(obj);
-    };
-  },
-});
-var require_lib = __commonJS({
-  '../../node_modules/qs/lib/index.js'(exports, module) {
-    'use strict';
-    var stringify2 = require_stringify(),
-      parse2 = require_parse(),
-      formats = require_formats();
-    module.exports = { formats, parse: parse2, stringify: stringify2 };
   },
 });
 var require_browser_dtector_umd_min = __commonJS({
@@ -5392,7 +5728,6 @@ var require_browser_dtector_umd_min = __commonJS({
 var dist_exports = {};
 __export(dist_exports, {
   CHANNEL_CREATED: () => CHANNEL_CREATED,
-  CHANNEL_WS_DISCONNECT: () => CHANNEL_WS_DISCONNECT,
   CONFIG_ERROR: () => CONFIG_ERROR,
   CURRENT_STORY_WAS_SET: () => CURRENT_STORY_WAS_SET,
   DOCS_PREPARED: () => DOCS_PREPARED,
@@ -5400,6 +5735,7 @@ __export(dist_exports, {
   FORCE_REMOUNT: () => FORCE_REMOUNT,
   FORCE_RE_RENDER: () => FORCE_RE_RENDER,
   GLOBALS_UPDATED: () => GLOBALS_UPDATED,
+  IGNORED_EXCEPTION: () => IGNORED_EXCEPTION,
   NAVIGATE_URL: () => NAVIGATE_URL,
   PLAY_FUNCTION_THREW_EXCEPTION: () => PLAY_FUNCTION_THREW_EXCEPTION,
   PRELOAD_ENTRIES: () => PRELOAD_ENTRIES,
@@ -5433,14 +5769,12 @@ __export(dist_exports, {
   STORY_UNCHANGED: () => STORY_UNCHANGED,
   TELEMETRY_ERROR: () => TELEMETRY_ERROR,
   TOGGLE_WHATS_NEW_NOTIFICATIONS: () => TOGGLE_WHATS_NEW_NOTIFICATIONS,
-  UNHANDLED_ERRORS_WHILE_PLAYING: () => UNHANDLED_ERRORS_WHILE_PLAYING,
   UPDATE_GLOBALS: () => UPDATE_GLOBALS,
   UPDATE_QUERY_PARAMS: () => UPDATE_QUERY_PARAMS,
   UPDATE_STORY_ARGS: () => UPDATE_STORY_ARGS,
   default: () => src_default,
 });
 var events = ((events2) => (
-    (events2.CHANNEL_WS_DISCONNECT = 'channelWSDisconnect'),
     (events2.CHANNEL_CREATED = 'channelCreated'),
     (events2.CONFIG_ERROR = 'configError'),
     (events2.STORY_INDEX_INVALIDATED = 'storyIndexInvalidated'),
@@ -5463,7 +5797,6 @@ var events = ((events2) => (
     (events2.STORY_THREW_EXCEPTION = 'storyThrewException'),
     (events2.STORY_RENDER_PHASE_CHANGED = 'storyRenderPhaseChanged'),
     (events2.PLAY_FUNCTION_THREW_EXCEPTION = 'playFunctionThrewException'),
-    (events2.UNHANDLED_ERRORS_WHILE_PLAYING = 'unhandledErrorsWhilePlaying'),
     (events2.UPDATE_STORY_ARGS = 'updateStoryArgs'),
     (events2.STORY_ARGS_UPDATED = 'storyArgsUpdated'),
     (events2.RESET_STORY_ARGS = 'resetStoryArgs'),
@@ -5490,7 +5823,6 @@ var events = ((events2) => (
   ))(events || {}),
   src_default = events,
   {
-    CHANNEL_WS_DISCONNECT,
     CHANNEL_CREATED,
     CONFIG_ERROR,
     CURRENT_STORY_WAS_SET,
@@ -5501,7 +5833,6 @@ var events = ((events2) => (
     GLOBALS_UPDATED,
     NAVIGATE_URL,
     PLAY_FUNCTION_THREW_EXCEPTION,
-    UNHANDLED_ERRORS_WHILE_PLAYING,
     PRELOAD_ENTRIES,
     PREVIEW_BUILDER_PROGRESS,
     PREVIEW_KEYDOWN,
@@ -5536,7 +5867,8 @@ var events = ((events2) => (
     SET_WHATS_NEW_CACHE,
     TOGGLE_WHATS_NEW_NOTIFICATIONS,
     TELEMETRY_ERROR,
-  } = events;
+  } = events,
+  IGNORED_EXCEPTION = new Error('ignoredException');
 var dist_exports2 = {};
 __export(dist_exports2, { global: () => scope });
 var scope = (() => {
@@ -5555,13 +5887,19 @@ var scope = (() => {
   );
 })();
 var globalsNameReferenceMap = {
+    '@storybook/addons': '__STORYBOOK_MODULE_ADDONS__',
     '@storybook/global': '__STORYBOOK_MODULE_GLOBAL__',
+    '@storybook/channel-postmessage':
+      '__STORYBOOK_MODULE_CHANNEL_POSTMESSAGE__',
+    '@storybook/channel-websocket': '__STORYBOOK_MODULE_CHANNEL_WEBSOCKET__',
     '@storybook/channels': '__STORYBOOK_MODULE_CHANNELS__',
+    '@storybook/client-api': '__STORYBOOK_MODULE_CLIENT_API__',
     '@storybook/client-logger': '__STORYBOOK_MODULE_CLIENT_LOGGER__',
+    '@storybook/core-client': '__STORYBOOK_MODULE_CORE_CLIENT__',
     '@storybook/core-events': '__STORYBOOK_MODULE_CORE_EVENTS__',
-    '@storybook/core-events/preview-errors':
-      '__STORYBOOK_MODULE_CORE_EVENTS_PREVIEW_ERRORS__',
+    '@storybook/preview-web': '__STORYBOOK_MODULE_PREVIEW_WEB__',
     '@storybook/preview-api': '__STORYBOOK_MODULE_PREVIEW_API__',
+    '@storybook/store': '__STORYBOOK_MODULE_STORE__',
     '@storybook/types': '__STORYBOOK_MODULE_TYPES__',
   },
   globalPackages = Object.keys(globalsNameReferenceMap);
@@ -5571,8 +5909,100 @@ __export(dist_exports4, {
   PostMessageTransport: () => PostMessageTransport,
   WebsocketTransport: () => WebsocketTransport,
   createBrowserChannel: () => createBrowserChannel,
+  createPostMessageChannel: () => createChannel,
+  createWebSocketChannel: () => createChannel2,
   default: () => src_default2,
 });
+var isMulti = (args2) => args2.transports !== void 0,
+  generateRandomId = () => Math.random().toString(16).slice(2),
+  Channel = class {
+    constructor(input = {}) {
+      (this.sender = generateRandomId()),
+        (this.events = {}),
+        (this.data = {}),
+        (this.transports = []),
+        (this.isAsync = input.async || !1),
+        isMulti(input)
+          ? ((this.transports = input.transports || []),
+            this.transports.forEach((t) => {
+              t.setHandler((event) => this.handleEvent(event));
+            }))
+          : (this.transports = input.transport ? [input.transport] : []),
+        this.transports.forEach((t) => {
+          t.setHandler((event) => this.handleEvent(event));
+        });
+    }
+    get hasTransport() {
+      return this.transports.length > 0;
+    }
+    addListener(eventName, listener) {
+      (this.events[eventName] = this.events[eventName] || []),
+        this.events[eventName].push(listener);
+    }
+    emit(eventName, ...args2) {
+      let event = { type: eventName, args: args2, from: this.sender },
+        options2 = {};
+      args2.length >= 1 &&
+        args2[0] &&
+        args2[0].options &&
+        (options2 = args2[0].options);
+      let handler = () => {
+        this.transports.forEach((t) => {
+          t.send(event, options2);
+        }),
+          this.handleEvent(event);
+      };
+      this.isAsync ? setImmediate(handler) : handler();
+    }
+    last(eventName) {
+      return this.data[eventName];
+    }
+    eventNames() {
+      return Object.keys(this.events);
+    }
+    listenerCount(eventName) {
+      let listeners = this.listeners(eventName);
+      return listeners ? listeners.length : 0;
+    }
+    listeners(eventName) {
+      return this.events[eventName] || void 0;
+    }
+    once(eventName, listener) {
+      let onceListener = this.onceListener(eventName, listener);
+      this.addListener(eventName, onceListener);
+    }
+    removeAllListeners(eventName) {
+      eventName
+        ? this.events[eventName] && delete this.events[eventName]
+        : (this.events = {});
+    }
+    removeListener(eventName, listener) {
+      let listeners = this.listeners(eventName);
+      listeners &&
+        (this.events[eventName] = listeners.filter((l) => l !== listener));
+    }
+    on(eventName, listener) {
+      this.addListener(eventName, listener);
+    }
+    off(eventName, listener) {
+      this.removeListener(eventName, listener);
+    }
+    handleEvent(event) {
+      let listeners = this.listeners(event.type);
+      listeners &&
+        listeners.length &&
+        listeners.forEach((fn) => {
+          fn.apply(event, event.args);
+        }),
+        (this.data[event.type] = event.args);
+    }
+    onceListener(eventName, listener) {
+      let onceListener = (...args2) => (
+        this.removeListener(eventName, onceListener), listener(...args2)
+      );
+      return onceListener;
+    }
+  };
 var dist_exports3 = {};
 __export(dist_exports3, {
   deprecate: () => deprecate,
@@ -7102,6 +7532,7 @@ var replacer = function (options2) {
       result2 = JSON.parse(data, reviver2(mergedOptions));
     return mutator()(result2), result2;
   };
+var import_qs = __toESM(require_lib(), 1);
 var isProduction = !1,
   prefix = 'Invariant failed';
 function invariant(condition, message) {
@@ -7112,109 +7543,11 @@ function invariant(condition, message) {
     throw new Error(value2);
   }
 }
-var isMulti = (args2) => args2.transports !== void 0,
-  generateRandomId = () => Math.random().toString(16).slice(2),
-  Channel = class {
-    constructor(input = {}) {
-      (this.sender = generateRandomId()),
-        (this.events = {}),
-        (this.data = {}),
-        (this.transports = []),
-        (this.isAsync = input.async || !1),
-        isMulti(input)
-          ? ((this.transports = input.transports || []),
-            this.transports.forEach((t) => {
-              t.setHandler((event) => this.handleEvent(event));
-            }))
-          : (this.transports = input.transport ? [input.transport] : []),
-        this.transports.forEach((t) => {
-          t.setHandler((event) => this.handleEvent(event));
-        });
-    }
-    get hasTransport() {
-      return this.transports.length > 0;
-    }
-    addListener(eventName, listener) {
-      (this.events[eventName] = this.events[eventName] || []),
-        this.events[eventName].push(listener);
-    }
-    emit(eventName, ...args2) {
-      let event = { type: eventName, args: args2, from: this.sender },
-        options2 = {};
-      args2.length >= 1 &&
-        args2[0] &&
-        args2[0].options &&
-        (options2 = args2[0].options);
-      let handler = () => {
-        this.transports.forEach((t) => {
-          t.send(event, options2);
-        }),
-          this.handleEvent(event);
-      };
-      this.isAsync ? setImmediate(handler) : handler();
-    }
-    last(eventName) {
-      return this.data[eventName];
-    }
-    eventNames() {
-      return Object.keys(this.events);
-    }
-    listenerCount(eventName) {
-      let listeners = this.listeners(eventName);
-      return listeners ? listeners.length : 0;
-    }
-    listeners(eventName) {
-      return this.events[eventName] || void 0;
-    }
-    once(eventName, listener) {
-      let onceListener = this.onceListener(eventName, listener);
-      this.addListener(eventName, onceListener);
-    }
-    removeAllListeners(eventName) {
-      eventName
-        ? this.events[eventName] && delete this.events[eventName]
-        : (this.events = {});
-    }
-    removeListener(eventName, listener) {
-      let listeners = this.listeners(eventName);
-      listeners &&
-        (this.events[eventName] = listeners.filter((l) => l !== listener));
-    }
-    on(eventName, listener) {
-      this.addListener(eventName, listener);
-    }
-    off(eventName, listener) {
-      this.removeListener(eventName, listener);
-    }
-    handleEvent(event) {
-      let listeners = this.listeners(event.type);
-      listeners &&
-        listeners.length &&
-        listeners.forEach((fn) => {
-          fn.apply(event, event.args);
-        }),
-        (this.data[event.type] = event.args);
-    }
-    onceListener(eventName, listener) {
-      let onceListener = (...args2) => (
-        this.removeListener(eventName, onceListener), listener(...args2)
-      );
-      return onceListener;
-    }
-  },
-  getEventSourceUrl = (event) => {
+var getEventSourceUrl = (event) => {
     let frames = Array.from(
         document.querySelectorAll('iframe[data-is-storybook]'),
       ),
       [frame, ...remainder] = frames.filter((element) => {
-        try {
-          return (
-            element.contentWindow?.location.origin ===
-              event.source.location.origin &&
-            element.contentWindow?.location.pathname ===
-              event.source.location.pathname
-          );
-        } catch {}
         try {
           return element.contentWindow === event.source;
         } catch {}
@@ -7244,7 +7577,7 @@ var isMulti = (args2) => args2.transports !== void 0,
   },
   { document: document2, location } = scope,
   KEY = 'storybook-channel',
-  defaultEventOptions = { allowFunction: !1, maxDepth: 25 },
+  defaultEventOptions = { allowFunction: !0, maxDepth: 25 },
   PostMessageTransport = class {
     constructor(config) {
       if (
@@ -7301,9 +7634,11 @@ var isMulti = (args2) => args2.transports !== void 0,
           ...eventOptions,
         },
         frames = this.getFrames(target),
-        query = new URLSearchParams(location?.search || ''),
+        query = import_qs.default.parse(location?.search || '', {
+          ignoreQueryPrefix: !0,
+        }),
         data = stringify(
-          { key: KEY, event, refId: query.get('refId') },
+          { key: KEY, event, refId: query.refId },
           stringifyOptions,
         );
       return frames.length
@@ -7414,9 +7749,15 @@ var isMulti = (args2) => args2.transports !== void 0,
       }
     }
   },
-  { WebSocket } = scope,
+  PostmsgTransport = PostMessageTransport;
+function createChannel({ page }) {
+  let transport = new PostmsgTransport({ page });
+  return new Channel({ transport });
+}
+var postmessage_default = createChannel;
+var { WebSocket } = scope,
   WebsocketTransport = class {
-    constructor({ url, onError, page }) {
+    constructor({ url, onError }) {
       (this.buffer = []),
         (this.isReady = !1),
         (this.socket = new WebSocket(url)),
@@ -7431,14 +7772,6 @@ var isMulti = (args2) => args2.transports !== void 0,
         }),
         (this.socket.onerror = (e) => {
           onError && onError(e);
-        }),
-        (this.socket.onclose = () => {
-          invariant(this.handler, 'WebsocketTransport handler should be set'),
-            this.handler({
-              type: CHANNEL_WS_DISCONNECT,
-              args: [],
-              from: page || 'preview',
-            });
         });
     }
     setHandler(handler) {
@@ -7451,19 +7784,30 @@ var isMulti = (args2) => args2.transports !== void 0,
       this.buffer.push(event);
     }
     sendNow(event) {
-      let data = stringify(event, {
-        maxDepth: 15,
-        allowFunction: !1,
-        ...scope.CHANNEL_OPTIONS,
-      });
+      let data = stringify(event, { maxDepth: 15, allowFunction: !0 });
       this.socket.send(data);
     }
     flush() {
       let { buffer } = this;
       (this.buffer = []), buffer.forEach((event) => this.send(event));
     }
-  },
-  { CONFIG_TYPE } = scope,
+  };
+function createChannel2({
+  url,
+  async = !1,
+  onError = (err) => logger.warn(err),
+}) {
+  let channelUrl = url;
+  if (!channelUrl) {
+    let protocol = window.location.protocol === 'http:' ? 'ws' : 'wss',
+      { hostname, port } = window.location;
+    channelUrl = `${protocol}://${hostname}:${port}/storybook-server-channel`;
+  }
+  let transport = new WebsocketTransport({ url: channelUrl, onError });
+  return new Channel({ transport, async });
+}
+var websocket_default = createChannel2;
+var { CONFIG_TYPE } = scope,
   src_default2 = Channel;
 function createBrowserChannel({ page, extraTransports = [] }) {
   let transports = [new PostMessageTransport({ page }), ...extraTransports];
@@ -7472,28 +7816,442 @@ function createBrowserChannel({ page, extraTransports = [] }) {
       { hostname, port } = window.location,
       channelUrl = `${protocol}://${hostname}:${port}/storybook-server-channel`;
     transports.push(
-      new WebsocketTransport({ url: channelUrl, onError: () => {}, page }),
+      new WebsocketTransport({ url: channelUrl, onError: () => {} }),
     );
   }
   return new Channel({ transports });
 }
-var preview_errors_exports = {};
-__export(preview_errors_exports, {
-  CalledExtractOnStoreError: () => CalledExtractOnStoreError,
-  CalledPreviewMethodBeforeInitializationError: () =>
-    CalledPreviewMethodBeforeInitializationError,
-  Category: () => Category,
-  EmptyIndexError: () => EmptyIndexError,
-  ImplicitActionsDuringRendering: () => ImplicitActionsDuringRendering,
-  MdxFileWithNoCsfReferencesError: () => MdxFileWithNoCsfReferencesError,
-  MissingRenderToCanvasError: () => MissingRenderToCanvasError,
-  MissingStoryAfterHmrError: () => MissingStoryAfterHmrError,
-  MissingStoryFromCsfFileError: () => MissingStoryFromCsfFileError,
-  NoStoryMatchError: () => NoStoryMatchError,
-  StoryIndexFetchError: () => StoryIndexFetchError,
-  StoryStoreAccessedBeforeInitializationError: () =>
-    StoryStoreAccessedBeforeInitializationError,
+var dist_exports5 = {};
+__export(dist_exports5, {
+  ClientApi: () => ClientApi,
+  DocsContext: () => DocsContext,
+  HooksContext: () => HooksContext,
+  Preview: () => Preview,
+  PreviewWeb: () => PreviewWeb,
+  StoryStore: () => StoryStore,
+  addArgTypes: () => addArgTypes,
+  addArgTypesEnhancer: () => addArgTypesEnhancer,
+  addArgs: () => addArgs,
+  addArgsEnhancer: () => addArgsEnhancer,
+  addDecorator: () => addDecorator,
+  addLoader: () => addLoader,
+  addParameters: () => addParameters,
+  addStepRunner: () => addStepRunner,
+  addons: () => addons,
+  applyHooks: () => applyHooks,
+  combineArgs: () => combineArgs,
+  combineParameters: () => combineParameters,
+  composeConfigs: () => composeConfigs,
+  composeStepRunners: () => composeStepRunners,
+  composeStories: () => composeStories,
+  composeStory: () => composeStory,
+  decorateStory: () => decorateStory,
+  defaultDecorateStory: () => defaultDecorateStory,
+  filterArgTypes: () => filterArgTypes,
+  getQueryParam: () => getQueryParam,
+  getQueryParams: () => getQueryParams,
+  inferControls: () => inferControls,
+  makeDecorator: () => makeDecorator,
+  mockChannel: () => mockChannel,
+  normalizeStory: () => normalizeStory,
+  prepareMeta: () => prepareMeta,
+  prepareStory: () => prepareStory,
+  sanitizeStoryContextUpdate: () => sanitizeStoryContextUpdate,
+  setGlobalRender: () => setGlobalRender,
+  setProjectAnnotations: () => setProjectAnnotations,
+  simulateDOMContentLoaded: () => simulateDOMContentLoaded,
+  simulatePageLoad: () => simulatePageLoad,
+  sortStoriesV7: () => sortStoriesV7,
+  start: () => start,
+  useArgs: () => useArgs,
+  useCallback: () => useCallback,
+  useChannel: () => useChannel,
+  useEffect: () => useEffect,
+  useGlobals: () => useGlobals,
+  useMemo: () => useMemo,
+  useParameter: () => useParameter,
+  useReducer: () => useReducer,
+  useRef: () => useRef,
+  useState: () => useState,
+  useStoryContext: () => useStoryContext,
+  userOrAutoTitle: () => userOrAutoTitle,
+  userOrAutoTitleFromSpecifier: () => userOrAutoTitleFromSpecifier,
 });
+var __create3 = Object.create,
+  __defProp3 = Object.defineProperty,
+  __getOwnPropDesc3 = Object.getOwnPropertyDescriptor,
+  __getOwnPropNames3 = Object.getOwnPropertyNames,
+  __getProtoOf3 = Object.getPrototypeOf,
+  __hasOwnProp3 = Object.prototype.hasOwnProperty,
+  __commonJS3 = (cb, mod) =>
+    function () {
+      return (
+        mod ||
+          (0, cb[__getOwnPropNames3(cb)[0]])(
+            (mod = { exports: {} }).exports,
+            mod,
+          ),
+        mod.exports
+      );
+    },
+  __copyProps3 = (to, from, except, desc) => {
+    if ((from && typeof from == 'object') || typeof from == 'function')
+      for (let key2 of __getOwnPropNames3(from))
+        !__hasOwnProp3.call(to, key2) &&
+          key2 !== except &&
+          __defProp3(to, key2, {
+            get: () => from[key2],
+            enumerable:
+              !(desc = __getOwnPropDesc3(from, key2)) || desc.enumerable,
+          });
+    return to;
+  },
+  __toESM3 = (mod, isNodeMode, target) => (
+    (target = mod != null ? __create3(__getProtoOf3(mod)) : {}),
+    __copyProps3(
+      isNodeMode || !mod || !mod.__esModule
+        ? __defProp3(target, 'default', { value: mod, enumerable: !0 })
+        : target,
+      mod,
+    )
+  );
+function mockChannel() {
+  let transport = { setHandler: () => {}, send: () => {} };
+  return new Channel({ transport });
+}
+var AddonStore = class {
+    constructor() {
+      (this.getChannel = () => {
+        if (!this.channel) {
+          let channel = mockChannel();
+          return this.setChannel(channel), channel;
+        }
+        return this.channel;
+      }),
+        (this.getServerChannel = () => {
+          if (!this.serverChannel)
+            throw new Error('Accessing non-existent serverChannel');
+          return this.serverChannel;
+        }),
+        (this.ready = () => this.promise),
+        (this.hasChannel = () => !!this.channel),
+        (this.hasServerChannel = () => !!this.serverChannel),
+        (this.setChannel = (channel) => {
+          (this.channel = channel), this.resolve();
+        }),
+        (this.setServerChannel = (channel) => {
+          this.serverChannel = channel;
+        }),
+        (this.promise = new Promise((res) => {
+          this.resolve = () => res(this.getChannel());
+        }));
+    }
+  },
+  KEY2 = '__STORYBOOK_ADDONS_PREVIEW';
+function getAddonsStore() {
+  return scope[KEY2] || (scope[KEY2] = new AddonStore()), scope[KEY2];
+}
+var addons = getAddonsStore(),
+  HooksContext = class {
+    constructor() {
+      (this.hookListsMap = void 0),
+        (this.mountedDecorators = void 0),
+        (this.prevMountedDecorators = void 0),
+        (this.currentHooks = void 0),
+        (this.nextHookIndex = void 0),
+        (this.currentPhase = void 0),
+        (this.currentEffects = void 0),
+        (this.prevEffects = void 0),
+        (this.currentDecoratorName = void 0),
+        (this.hasUpdates = void 0),
+        (this.currentContext = void 0),
+        (this.renderListener = (storyId) => {
+          storyId === this.currentContext?.id &&
+            (this.triggerEffects(),
+            (this.currentContext = null),
+            this.removeRenderListeners());
+        }),
+        this.init();
+    }
+    init() {
+      (this.hookListsMap = new WeakMap()),
+        (this.mountedDecorators = new Set()),
+        (this.prevMountedDecorators = new Set()),
+        (this.currentHooks = []),
+        (this.nextHookIndex = 0),
+        (this.currentPhase = 'NONE'),
+        (this.currentEffects = []),
+        (this.prevEffects = []),
+        (this.currentDecoratorName = null),
+        (this.hasUpdates = !1),
+        (this.currentContext = null);
+    }
+    clean() {
+      this.prevEffects.forEach((effect) => {
+        effect.destroy && effect.destroy();
+      }),
+        this.init(),
+        this.removeRenderListeners();
+    }
+    getNextHook() {
+      let hook = this.currentHooks[this.nextHookIndex];
+      return (this.nextHookIndex += 1), hook;
+    }
+    triggerEffects() {
+      this.prevEffects.forEach((effect) => {
+        !this.currentEffects.includes(effect) &&
+          effect.destroy &&
+          effect.destroy();
+      }),
+        this.currentEffects.forEach((effect) => {
+          this.prevEffects.includes(effect) ||
+            (effect.destroy = effect.create());
+        }),
+        (this.prevEffects = this.currentEffects),
+        (this.currentEffects = []);
+    }
+    addRenderListeners() {
+      this.removeRenderListeners(),
+        addons.getChannel().on(STORY_RENDERED, this.renderListener);
+    }
+    removeRenderListeners() {
+      addons.getChannel().removeListener(STORY_RENDERED, this.renderListener);
+    }
+  };
+function hookify(fn) {
+  let hookified = (...args2) => {
+    let { hooks } = typeof args2[0] == 'function' ? args2[1] : args2[0],
+      prevPhase = hooks.currentPhase,
+      prevHooks = hooks.currentHooks,
+      prevNextHookIndex = hooks.nextHookIndex,
+      prevDecoratorName = hooks.currentDecoratorName;
+    (hooks.currentDecoratorName = fn.name),
+      hooks.prevMountedDecorators.has(fn)
+        ? ((hooks.currentPhase = 'UPDATE'),
+          (hooks.currentHooks = hooks.hookListsMap.get(fn) || []))
+        : ((hooks.currentPhase = 'MOUNT'),
+          (hooks.currentHooks = []),
+          hooks.hookListsMap.set(fn, hooks.currentHooks),
+          hooks.prevMountedDecorators.add(fn)),
+      (hooks.nextHookIndex = 0);
+    let prevContext = scope.STORYBOOK_HOOKS_CONTEXT;
+    scope.STORYBOOK_HOOKS_CONTEXT = hooks;
+    let result2 = fn(...args2);
+    if (
+      ((scope.STORYBOOK_HOOKS_CONTEXT = prevContext),
+      hooks.currentPhase === 'UPDATE' && hooks.getNextHook() != null)
+    )
+      throw new Error(
+        'Rendered fewer hooks than expected. This may be caused by an accidental early return statement.',
+      );
+    return (
+      (hooks.currentPhase = prevPhase),
+      (hooks.currentHooks = prevHooks),
+      (hooks.nextHookIndex = prevNextHookIndex),
+      (hooks.currentDecoratorName = prevDecoratorName),
+      result2
+    );
+  };
+  return (hookified.originalFn = fn), hookified;
+}
+var numberOfRenders = 0,
+  RENDER_LIMIT = 25,
+  applyHooks = (applyDecorators) => (storyFn, decorators) => {
+    let decorated = applyDecorators(
+      hookify(storyFn),
+      decorators.map((decorator) => hookify(decorator)),
+    );
+    return (context) => {
+      let { hooks } = context;
+      (hooks.prevMountedDecorators ??= new Set()),
+        (hooks.mountedDecorators = new Set([storyFn, ...decorators])),
+        (hooks.currentContext = context),
+        (hooks.hasUpdates = !1);
+      let result2 = decorated(context);
+      for (numberOfRenders = 1; hooks.hasUpdates; )
+        if (
+          ((hooks.hasUpdates = !1),
+          (hooks.currentEffects = []),
+          (result2 = decorated(context)),
+          (numberOfRenders += 1),
+          numberOfRenders > RENDER_LIMIT)
+        )
+          throw new Error(
+            'Too many re-renders. Storybook limits the number of renders to prevent an infinite loop.',
+          );
+      return hooks.addRenderListeners(), result2;
+    };
+  },
+  areDepsEqual = (deps, nextDeps) =>
+    deps.length === nextDeps.length &&
+    deps.every((dep, i) => dep === nextDeps[i]),
+  invalidHooksError = () =>
+    new Error(
+      'Storybook preview hooks can only be called inside decorators and story functions.',
+    );
+function getHooksContextOrNull() {
+  return scope.STORYBOOK_HOOKS_CONTEXT || null;
+}
+function getHooksContextOrThrow() {
+  let hooks = getHooksContextOrNull();
+  if (hooks == null) throw invalidHooksError();
+  return hooks;
+}
+function useHook(name2, callback, deps) {
+  let hooks = getHooksContextOrThrow();
+  if (hooks.currentPhase === 'MOUNT') {
+    deps != null &&
+      !Array.isArray(deps) &&
+      logger.warn(
+        `${name2} received a final argument that is not an array (instead, received ${deps}). When specified, the final argument must be an array.`,
+      );
+    let hook = { name: name2, deps };
+    return hooks.currentHooks.push(hook), callback(hook), hook;
+  }
+  if (hooks.currentPhase === 'UPDATE') {
+    let hook = hooks.getNextHook();
+    if (hook == null)
+      throw new Error('Rendered more hooks than during the previous render.');
+    return (
+      hook.name !== name2 &&
+        logger.warn(
+          `Storybook has detected a change in the order of Hooks${hooks.currentDecoratorName ? ` called by ${hooks.currentDecoratorName}` : ''}. This will lead to bugs and errors if not fixed.`,
+        ),
+      deps != null &&
+        hook.deps == null &&
+        logger.warn(
+          `${name2} received a final argument during this render, but not during the previous render. Even though the final argument is optional, its type cannot change between renders.`,
+        ),
+      deps != null &&
+        hook.deps != null &&
+        deps.length !== hook.deps.length &&
+        logger.warn(`The final argument passed to ${name2} changed size between renders. The order and size of this array must remain constant.
+Previous: ${hook.deps}
+Incoming: ${deps}`),
+      (deps == null || hook.deps == null || !areDepsEqual(deps, hook.deps)) &&
+        (callback(hook), (hook.deps = deps)),
+      hook
+    );
+  }
+  throw invalidHooksError();
+}
+function useMemoLike(name2, nextCreate, deps) {
+  let { memoizedState } = useHook(
+    name2,
+    (hook) => {
+      hook.memoizedState = nextCreate();
+    },
+    deps,
+  );
+  return memoizedState;
+}
+function useMemo(nextCreate, deps) {
+  return useMemoLike('useMemo', nextCreate, deps);
+}
+function useCallback(callback, deps) {
+  return useMemoLike('useCallback', () => callback, deps);
+}
+function useRefLike(name2, initialValue) {
+  return useMemoLike(name2, () => ({ current: initialValue }), []);
+}
+function useRef(initialValue) {
+  return useRefLike('useRef', initialValue);
+}
+function triggerUpdate() {
+  let hooks = getHooksContextOrNull();
+  if (hooks != null && hooks.currentPhase !== 'NONE') hooks.hasUpdates = !0;
+  else
+    try {
+      addons.getChannel().emit(FORCE_RE_RENDER);
+    } catch {
+      logger.warn(
+        'State updates of Storybook preview hooks work only in browser',
+      );
+    }
+}
+function useStateLike(name2, initialState) {
+  let stateRef = useRefLike(
+      name2,
+      typeof initialState == 'function' ? initialState() : initialState,
+    ),
+    setState = (update) => {
+      (stateRef.current =
+        typeof update == 'function' ? update(stateRef.current) : update),
+        triggerUpdate();
+    };
+  return [stateRef.current, setState];
+}
+function useState(initialState) {
+  return useStateLike('useState', initialState);
+}
+function useReducer(reducer, initialArg, init) {
+  let initialState = init != null ? () => init(initialArg) : initialArg,
+    [state, setState] = useStateLike('useReducer', initialState);
+  return [
+    state,
+    (action) => setState((prevState) => reducer(prevState, action)),
+  ];
+}
+function useEffect(create, deps) {
+  let hooks = getHooksContextOrThrow(),
+    effect = useMemoLike('useEffect', () => ({ create }), deps);
+  hooks.currentEffects.includes(effect) || hooks.currentEffects.push(effect);
+}
+function useChannel(eventMap, deps = []) {
+  let channel = addons.getChannel();
+  return (
+    useEffect(
+      () => (
+        Object.entries(eventMap).forEach(([type, listener]) =>
+          channel.on(type, listener),
+        ),
+        () => {
+          Object.entries(eventMap).forEach(([type, listener]) =>
+            channel.removeListener(type, listener),
+          );
+        }
+      ),
+      [...Object.keys(eventMap), ...deps],
+    ),
+    useCallback(channel.emit.bind(channel), [channel])
+  );
+}
+function useStoryContext() {
+  let { currentContext } = getHooksContextOrThrow();
+  if (currentContext == null) throw invalidHooksError();
+  return currentContext;
+}
+function useParameter(parameterKey, defaultValue) {
+  let { parameters } = useStoryContext();
+  if (parameterKey) return parameters[parameterKey] ?? defaultValue;
+}
+function useArgs() {
+  let channel = addons.getChannel(),
+    { id: storyId, args: args2 } = useStoryContext(),
+    updateArgs = useCallback(
+      (updatedArgs) =>
+        channel.emit(UPDATE_STORY_ARGS, { storyId, updatedArgs }),
+      [channel, storyId],
+    ),
+    resetArgs = useCallback(
+      (argNames) => channel.emit(RESET_STORY_ARGS, { storyId, argNames }),
+      [channel, storyId],
+    );
+  return [args2, updateArgs, resetArgs];
+}
+function useGlobals() {
+  let channel = addons.getChannel(),
+    { globals } = useStoryContext(),
+    updateGlobals = useCallback(
+      (newGlobals) => channel.emit(UPDATE_GLOBALS, { globals: newGlobals }),
+      [channel],
+    );
+  return [globals, updateGlobals];
+}
+var import_memoizerific2 = __toESM(require_memoizerific(), 1),
+  import_mapValues = __toESM(require_mapValues(), 1),
+  import_pick = __toESM(require_pick(), 1),
+  import_synchronous_promise = __toESM(require_synchronous_promise(), 1);
 var StorybookError = class extends Error {
   constructor() {
     super(...arguments),
@@ -7631,223 +8389,7 @@ var Category = ((Category2) => (
     - Please check the values in the stories field of your main.js config and see if they would match your CSF File.
     - Also check the browser console and terminal for potential error messages.`;
     }
-  },
-  ImplicitActionsDuringRendering = class extends StorybookError {
-    constructor(data) {
-      super(),
-        (this.data = data),
-        (this.category = 'PREVIEW_API'),
-        (this.code = 2),
-        (this.documentation =
-          'https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#using-implicit-actions-during-rendering-is-deprecated-for-example-in-the-play-function');
-    }
-    template() {
-      return esm_default`
-      We detected that you use an implicit action arg while ${this.data.phase} of your story.  
-      ${
-        this.data.deprecated
-          ? `
-This is deprecated and won't work in Storybook 8 anymore.
-`
-          : ''
-      }
-      Please provide an explicit spy to your args like this:
-        import { fn } from '@storybook/test';
-        ... 
-        args: {
-         ${this.data.name}: fn()
-        }
-    `;
-    }
-  },
-  CalledExtractOnStoreError = class extends StorybookError {
-    constructor() {
-      super(...arguments), (this.category = 'PREVIEW_API'), (this.code = 3);
-    }
-    template() {
-      return esm_default`
-    Cannot call \`storyStore.extract()\` without calling \`storyStore.cacheAllCsfFiles()\` first.
-
-    You probably meant to call \`await preview.extract()\` which does the above for you.`;
-    }
-  },
-  MissingRenderToCanvasError = class extends StorybookError {
-    constructor() {
-      super(...arguments),
-        (this.category = 'PREVIEW_API'),
-        (this.code = 4),
-        (this.documentation =
-          'https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#mainjs-framework-field');
-    }
-    template() {
-      return esm_default`
-      Expected your framework's preset to export a \`renderToCanvas\` field.
-
-      Perhaps it needs to be upgraded for Storybook 6.4?`;
-    }
-  },
-  CalledPreviewMethodBeforeInitializationError = class extends StorybookError {
-    constructor(data) {
-      super(),
-        (this.data = data),
-        (this.category = 'PREVIEW_API'),
-        (this.code = 5);
-    }
-    template() {
-      return esm_default`
-      Called \`Preview.${this.data.methodName}()\` before initialization.
-      
-      The preview needs to load the story index before most methods can be called. If you want
-      to call \`${this.data.methodName}\`, try \`await preview.initializationPromise;\` first.
-      
-      If you didn't call the above code, then likely it was called by an addon that needs to
-      do the above.`;
-    }
-  },
-  StoryIndexFetchError = class extends StorybookError {
-    constructor(data) {
-      super(),
-        (this.data = data),
-        (this.category = 'PREVIEW_API'),
-        (this.code = 6);
-    }
-    template() {
-      return esm_default`
-      Error fetching \`/index.json\`:
-      
-      ${this.data.text}
-
-      If you are in development, this likely indicates a problem with your Storybook process,
-      check the terminal for errors.
-
-      If you are in a deployed Storybook, there may have been an issue deploying the full Storybook
-      build.`;
-    }
-  },
-  MdxFileWithNoCsfReferencesError = class extends StorybookError {
-    constructor(data) {
-      super(),
-        (this.data = data),
-        (this.category = 'PREVIEW_API'),
-        (this.code = 7);
-    }
-    template() {
-      return esm_default`
-      Tried to render docs entry ${this.data.storyId} but it is a MDX file that has no CSF
-      references, or autodocs for a CSF file that some doesn't refer to itself.
-      
-      This likely is an internal error in Storybook's indexing, or you've attached the
-      \`attached-mdx\` tag to an MDX file that is not attached.`;
-    }
-  },
-  EmptyIndexError = class extends StorybookError {
-    constructor() {
-      super(...arguments), (this.category = 'PREVIEW_API'), (this.code = 8);
-    }
-    template() {
-      return esm_default`
-      Couldn't find any stories in your Storybook.
-
-        - Please check your stories field of your main.js config: does it match correctly?
-        - Also check the browser console and terminal for error messages.`;
-    }
-  },
-  NoStoryMatchError = class extends StorybookError {
-    constructor(data) {
-      super(),
-        (this.data = data),
-        (this.category = 'PREVIEW_API'),
-        (this.code = 9);
-    }
-    template() {
-      return esm_default`
-      Couldn't find story matching '${this.data.storySpecifier}'.
-
-        - Are you sure a story with that id exists?
-        - Please check your stories field of your main.js config.
-        - Also check the browser console and terminal for error messages.`;
-    }
-  },
-  MissingStoryFromCsfFileError = class extends StorybookError {
-    constructor(data) {
-      super(),
-        (this.data = data),
-        (this.category = 'PREVIEW_API'),
-        (this.code = 10);
-    }
-    template() {
-      return esm_default`
-    Couldn't find story matching id '${this.data.storyId}' after importing a CSF file.
-
-    The file was indexed as if the story was there, but then after importing the file in the browser
-    we didn't find the story. Possible reasons:
-    - You are using a custom story indexer that is misbehaving.
-    - You have a custom file loader that is removing or renaming exports.
-
-    Please check your browser console and terminal for errors that may explain the issue.`;
-    }
-  },
-  StoryStoreAccessedBeforeInitializationError = class extends StorybookError {
-    constructor() {
-      super(...arguments), (this.category = 'PREVIEW_API'), (this.code = 11);
-    }
-    template() {
-      return esm_default`
-    Cannot access the Story Store until the index is ready.
-
-    It is not recommended to use methods directly on the Story Store anyway, in Storybook 9 we will
-    remove access to the store entirely`;
-    }
   };
-var dist_exports5 = {};
-__export(dist_exports5, {
-  DocsContext: () => DocsContext,
-  HooksContext: () => HooksContext,
-  Preview: () => Preview,
-  PreviewWeb: () => PreviewWeb,
-  PreviewWithSelection: () => PreviewWithSelection,
-  StoryStore: () => StoryStore,
-  UrlStore: () => UrlStore,
-  WebView: () => WebView,
-  addons: () => addons,
-  applyHooks: () => applyHooks,
-  combineArgs: () => combineArgs,
-  combineParameters: () => combineParameters,
-  composeConfigs: () => composeConfigs,
-  composeStepRunners: () => composeStepRunners,
-  composeStories: () => composeStories,
-  composeStory: () => composeStory,
-  decorateStory: () => decorateStory,
-  defaultDecorateStory: () => defaultDecorateStory,
-  filterArgTypes: () => filterArgTypes,
-  inferControls: () => inferControls,
-  makeDecorator: () => makeDecorator,
-  mockChannel: () => mockChannel,
-  normalizeStory: () => normalizeStory,
-  prepareMeta: () => prepareMeta,
-  prepareStory: () => prepareStory,
-  sanitizeStoryContextUpdate: () => sanitizeStoryContextUpdate,
-  setProjectAnnotations: () => setProjectAnnotations,
-  simulateDOMContentLoaded: () => simulateDOMContentLoaded,
-  simulatePageLoad: () => simulatePageLoad,
-  sortStoriesV7: () => sortStoriesV7,
-  useArgs: () => useArgs,
-  useCallback: () => useCallback,
-  useChannel: () => useChannel,
-  useEffect: () => useEffect,
-  useGlobals: () => useGlobals,
-  useMemo: () => useMemo,
-  useParameter: () => useParameter,
-  useReducer: () => useReducer,
-  useRef: () => useRef,
-  useState: () => useState,
-  useStoryContext: () => useStoryContext,
-  userOrAutoTitle: () => userOrAutoTitle,
-  userOrAutoTitleFromSpecifier: () => userOrAutoTitleFromSpecifier,
-});
-var import_memoizerific2 = __toESM(require_memoizerific(), 1),
-  import_mapValues = __toESM(require_mapValues(), 1),
-  import_pick = __toESM(require_pick(), 1);
 var has = Object.prototype.hasOwnProperty;
 function find(iter, tar, key2) {
   for (key2 of iter.keys()) if (dequal(key2, tar)) return key2;
@@ -8081,47 +8623,1926 @@ function m(r, e) {
 function G(r, { includeStories: e, excludeStories: n }) {
   return r !== '__esModule' && (!e || m(r, e)) && (!n || !m(r, n));
 }
-var import_util_deprecate = __toESM(require_browser(), 1),
-  import_pickBy = __toESM(require_pickBy(), 1);
-var import_qs = __toESM(require_lib(), 1),
-  __create3 = Object.create,
-  __defProp3 = Object.defineProperty,
-  __getOwnPropDesc3 = Object.getOwnPropertyDescriptor,
-  __getOwnPropNames3 = Object.getOwnPropertyNames,
-  __getProtoOf3 = Object.getPrototypeOf,
-  __hasOwnProp3 = Object.prototype.hasOwnProperty,
-  __commonJS3 = (cb, mod) =>
-    function () {
+var import_util_deprecate = __toESM(require_browser(), 1);
+var import_pickBy = __toESM(require_pickBy(), 1);
+var getImportPathMap = (0, import_memoizerific2.default)(1)((entries) =>
+    Object.values(entries).reduce(
+      (acc, entry) => (
+        (acc[entry.importPath] = acc[entry.importPath] || entry), acc
+      ),
+      {},
+    ),
+  ),
+  StoryIndexStore = class {
+    constructor({ entries } = { v: 4, entries: {} }) {
+      this.entries = entries;
+    }
+    entryFromSpecifier(specifier) {
+      let entries = Object.values(this.entries);
+      if (specifier === '*') return entries[0];
+      if (typeof specifier == 'string')
+        return this.entries[specifier]
+          ? this.entries[specifier]
+          : entries.find((entry) => entry.id.startsWith(specifier));
+      let { name: name2, title } = specifier;
+      return entries.find(
+        (entry) => entry.name === name2 && entry.title === title,
+      );
+    }
+    storyIdToEntry(storyId) {
+      let storyEntry = this.entries[storyId];
+      if (!storyEntry) throw new MissingStoryAfterHmrError({ storyId });
+      return storyEntry;
+    }
+    importPathToEntry(importPath) {
+      return getImportPathMap(this.entries)[importPath];
+    }
+  },
+  INCOMPATIBLE = Symbol('incompatible'),
+  map = (arg, argType) => {
+    let type = argType.type;
+    if (arg == null || !type || argType.mapping) return arg;
+    switch (type.name) {
+      case 'string':
+        return String(arg);
+      case 'enum':
+        return arg;
+      case 'number':
+        return Number(arg);
+      case 'boolean':
+        return String(arg) === 'true';
+      case 'array':
+        return !type.value || !Array.isArray(arg)
+          ? INCOMPATIBLE
+          : arg.reduce((acc, item, index) => {
+              let mapped = map(item, { type: type.value });
+              return mapped !== INCOMPATIBLE && (acc[index] = mapped), acc;
+            }, new Array(arg.length));
+      case 'object':
+        return typeof arg == 'string' || typeof arg == 'number'
+          ? arg
+          : !type.value || typeof arg != 'object'
+            ? INCOMPATIBLE
+            : Object.entries(arg).reduce((acc, [key2, val]) => {
+                let mapped = map(val, { type: type.value[key2] });
+                return mapped === INCOMPATIBLE
+                  ? acc
+                  : Object.assign(acc, { [key2]: mapped });
+              }, {});
+      default:
+        return INCOMPATIBLE;
+    }
+  },
+  mapArgsToTypes = (args2, argTypes) =>
+    Object.entries(args2).reduce((acc, [key2, value2]) => {
+      if (!argTypes[key2]) return acc;
+      let mapped = map(value2, argTypes[key2]);
+      return mapped === INCOMPATIBLE
+        ? acc
+        : Object.assign(acc, { [key2]: mapped });
+    }, {}),
+  combineArgs = (value2, update) =>
+    Array.isArray(value2) && Array.isArray(update)
+      ? update
+          .reduce(
+            (acc, upd, index) => (
+              (acc[index] = combineArgs(value2[index], update[index])), acc
+            ),
+            [...value2],
+          )
+          .filter((v2) => v2 !== void 0)
+      : !(0, import_isPlainObject.default)(value2) ||
+          !(0, import_isPlainObject.default)(update)
+        ? update
+        : Object.keys({ ...value2, ...update }).reduce((acc, key2) => {
+            if (key2 in update) {
+              let combined = combineArgs(value2[key2], update[key2]);
+              combined !== void 0 && (acc[key2] = combined);
+            } else acc[key2] = value2[key2];
+            return acc;
+          }, {}),
+  validateOptions = (args2, argTypes) =>
+    Object.entries(argTypes).reduce((acc, [key2, { options: options2 }]) => {
+      function allowArg() {
+        return key2 in args2 && (acc[key2] = args2[key2]), acc;
+      }
+      if (!options2) return allowArg();
+      if (!Array.isArray(options2))
+        return (
+          once.error(dedent`
+        Invalid argType: '${key2}.options' should be an array.
+
+        More info: https://storybook.js.org/docs/react/api/argtypes
+      `),
+          allowArg()
+        );
+      if (
+        options2.some(
+          (opt) => opt && ['object', 'function'].includes(typeof opt),
+        )
+      )
+        return (
+          once.error(dedent`
+        Invalid argType: '${key2}.options' should only contain primitives. Use a 'mapping' for complex values.
+
+        More info: https://storybook.js.org/docs/react/writing-stories/args#mapping-to-complex-arg-values
+      `),
+          allowArg()
+        );
+      let isArray2 = Array.isArray(args2[key2]),
+        invalidIndex =
+          isArray2 && args2[key2].findIndex((val) => !options2.includes(val)),
+        isValidArray = isArray2 && invalidIndex === -1;
+      if (
+        args2[key2] === void 0 ||
+        options2.includes(args2[key2]) ||
+        isValidArray
+      )
+        return allowArg();
+      let field = isArray2 ? `${key2}[${invalidIndex}]` : key2,
+        supportedOptions = options2
+          .map((opt) => (typeof opt == 'string' ? `'${opt}'` : String(opt)))
+          .join(', ');
       return (
-        mod ||
-          (0, cb[__getOwnPropNames3(cb)[0]])(
-            (mod = { exports: {} }).exports,
-            mod,
-          ),
-        mod.exports
+        once.warn(
+          `Received illegal value for '${field}'. Supported options: ${supportedOptions}`,
+        ),
+        acc
+      );
+    }, {}),
+  DEEPLY_EQUAL = Symbol('Deeply equal'),
+  deepDiff = (value2, update) => {
+    if (typeof value2 != typeof update) return update;
+    if (dequal(value2, update)) return DEEPLY_EQUAL;
+    if (Array.isArray(value2) && Array.isArray(update)) {
+      let res = update.reduce((acc, upd, index) => {
+        let diff = deepDiff(value2[index], upd);
+        return diff !== DEEPLY_EQUAL && (acc[index] = diff), acc;
+      }, new Array(update.length));
+      return update.length >= value2.length
+        ? res
+        : res.concat(new Array(value2.length - update.length).fill(void 0));
+    }
+    return (0, import_isPlainObject.default)(value2) &&
+      (0, import_isPlainObject.default)(update)
+      ? Object.keys({ ...value2, ...update }).reduce((acc, key2) => {
+          let diff = deepDiff(value2?.[key2], update?.[key2]);
+          return diff === DEEPLY_EQUAL
+            ? acc
+            : Object.assign(acc, { [key2]: diff });
+        }, {})
+      : update;
+  },
+  UNTARGETED = 'UNTARGETED';
+function groupArgsByTarget({ args: args2, argTypes }) {
+  let groupedArgs = {};
+  return (
+    Object.entries(args2).forEach(([name2, value2]) => {
+      let { target = UNTARGETED } = argTypes[name2] || {};
+      (groupedArgs[target] = groupedArgs[target] || {}),
+        (groupedArgs[target][name2] = value2);
+    }),
+    groupedArgs
+  );
+}
+function noTargetArgs(context) {
+  return groupArgsByTarget(context)[UNTARGETED];
+}
+function deleteUndefined(obj) {
+  return (
+    Object.keys(obj).forEach(
+      (key2) => obj[key2] === void 0 && delete obj[key2],
+    ),
+    obj
+  );
+}
+var ArgsStore = class {
+    constructor() {
+      (this.initialArgsByStoryId = {}), (this.argsByStoryId = {});
+    }
+    get(storyId) {
+      if (!(storyId in this.argsByStoryId))
+        throw new Error(
+          `No args known for ${storyId} -- has it been rendered yet?`,
+        );
+      return this.argsByStoryId[storyId];
+    }
+    setInitial(story) {
+      if (!this.initialArgsByStoryId[story.id])
+        (this.initialArgsByStoryId[story.id] = story.initialArgs),
+          (this.argsByStoryId[story.id] = story.initialArgs);
+      else if (this.initialArgsByStoryId[story.id] !== story.initialArgs) {
+        let delta = deepDiff(
+          this.initialArgsByStoryId[story.id],
+          this.argsByStoryId[story.id],
+        );
+        (this.initialArgsByStoryId[story.id] = story.initialArgs),
+          (this.argsByStoryId[story.id] = story.initialArgs),
+          delta !== DEEPLY_EQUAL && this.updateFromDelta(story, delta);
+      }
+    }
+    updateFromDelta(story, delta) {
+      let validatedDelta = validateOptions(delta, story.argTypes);
+      this.argsByStoryId[story.id] = combineArgs(
+        this.argsByStoryId[story.id],
+        validatedDelta,
+      );
+    }
+    updateFromPersisted(story, persisted) {
+      let mappedPersisted = mapArgsToTypes(persisted, story.argTypes);
+      return this.updateFromDelta(story, mappedPersisted);
+    }
+    update(storyId, argsUpdate) {
+      if (!(storyId in this.argsByStoryId))
+        throw new Error(
+          `No args known for ${storyId} -- has it been rendered yet?`,
+        );
+      this.argsByStoryId[storyId] = deleteUndefined({
+        ...this.argsByStoryId[storyId],
+        ...argsUpdate,
+      });
+    }
+  },
+  getValuesFromArgTypes = (argTypes = {}) =>
+    Object.entries(argTypes).reduce(
+      (acc, [arg, { defaultValue }]) => (
+        typeof defaultValue < 'u' && (acc[arg] = defaultValue), acc
+      ),
+      {},
+    ),
+  GlobalsStore = class {
+    constructor({ globals = {}, globalTypes = {} }) {
+      this.set({ globals, globalTypes });
+    }
+    set({ globals = {}, globalTypes = {} }) {
+      let delta =
+        this.initialGlobals && deepDiff(this.initialGlobals, this.globals);
+      this.allowedGlobalNames = new Set([
+        ...Object.keys(globals),
+        ...Object.keys(globalTypes),
+      ]);
+      let defaultGlobals = getValuesFromArgTypes(globalTypes);
+      (this.initialGlobals = { ...defaultGlobals, ...globals }),
+        (this.globals = this.initialGlobals),
+        delta && delta !== DEEPLY_EQUAL && this.updateFromPersisted(delta);
+    }
+    filterAllowedGlobals(globals) {
+      return Object.entries(globals).reduce(
+        (acc, [key2, value2]) => (
+          this.allowedGlobalNames.has(key2)
+            ? (acc[key2] = value2)
+            : logger.warn(
+                `Attempted to set a global (${key2}) that is not defined in initial globals or globalTypes`,
+              ),
+          acc
+        ),
+        {},
+      );
+    }
+    updateFromPersisted(persisted) {
+      let allowedUrlGlobals = this.filterAllowedGlobals(persisted);
+      this.globals = { ...this.globals, ...allowedUrlGlobals };
+    }
+    get() {
+      return this.globals;
+    }
+    update(newGlobals) {
+      this.globals = {
+        ...this.globals,
+        ...this.filterAllowedGlobals(newGlobals),
+      };
+    }
+  },
+  normalizeType = (type) => (typeof type == 'string' ? { name: type } : type),
+  normalizeControl = (control) =>
+    typeof control == 'string' ? { type: control } : control,
+  normalizeInputType = (inputType, key2) => {
+    let { type, control, ...rest } = inputType,
+      normalized = { name: key2, ...rest };
+    return (
+      type && (normalized.type = normalizeType(type)),
+      control
+        ? (normalized.control = normalizeControl(control))
+        : control === !1 && (normalized.control = { disable: !0 }),
+      normalized
+    );
+  },
+  normalizeInputTypes = (inputTypes) =>
+    (0, import_mapValues.default)(inputTypes, normalizeInputType),
+  normalizeArrays = (array) =>
+    Array.isArray(array) ? array : array ? [array] : [],
+  deprecatedStoryAnnotation = dedent`
+CSF .story annotations deprecated; annotate story functions directly:
+- StoryFn.story.name => StoryFn.storyName
+- StoryFn.story.(parameters|decorators) => StoryFn.(parameters|decorators)
+See https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#hoisted-csf-annotations for details and codemod.
+`,
+  deprecatedStoryAnnotationWarning = (0, import_util_deprecate.default)(
+    () => {},
+    deprecatedStoryAnnotation,
+  );
+function normalizeStory(key2, storyAnnotations, meta) {
+  let storyObject = storyAnnotations,
+    userStoryFn =
+      typeof storyAnnotations == 'function' ? storyAnnotations : null,
+    { story } = storyObject;
+  story &&
+    (logger.debug('deprecated story', story),
+    deprecatedStoryAnnotationWarning());
+  let exportName = M(key2),
+    name2 =
+      (typeof storyObject != 'function' && storyObject.name) ||
+      storyObject.storyName ||
+      story?.name ||
+      exportName,
+    decorators = [
+      ...normalizeArrays(storyObject.decorators),
+      ...normalizeArrays(story?.decorators),
+    ],
+    parameters = { ...story?.parameters, ...storyObject.parameters },
+    args2 = { ...story?.args, ...storyObject.args },
+    argTypes = { ...story?.argTypes, ...storyObject.argTypes },
+    loaders = [
+      ...normalizeArrays(storyObject.loaders),
+      ...normalizeArrays(story?.loaders),
+    ],
+    { render, play, tags = [] } = storyObject,
+    id = parameters.__id || N(meta.id, exportName);
+  return {
+    moduleExport: storyAnnotations,
+    id,
+    name: name2,
+    tags,
+    decorators,
+    parameters,
+    args: args2,
+    argTypes: normalizeInputTypes(argTypes),
+    loaders,
+    ...(render && { render }),
+    ...(userStoryFn && { userStoryFn }),
+    ...(play && { play }),
+  };
+}
+function normalizeComponentAnnotations(
+  defaultExport,
+  title = defaultExport.title,
+  importPath,
+) {
+  let { id, argTypes } = defaultExport;
+  return {
+    id: L(id || title),
+    ...defaultExport,
+    title,
+    ...(argTypes && { argTypes: normalizeInputTypes(argTypes) }),
+    parameters: { fileName: importPath, ...defaultExport.parameters },
+  };
+}
+var checkGlobals = (parameters) => {
+    let { globals, globalTypes } = parameters;
+    (globals || globalTypes) &&
+      logger.error(
+        'Global args/argTypes can only be set globally',
+        JSON.stringify({ globals, globalTypes }),
+      );
+  },
+  checkStorySort = (parameters) => {
+    let { options: options2 } = parameters;
+    options2?.storySort &&
+      logger.error('The storySort option parameter can only be set globally');
+  },
+  checkDisallowedParameters = (parameters) => {
+    parameters && (checkGlobals(parameters), checkStorySort(parameters));
+  },
+  checkSubcomponents = (meta) => {
+    meta.subcomponents &&
+      deprecate(esm_default`The \`subcomponents\` annotation is deprecated. 
+    
+      Please refer to the migration guide: https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#argstable-block'
+    `);
+  };
+function processCSFFile(moduleExports, importPath, title) {
+  let {
+      default: defaultExport,
+      __namedExportsOrder,
+      ...namedExports
+    } = moduleExports,
+    meta = normalizeComponentAnnotations(defaultExport, title, importPath);
+  checkDisallowedParameters(meta.parameters), checkSubcomponents(meta);
+  let csfFile = { meta, stories: {}, moduleExports };
+  return (
+    Object.keys(namedExports).forEach((key2) => {
+      if (G(key2, meta)) {
+        let storyMeta = normalizeStory(key2, namedExports[key2], meta);
+        checkDisallowedParameters(storyMeta.parameters),
+          (csfFile.stories[storyMeta.id] = storyMeta);
+      }
+    }),
+    csfFile
+  );
+}
+var combineParameters = (...parameterSets) => {
+  let mergeKeys = {},
+    definedParametersSets = parameterSets.filter(Boolean),
+    combined = definedParametersSets.reduce(
+      (acc, parameters) => (
+        Object.entries(parameters).forEach(([key2, value2]) => {
+          let existing = acc[key2];
+          Array.isArray(value2) || typeof existing > 'u'
+            ? (acc[key2] = value2)
+            : (0, import_isPlainObject.default)(value2) &&
+                (0, import_isPlainObject.default)(existing)
+              ? (mergeKeys[key2] = !0)
+              : typeof value2 < 'u' && (acc[key2] = value2);
+        }),
+        acc
+      ),
+      {},
+    );
+  return (
+    Object.keys(mergeKeys).forEach((key2) => {
+      let mergeValues = definedParametersSets
+        .filter(Boolean)
+        .map((p) => p[key2])
+        .filter((value2) => typeof value2 < 'u');
+      mergeValues.every((value2) => (0, import_isPlainObject.default)(value2))
+        ? (combined[key2] = combineParameters(...mergeValues))
+        : (combined[key2] = mergeValues[mergeValues.length - 1]);
+    }),
+    combined
+  );
+};
+function decorateStory(storyFn, decorator, bindWithContext) {
+  let boundStoryFunction = bindWithContext(storyFn);
+  return (context) => decorator(boundStoryFunction, context);
+}
+function sanitizeStoryContextUpdate({
+  componentId,
+  title,
+  kind,
+  id,
+  name: name2,
+  story,
+  parameters,
+  initialArgs,
+  argTypes,
+  ...update
+} = {}) {
+  return update;
+}
+function defaultDecorateStory(storyFn, decorators) {
+  let contextStore = {},
+    bindWithContext = (decoratedStoryFn) => (update) => {
+      if (!contextStore.value)
+        throw new Error('Decorated function called without init');
+      return (
+        (contextStore.value = {
+          ...contextStore.value,
+          ...sanitizeStoryContextUpdate(update),
+        }),
+        decoratedStoryFn(contextStore.value)
       );
     },
-  __copyProps3 = (to, from, except, desc) => {
-    if ((from && typeof from == 'object') || typeof from == 'function')
-      for (let key2 of __getOwnPropNames3(from))
-        !__hasOwnProp3.call(to, key2) &&
-          key2 !== except &&
-          __defProp3(to, key2, {
-            get: () => from[key2],
-            enumerable:
-              !(desc = __getOwnPropDesc3(from, key2)) || desc.enumerable,
-          });
-    return to;
+    decoratedWithContextStore = decorators.reduce(
+      (story, decorator) => decorateStory(story, decorator, bindWithContext),
+      storyFn,
+    );
+  return (context) => (
+    (contextStore.value = context), decoratedWithContextStore(context)
+  );
+}
+function prepareStory(
+  storyAnnotations,
+  componentAnnotations,
+  projectAnnotations,
+) {
+  let { moduleExport, id, name: name2 } = storyAnnotations || {},
+    partialAnnotations = preparePartialAnnotations(
+      storyAnnotations,
+      componentAnnotations,
+      projectAnnotations,
+    ),
+    applyLoaders = async (context) => {
+      let updatedContext = { ...context, loaded: {} };
+      for (let loaders of [
+        ...('__STORYBOOK_TEST_LOADERS__' in scope &&
+        Array.isArray(scope.__STORYBOOK_TEST_LOADERS__)
+          ? [scope.__STORYBOOK_TEST_LOADERS__]
+          : []),
+        normalizeArrays(projectAnnotations.loaders),
+        normalizeArrays(componentAnnotations.loaders),
+        normalizeArrays(storyAnnotations.loaders),
+      ]) {
+        let loadResults = await Promise.all(
+            loaders.map((loader) => loader(updatedContext)),
+          ),
+          loaded = Object.assign({}, ...loadResults);
+        updatedContext = {
+          ...updatedContext,
+          loaded: { ...updatedContext.loaded, ...loaded },
+        };
+      }
+      return updatedContext;
+    },
+    undecoratedStoryFn = (context) => {
+      let { passArgsFirst: renderTimePassArgsFirst = !0 } = context.parameters;
+      return renderTimePassArgsFirst
+        ? render(context.args, context)
+        : render(context);
+    },
+    { applyDecorators = defaultDecorateStory, runStep } = projectAnnotations,
+    decorators = [
+      ...normalizeArrays(storyAnnotations?.decorators),
+      ...normalizeArrays(componentAnnotations?.decorators),
+      ...normalizeArrays(projectAnnotations?.decorators),
+    ],
+    render =
+      storyAnnotations?.userStoryFn ||
+      storyAnnotations?.render ||
+      componentAnnotations.render ||
+      projectAnnotations.render;
+  if (!render)
+    throw new Error(`No render function available for storyId '${id}'`);
+  let decoratedStoryFn = applyHooks(applyDecorators)(
+      undecoratedStoryFn,
+      decorators,
+    ),
+    unboundStoryFn = (context) => decoratedStoryFn(context),
+    play = storyAnnotations?.play || componentAnnotations.play;
+  return {
+    ...partialAnnotations,
+    moduleExport,
+    id,
+    name: name2,
+    story: name2,
+    originalStoryFn: render,
+    undecoratedStoryFn,
+    unboundStoryFn,
+    applyLoaders,
+    playFunction:
+      play &&
+      (async (storyContext) => {
+        let playFunctionContext = {
+          ...storyContext,
+          step: (label, play2) => runStep(label, play2, playFunctionContext),
+        };
+        return play(playFunctionContext);
+      }),
+  };
+}
+function prepareMeta(componentAnnotations, projectAnnotations, moduleExport) {
+  return {
+    ...preparePartialAnnotations(
+      void 0,
+      componentAnnotations,
+      projectAnnotations,
+    ),
+    moduleExport,
+  };
+}
+function preparePartialAnnotations(
+  storyAnnotations,
+  componentAnnotations,
+  projectAnnotations,
+) {
+  let tags = [
+      ...(storyAnnotations?.tags || componentAnnotations.tags || []),
+      'story',
+    ],
+    parameters = combineParameters(
+      projectAnnotations.parameters,
+      componentAnnotations.parameters,
+      storyAnnotations?.parameters,
+    ),
+    { argTypesEnhancers = [], argsEnhancers = [] } = projectAnnotations,
+    passedArgTypes = combineParameters(
+      projectAnnotations.argTypes,
+      componentAnnotations.argTypes,
+      storyAnnotations?.argTypes,
+    );
+  if (storyAnnotations) {
+    let render =
+        storyAnnotations?.userStoryFn ||
+        storyAnnotations?.render ||
+        componentAnnotations.render ||
+        projectAnnotations.render,
+      { passArgsFirst = !0 } = parameters;
+    parameters.__isArgsStory = passArgsFirst && render && render.length > 0;
+  }
+  let passedArgs = {
+      ...projectAnnotations.args,
+      ...componentAnnotations.args,
+      ...storyAnnotations?.args,
+    },
+    contextForEnhancers = {
+      componentId: componentAnnotations.id,
+      title: componentAnnotations.title,
+      kind: componentAnnotations.title,
+      id: storyAnnotations?.id || componentAnnotations.id,
+      name: storyAnnotations?.name || '__meta',
+      story: storyAnnotations?.name || '__meta',
+      component: componentAnnotations.component,
+      subcomponents: componentAnnotations.subcomponents,
+      tags,
+      parameters,
+      initialArgs: passedArgs,
+      argTypes: passedArgTypes,
+    };
+  contextForEnhancers.argTypes = argTypesEnhancers.reduce(
+    (accumulatedArgTypes, enhancer) =>
+      enhancer({ ...contextForEnhancers, argTypes: accumulatedArgTypes }),
+    contextForEnhancers.argTypes,
+  );
+  let initialArgsBeforeEnhancers = { ...passedArgs };
+  contextForEnhancers.initialArgs = argsEnhancers.reduce(
+    (accumulatedArgs, enhancer) => ({
+      ...accumulatedArgs,
+      ...enhancer({ ...contextForEnhancers, initialArgs: accumulatedArgs }),
+    }),
+    initialArgsBeforeEnhancers,
+  );
+  let { name: name2, story, ...withoutStoryIdentifiers } = contextForEnhancers;
+  return withoutStoryIdentifiers;
+}
+function prepareContext(context) {
+  let { args: unmappedArgs } = context,
+    targetedContext = { ...context, allArgs: void 0, argsByTarget: void 0 };
+  if (scope.FEATURES?.argTypeTargetsV7) {
+    let argsByTarget = groupArgsByTarget(context);
+    targetedContext = {
+      ...context,
+      allArgs: context.args,
+      argsByTarget,
+      args: argsByTarget[UNTARGETED] || {},
+    };
+  }
+  let mappedArgs = Object.entries(targetedContext.args).reduce(
+      (acc, [key2, val]) => {
+        if (!targetedContext.argTypes[key2]?.mapping)
+          return (acc[key2] = val), acc;
+        let mappingFn = (originalValue) =>
+          originalValue in targetedContext.argTypes[key2].mapping
+            ? targetedContext.argTypes[key2].mapping[originalValue]
+            : originalValue;
+        return (
+          (acc[key2] = Array.isArray(val)
+            ? val.map(mappingFn)
+            : mappingFn(val)),
+          acc
+        );
+      },
+      {},
+    ),
+    includedArgs = Object.entries(mappedArgs).reduce((acc, [key2, val]) => {
+      let argType = targetedContext.argTypes[key2] || {};
+      return (
+        O(argType, mappedArgs, targetedContext.globals) && (acc[key2] = val),
+        acc
+      );
+    }, {});
+  return { ...targetedContext, unmappedArgs, args: includedArgs };
+}
+var inferType = (value2, name2, visited) => {
+    let type = typeof value2;
+    switch (type) {
+      case 'boolean':
+      case 'string':
+      case 'number':
+      case 'function':
+      case 'symbol':
+        return { name: type };
+    }
+    return value2
+      ? visited.has(value2)
+        ? (logger.warn(dedent`
+        We've detected a cycle in arg '${name2}'. Args should be JSON-serializable.
+
+        Consider using the mapping feature or fully custom args:
+        - Mapping: https://storybook.js.org/docs/react/writing-stories/args#mapping-to-complex-arg-values
+        - Custom args: https://storybook.js.org/docs/react/essentials/controls#fully-custom-args
+      `),
+          { name: 'other', value: 'cyclic object' })
+        : (visited.add(value2),
+          Array.isArray(value2)
+            ? {
+                name: 'array',
+                value:
+                  value2.length > 0
+                    ? inferType(value2[0], name2, new Set(visited))
+                    : { name: 'other', value: 'unknown' },
+              }
+            : {
+                name: 'object',
+                value: (0, import_mapValues.default)(value2, (field) =>
+                  inferType(field, name2, new Set(visited)),
+                ),
+              })
+      : { name: 'object', value: {} };
   },
-  __toESM3 = (mod, isNodeMode, target) => (
-    (target = mod != null ? __create3(__getProtoOf3(mod)) : {}),
-    __copyProps3(
-      isNodeMode || !mod || !mod.__esModule
-        ? __defProp3(target, 'default', { value: mod, enumerable: !0 })
-        : target,
-      mod,
-    )
-  ),
+  inferArgTypes = (context) => {
+    let { id, argTypes: userArgTypes = {}, initialArgs = {} } = context,
+      argTypes = (0, import_mapValues.default)(initialArgs, (arg, key2) => ({
+        name: key2,
+        type: inferType(arg, `${id}.${key2}`, new Set()),
+      })),
+      userArgTypesNames = (0, import_mapValues.default)(
+        userArgTypes,
+        (argType, key2) => ({ name: key2 }),
+      );
+    return combineParameters(argTypes, userArgTypesNames, userArgTypes);
+  };
+inferArgTypes.secondPass = !0;
+var matches = (name2, descriptor) =>
+    Array.isArray(descriptor)
+      ? descriptor.includes(name2)
+      : name2.match(descriptor),
+  filterArgTypes = (argTypes, include, exclude) =>
+    !include && !exclude
+      ? argTypes
+      : argTypes &&
+        (0, import_pickBy.default)(argTypes, (argType, key2) => {
+          let name2 = argType.name || key2;
+          return (
+            (!include || matches(name2, include)) &&
+            (!exclude || !matches(name2, exclude))
+          );
+        }),
+  inferControl = (argType, name2, matchers) => {
+    let { type, options: options2 } = argType;
+    if (type) {
+      if (matchers.color && matchers.color.test(name2)) {
+        let controlType = type.name;
+        if (controlType === 'string') return { control: { type: 'color' } };
+        controlType !== 'enum' &&
+          logger.warn(
+            `Addon controls: Control of type color only supports string, received "${controlType}" instead`,
+          );
+      }
+      if (matchers.date && matchers.date.test(name2))
+        return { control: { type: 'date' } };
+      switch (type.name) {
+        case 'array':
+          return { control: { type: 'object' } };
+        case 'boolean':
+          return { control: { type: 'boolean' } };
+        case 'string':
+          return { control: { type: 'text' } };
+        case 'number':
+          return { control: { type: 'number' } };
+        case 'enum': {
+          let { value: value2 } = type;
+          return {
+            control: { type: value2?.length <= 5 ? 'radio' : 'select' },
+            options: value2,
+          };
+        }
+        case 'function':
+        case 'symbol':
+          return null;
+        default:
+          return { control: { type: options2 ? 'select' : 'object' } };
+      }
+    }
+  },
+  inferControls = (context) => {
+    let {
+      argTypes,
+      parameters: {
+        __isArgsStory,
+        controls: { include = null, exclude = null, matchers = {} } = {},
+      },
+    } = context;
+    if (!__isArgsStory) return argTypes;
+    let filteredArgTypes = filterArgTypes(argTypes, include, exclude),
+      withControls = (0, import_mapValues.default)(
+        filteredArgTypes,
+        (argType, name2) =>
+          argType?.type && inferControl(argType, name2, matchers),
+      );
+    return combineParameters(withControls, filteredArgTypes);
+  };
+inferControls.secondPass = !0;
+function normalizeProjectAnnotations({
+  argTypes,
+  globalTypes,
+  argTypesEnhancers,
+  decorators,
+  loaders,
+  ...annotations
+}) {
+  return {
+    ...(argTypes && { argTypes: normalizeInputTypes(argTypes) }),
+    ...(globalTypes && { globalTypes: normalizeInputTypes(globalTypes) }),
+    decorators: normalizeArrays(decorators),
+    loaders: normalizeArrays(loaders),
+    argTypesEnhancers: [
+      ...(argTypesEnhancers || []),
+      inferArgTypes,
+      inferControls,
+    ],
+    ...annotations,
+  };
+}
+function composeStepRunners(stepRunners) {
+  return async (label, play, playContext) => {
+    await stepRunners.reduceRight(
+      (innerPlay, stepRunner) => async () =>
+        stepRunner(label, innerPlay, playContext),
+      async () => play(playContext),
+    )();
+  };
+}
+function getField(moduleExportList, field) {
+  return moduleExportList
+    .map((xs) => xs.default?.[field] ?? xs[field])
+    .filter(Boolean);
+}
+function getArrayField(moduleExportList, field, options2 = {}) {
+  return getField(moduleExportList, field).reduce(
+    (a, b2) => (options2.reverseFileOrder ? [...b2, ...a] : [...a, ...b2]),
+    [],
+  );
+}
+function getObjectField(moduleExportList, field) {
+  return Object.assign({}, ...getField(moduleExportList, field));
+}
+function getSingletonField(moduleExportList, field) {
+  return getField(moduleExportList, field).pop();
+}
+function composeConfigs(moduleExportList) {
+  let allArgTypeEnhancers = getArrayField(
+      moduleExportList,
+      'argTypesEnhancers',
+    ),
+    stepRunners = getField(moduleExportList, 'runStep');
+  return {
+    parameters: combineParameters(...getField(moduleExportList, 'parameters')),
+    decorators: getArrayField(moduleExportList, 'decorators', {
+      reverseFileOrder: !(scope.FEATURES?.legacyDecoratorFileOrder ?? !1),
+    }),
+    args: getObjectField(moduleExportList, 'args'),
+    argsEnhancers: getArrayField(moduleExportList, 'argsEnhancers'),
+    argTypes: getObjectField(moduleExportList, 'argTypes'),
+    argTypesEnhancers: [
+      ...allArgTypeEnhancers.filter((e) => !e.secondPass),
+      ...allArgTypeEnhancers.filter((e) => e.secondPass),
+    ],
+    globals: getObjectField(moduleExportList, 'globals'),
+    globalTypes: getObjectField(moduleExportList, 'globalTypes'),
+    loaders: getArrayField(moduleExportList, 'loaders'),
+    render: getSingletonField(moduleExportList, 'render'),
+    renderToCanvas: getSingletonField(moduleExportList, 'renderToCanvas'),
+    renderToDOM: getSingletonField(moduleExportList, 'renderToDOM'),
+    applyDecorators: getSingletonField(moduleExportList, 'applyDecorators'),
+    runStep: composeStepRunners(stepRunners),
+  };
+}
+var GLOBAL_STORYBOOK_PROJECT_ANNOTATIONS = composeConfigs([]);
+function setProjectAnnotations(projectAnnotations) {
+  let annotations = Array.isArray(projectAnnotations)
+    ? projectAnnotations
+    : [projectAnnotations];
+  GLOBAL_STORYBOOK_PROJECT_ANNOTATIONS = composeConfigs(annotations);
+}
+function composeStory(
+  storyAnnotations,
+  componentAnnotations,
+  projectAnnotations = GLOBAL_STORYBOOK_PROJECT_ANNOTATIONS,
+  defaultConfig = {},
+  exportsName,
+) {
+  if (storyAnnotations === void 0)
+    throw new Error('Expected a story but received undefined.');
+  componentAnnotations.title = componentAnnotations.title ?? 'ComposedStory';
+  let normalizedComponentAnnotations =
+      normalizeComponentAnnotations(componentAnnotations),
+    storyName =
+      exportsName ||
+      storyAnnotations.storyName ||
+      storyAnnotations.story?.name ||
+      storyAnnotations.name ||
+      'unknown',
+    normalizedStory = normalizeStory(
+      storyName,
+      storyAnnotations,
+      normalizedComponentAnnotations,
+    ),
+    normalizedProjectAnnotations = normalizeProjectAnnotations({
+      ...projectAnnotations,
+      ...defaultConfig,
+    }),
+    story = prepareStory(
+      normalizedStory,
+      normalizedComponentAnnotations,
+      normalizedProjectAnnotations,
+    ),
+    defaultGlobals = getValuesFromArgTypes(projectAnnotations.globalTypes);
+  return Object.assign(
+    (extraArgs) => {
+      let context = {
+        ...story,
+        hooks: new HooksContext(),
+        globals: defaultGlobals,
+        args: { ...story.initialArgs, ...extraArgs },
+      };
+      return story.unboundStoryFn(prepareContext(context));
+    },
+    {
+      storyName,
+      args: story.initialArgs,
+      play: story.playFunction,
+      parameters: story.parameters,
+      id: story.id,
+    },
+  );
+}
+function composeStories(storiesImport, globalConfig, composeStoryFn) {
+  let {
+    default: meta,
+    __esModule,
+    __namedExportsOrder,
+    ...stories
+  } = storiesImport;
+  return Object.entries(stories).reduce(
+    (storiesMap, [exportsName, story]) =>
+      G(exportsName, meta)
+        ? Object.assign(storiesMap, {
+            [exportsName]: composeStoryFn(
+              story,
+              meta,
+              globalConfig,
+              exportsName,
+            ),
+          })
+        : storiesMap,
+    {},
+  );
+}
+var CSF_CACHE_SIZE = 1e3,
+  STORY_CACHE_SIZE = 1e4,
+  EXTRACT_BATCH_SIZE = 20,
+  StoryStore = class {
+    constructor() {
+      (this.getStoriesJsonData = () => {
+        let { storyIndex } = this;
+        if (!storyIndex)
+          throw new Error('getStoriesJsonData called before initialization');
+        let value2 = this.getSetStoriesPayload(),
+          allowedParameters = [
+            'fileName',
+            'docsOnly',
+            'framework',
+            '__id',
+            '__isArgsStory',
+          ];
+        return {
+          v: 3,
+          stories: (0, import_mapValues.default)(value2.stories, (story) => {
+            let { importPath } = storyIndex.entries[story.id];
+            return {
+              ...(0, import_pick.default)(story, ['id', 'name', 'title']),
+              importPath,
+              kind: story.title,
+              story: story.name,
+              parameters: {
+                ...(0, import_pick.default)(
+                  story.parameters,
+                  allowedParameters,
+                ),
+                fileName: importPath,
+              },
+            };
+          }),
+        };
+      }),
+        (this.args = new ArgsStore()),
+        (this.hooks = {}),
+        (this.processCSFFileWithCache = (0, import_memoizerific2.default)(
+          CSF_CACHE_SIZE,
+        )(processCSFFile)),
+        (this.prepareMetaWithCache = (0, import_memoizerific2.default)(
+          CSF_CACHE_SIZE,
+        )(prepareMeta)),
+        (this.prepareStoryWithCache = (0, import_memoizerific2.default)(
+          STORY_CACHE_SIZE,
+        )(prepareStory)),
+        (this.initializationPromise =
+          new import_synchronous_promise.SynchronousPromise((resolve) => {
+            this.resolveInitializationPromise = resolve;
+          }));
+    }
+    setProjectAnnotations(projectAnnotations) {
+      this.projectAnnotations = normalizeProjectAnnotations(projectAnnotations);
+      let { globals, globalTypes } = projectAnnotations;
+      this.globals
+        ? this.globals.set({ globals, globalTypes })
+        : (this.globals = new GlobalsStore({ globals, globalTypes }));
+    }
+    initialize({ storyIndex, importFn, cache = !1 }) {
+      return (
+        (this.storyIndex = new StoryIndexStore(storyIndex)),
+        (this.importFn = importFn),
+        this.resolveInitializationPromise(),
+        cache
+          ? this.cacheAllCSFFiles()
+          : import_synchronous_promise.SynchronousPromise.resolve()
+      );
+    }
+    async onStoriesChanged({ importFn, storyIndex }) {
+      await this.initializationPromise,
+        importFn && (this.importFn = importFn),
+        storyIndex && (this.storyIndex.entries = storyIndex.entries),
+        this.cachedCSFFiles && (await this.cacheAllCSFFiles());
+    }
+    async storyIdToEntry(storyId) {
+      return (
+        await this.initializationPromise,
+        this.storyIndex.storyIdToEntry(storyId)
+      );
+    }
+    loadCSFFileByStoryId(storyId) {
+      if (!this.storyIndex || !this.importFn)
+        throw new Error('loadCSFFileByStoryId called before initialization');
+      let { importPath, title } = this.storyIndex.storyIdToEntry(storyId);
+      return this.importFn(importPath).then((moduleExports) =>
+        this.processCSFFileWithCache(moduleExports, importPath, title),
+      );
+    }
+    loadAllCSFFiles({ batchSize = EXTRACT_BATCH_SIZE } = {}) {
+      if (!this.storyIndex)
+        throw new Error('loadAllCSFFiles called before initialization');
+      let importPaths = Object.entries(this.storyIndex.entries).map(
+          ([storyId, { importPath }]) => [importPath, storyId],
+        ),
+        loadInBatches = (remainingImportPaths) => {
+          if (remainingImportPaths.length === 0)
+            return import_synchronous_promise.SynchronousPromise.resolve([]);
+          let csfFilePromiseList = remainingImportPaths
+            .slice(0, batchSize)
+            .map(([importPath, storyId]) =>
+              this.loadCSFFileByStoryId(storyId).then((csfFile) => ({
+                importPath,
+                csfFile,
+              })),
+            );
+          return import_synchronous_promise.SynchronousPromise.all(
+            csfFilePromiseList,
+          ).then((firstResults) =>
+            loadInBatches(remainingImportPaths.slice(batchSize)).then(
+              (restResults) => firstResults.concat(restResults),
+            ),
+          );
+        };
+      return loadInBatches(importPaths).then((list) =>
+        list.reduce(
+          (acc, { importPath, csfFile }) => ((acc[importPath] = csfFile), acc),
+          {},
+        ),
+      );
+    }
+    cacheAllCSFFiles() {
+      return this.initializationPromise.then(() =>
+        this.loadAllCSFFiles().then((csfFiles) => {
+          this.cachedCSFFiles = csfFiles;
+        }),
+      );
+    }
+    preparedMetaFromCSFFile({ csfFile }) {
+      if (!this.projectAnnotations)
+        throw new Error('storyFromCSFFile called before initialization');
+      let componentAnnotations = csfFile.meta;
+      return this.prepareMetaWithCache(
+        componentAnnotations,
+        this.projectAnnotations,
+        csfFile.moduleExports.default,
+      );
+    }
+    async loadStory({ storyId }) {
+      await this.initializationPromise;
+      let csfFile = await this.loadCSFFileByStoryId(storyId);
+      return this.storyFromCSFFile({ storyId, csfFile });
+    }
+    storyFromCSFFile({ storyId, csfFile }) {
+      if (!this.projectAnnotations)
+        throw new Error('storyFromCSFFile called before initialization');
+      let storyAnnotations = csfFile.stories[storyId];
+      if (!storyAnnotations)
+        throw new Error(
+          `Didn't find '${storyId}' in CSF file, this is unexpected`,
+        );
+      let componentAnnotations = csfFile.meta,
+        story = this.prepareStoryWithCache(
+          storyAnnotations,
+          componentAnnotations,
+          this.projectAnnotations,
+        );
+      return (
+        this.args.setInitial(story),
+        (this.hooks[story.id] = this.hooks[story.id] || new HooksContext()),
+        story
+      );
+    }
+    componentStoriesFromCSFFile({ csfFile }) {
+      if (!this.storyIndex)
+        throw new Error(
+          'componentStoriesFromCSFFile called before initialization',
+        );
+      return Object.keys(this.storyIndex.entries)
+        .filter((storyId) => !!csfFile.stories[storyId])
+        .map((storyId) => this.storyFromCSFFile({ storyId, csfFile }));
+    }
+    async loadEntry(id) {
+      let entry = await this.storyIdToEntry(id),
+        { importFn, storyIndex } = this;
+      if (!storyIndex || !importFn)
+        throw new Error('loadEntry called before initialization');
+      let storyImports = entry.type === 'docs' ? entry.storiesImports : [],
+        [entryExports, ...csfFiles] = await Promise.all([
+          importFn(entry.importPath),
+          ...storyImports.map((storyImportPath) => {
+            let firstStoryEntry = storyIndex.importPathToEntry(storyImportPath);
+            return this.loadCSFFileByStoryId(firstStoryEntry.id);
+          }),
+        ]);
+      return { entryExports, csfFiles };
+    }
+    getStoryContext(story, { forceInitialArgs = !1 } = {}) {
+      if (!this.globals)
+        throw new Error('getStoryContext called before initialization');
+      return prepareContext({
+        ...story,
+        args: forceInitialArgs ? story.initialArgs : this.args.get(story.id),
+        globals: this.globals.get(),
+        hooks: this.hooks[story.id],
+      });
+    }
+    cleanupStory(story) {
+      this.hooks[story.id].clean();
+    }
+    extract(options2 = { includeDocsOnly: !1 }) {
+      if (!this.storyIndex)
+        throw new Error('extract called before initialization');
+      let { cachedCSFFiles } = this;
+      if (!cachedCSFFiles)
+        throw new Error(
+          'Cannot call extract() unless you call cacheAllCSFFiles() first.',
+        );
+      return Object.entries(this.storyIndex.entries).reduce(
+        (acc, [storyId, { type, importPath }]) => {
+          if (type === 'docs') return acc;
+          let csfFile = cachedCSFFiles[importPath],
+            story = this.storyFromCSFFile({ storyId, csfFile });
+          return (
+            (!options2.includeDocsOnly && story.parameters.docsOnly) ||
+              (acc[storyId] = Object.entries(story).reduce(
+                (storyAcc, [key2, value2]) =>
+                  key2 === 'moduleExport' || typeof value2 == 'function'
+                    ? storyAcc
+                    : Array.isArray(value2)
+                      ? Object.assign(storyAcc, {
+                          [key2]: value2.slice().sort(),
+                        })
+                      : Object.assign(storyAcc, { [key2]: value2 }),
+                { args: story.initialArgs },
+              )),
+            acc
+          );
+        },
+        {},
+      );
+    }
+    getSetStoriesPayload() {
+      if (!this.globals)
+        throw new Error('getSetStoriesPayload called before initialization');
+      let stories = this.extract({ includeDocsOnly: !0 }),
+        kindParameters = Object.values(stories).reduce(
+          (acc, { title }) => ((acc[title] = {}), acc),
+          {},
+        );
+      return {
+        v: 2,
+        globals: this.globals.get(),
+        globalParameters: {},
+        kindParameters,
+        stories,
+      };
+    }
+    getSetIndexPayload() {
+      if (!this.storyIndex)
+        throw new Error('getSetIndexPayload called before initialization');
+      if (!this.cachedCSFFiles)
+        throw new Error(
+          'Cannot call getSetIndexPayload() unless you call cacheAllCSFFiles() first',
+        );
+      let { cachedCSFFiles } = this,
+        stories = this.extract({ includeDocsOnly: !0 });
+      return {
+        v: 4,
+        entries: Object.fromEntries(
+          Object.entries(this.storyIndex.entries).map(([id, entry]) => [
+            id,
+            stories[id]
+              ? {
+                  ...entry,
+                  args: stories[id].initialArgs,
+                  initialArgs: stories[id].initialArgs,
+                  argTypes: stories[id].argTypes,
+                  parameters: stories[id].parameters,
+                }
+              : {
+                  ...entry,
+                  parameters: this.preparedMetaFromCSFFile({
+                    csfFile: cachedCSFFiles[entry.importPath],
+                  }).parameters,
+                },
+          ]),
+        ),
+      };
+    }
+    raw() {
+      return Object.values(this.extract())
+        .map(({ id }) => this.fromId(id))
+        .filter(Boolean);
+    }
+    fromId(storyId) {
+      if (!this.storyIndex)
+        throw new Error('fromId called before initialization');
+      if (!this.cachedCSFFiles)
+        throw new Error(
+          'Cannot call fromId/raw() unless you call cacheAllCSFFiles() first.',
+        );
+      let importPath;
+      try {
+        ({ importPath } = this.storyIndex.storyIdToEntry(storyId));
+      } catch {
+        return null;
+      }
+      let csfFile = this.cachedCSFFiles[importPath],
+        story = this.storyFromCSFFile({ storyId, csfFile });
+      return {
+        ...story,
+        storyFn: (update) => {
+          let context = { ...this.getStoryContext(story), viewMode: 'story' };
+          return story.unboundStoryFn({ ...context, ...update });
+        },
+      };
+    }
+  };
+function useSharedState(sharedId, defaultState) {
+  let channel = addons.getChannel(),
+    [lastValue] =
+      channel.last(`${SHARED_STATE_CHANGED}-manager-${sharedId}`) ||
+      channel.last(`${SHARED_STATE_SET}-manager-${sharedId}`) ||
+      [],
+    [state, setState] = useState(lastValue || defaultState),
+    allListeners = useMemo(
+      () => ({
+        [`${SHARED_STATE_CHANGED}-manager-${sharedId}`]: (s) => setState(s),
+        [`${SHARED_STATE_SET}-manager-${sharedId}`]: (s) => setState(s),
+      }),
+      [sharedId],
+    ),
+    emit = useChannel(allListeners, [sharedId]);
+  return (
+    useEffect(() => {
+      defaultState !== void 0 &&
+        !lastValue &&
+        emit(`${SHARED_STATE_SET}-client-${sharedId}`, defaultState);
+    }, [sharedId]),
+    [
+      state,
+      (s) => {
+        setState(s), emit(`${SHARED_STATE_CHANGED}-client-${sharedId}`, s);
+      },
+    ]
+  );
+}
+function useAddonState(addonId, defaultState) {
+  return useSharedState(addonId, defaultState);
+}
+function slash(path) {
+  return path.startsWith('\\\\?\\') ? path : path.replace(/\\/g, '/');
+}
+var stripExtension = (path) => {
+    let parts = [...path],
+      last = parts[parts.length - 1],
+      dotIndex = last.indexOf('.'),
+      stripped = dotIndex > 0 ? last.substr(0, dotIndex) : last;
+    parts[parts.length - 1] = stripped;
+    let [first, ...rest] = parts;
+    return first === '' && (parts = rest), parts;
+  },
+  indexRe = /^index$/i,
+  removeRedundantFilename = (paths) => {
+    let prevVal;
+    return paths.filter((val, index) =>
+      index === paths.length - 1 && (val === prevVal || indexRe.test(val))
+        ? !1
+        : ((prevVal = val), !0),
+    );
+  };
+function pathJoin(paths) {
+  let slashes = new RegExp('/{1,}', 'g');
+  return paths.join('/').replace(slashes, '/');
+}
+var userOrAutoTitleFromSpecifier = (fileName, entry, userTitle) => {
+    let { directory, importPathMatcher, titlePrefix = '' } = entry || {};
+    typeof fileName == 'number' &&
+      once.warn(dedent`
+      CSF Auto-title received a numeric fileName. This typically happens when
+      webpack is mis-configured in production mode. To force webpack to produce
+      filenames, set optimization.moduleIds = "named" in your webpack config.
+    `);
+    let normalizedFileName = slash(String(fileName));
+    if (importPathMatcher.exec(normalizedFileName)) {
+      if (!userTitle) {
+        let suffix = normalizedFileName.replace(directory, ''),
+          path = slash(pathJoin([titlePrefix, suffix])).split('/');
+        return (
+          (path = stripExtension(path)),
+          (path = removeRedundantFilename(path)),
+          path.join('/')
+        );
+      }
+      return titlePrefix
+        ? slash(pathJoin([titlePrefix, userTitle]))
+        : userTitle;
+    }
+  },
+  userOrAutoTitle = (fileName, storiesEntries, userTitle) => {
+    for (let i = 0; i < storiesEntries.length; i += 1) {
+      let title = userOrAutoTitleFromSpecifier(
+        fileName,
+        storiesEntries[i],
+        userTitle,
+      );
+      if (title) return title;
+    }
+    return userTitle || void 0;
+  },
+  STORY_KIND_PATH_SEPARATOR = /\s*\/\s*/,
+  storySort =
+    (options2 = {}) =>
+    (a, b2) => {
+      if (a.title === b2.title && !options2.includeNames) return 0;
+      let method = options2.method || 'configure',
+        order = options2.order || [],
+        storyTitleA = a.title.trim().split(STORY_KIND_PATH_SEPARATOR),
+        storyTitleB = b2.title.trim().split(STORY_KIND_PATH_SEPARATOR);
+      options2.includeNames &&
+        (storyTitleA.push(a.name), storyTitleB.push(b2.name));
+      let depth = 0;
+      for (; storyTitleA[depth] || storyTitleB[depth]; ) {
+        if (!storyTitleA[depth]) return -1;
+        if (!storyTitleB[depth]) return 1;
+        let nameA = storyTitleA[depth],
+          nameB = storyTitleB[depth];
+        if (nameA !== nameB) {
+          let indexA = order.indexOf(nameA),
+            indexB = order.indexOf(nameB),
+            indexWildcard = order.indexOf('*');
+          return indexA !== -1 || indexB !== -1
+            ? (indexA === -1 &&
+                (indexWildcard !== -1
+                  ? (indexA = indexWildcard)
+                  : (indexA = order.length)),
+              indexB === -1 &&
+                (indexWildcard !== -1
+                  ? (indexB = indexWildcard)
+                  : (indexB = order.length)),
+              indexA - indexB)
+            : method === 'configure'
+              ? 0
+              : nameA.localeCompare(
+                  nameB,
+                  options2.locales ? options2.locales : void 0,
+                  { numeric: !0, sensitivity: 'accent' },
+                );
+        }
+        let index = order.indexOf(nameA);
+        index === -1 && (index = order.indexOf('*')),
+          (order =
+            index !== -1 && Array.isArray(order[index + 1])
+              ? order[index + 1]
+              : []),
+          (depth += 1);
+      }
+      return 0;
+    },
+  sortStoriesCommon = (stories, storySortParameter, fileNameOrder) => {
+    if (storySortParameter) {
+      let sortFn;
+      typeof storySortParameter == 'function'
+        ? (sortFn = storySortParameter)
+        : (sortFn = storySort(storySortParameter)),
+        stories.sort(sortFn);
+    } else
+      stories.sort(
+        (s1, s2) =>
+          fileNameOrder.indexOf(s1.importPath) -
+          fileNameOrder.indexOf(s2.importPath),
+      );
+    return stories;
+  },
+  sortStoriesV7 = (stories, storySortParameter, fileNameOrder) => {
+    try {
+      return sortStoriesCommon(stories, storySortParameter, fileNameOrder);
+    } catch (err) {
+      throw new Error(dedent`
+    Error sorting stories with sort parameter ${storySortParameter}:
+
+    > ${err.message}
+    
+    Are you using a V6-style sort function in V7 mode?
+
+    More info: https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#v7-style-story-sort
+  `);
+    }
+  },
+  toIndexEntry = (story) => {
+    let { id, title, name: name2, parameters, type } = story;
+    return { id, title, name: name2, importPath: parameters.fileName, type };
+  },
+  sortStoriesV6 = (stories, storySortParameter, fileNameOrder) => {
+    if (storySortParameter && typeof storySortParameter == 'function')
+      return (
+        stories.sort(storySortParameter), stories.map((s) => toIndexEntry(s[1]))
+      );
+    let storiesV7 = stories.map((s) => toIndexEntry(s[1]));
+    return sortStoriesCommon(storiesV7, storySortParameter, fileNameOrder);
+  };
+var import_synchronous_promise2 = __toESM(require_synchronous_promise(), 1),
+  import_qs2 = __toESM(require_lib(), 1),
+  AUTODOCS_TAG = 'autodocs',
+  STORIES_MDX_TAG = 'stories-mdx',
+  StoryStoreFacade = class {
+    constructor() {
+      (this.projectAnnotations = {
+        loaders: [],
+        decorators: [],
+        parameters: {},
+        argsEnhancers: [],
+        argTypesEnhancers: [],
+        args: {},
+        argTypes: {},
+      }),
+        (this.entries = {}),
+        (this.csfExports = {});
+    }
+    importFn(path) {
+      return import_synchronous_promise2.SynchronousPromise.resolve().then(
+        () => {
+          let moduleExports = this.csfExports[path];
+          if (!moduleExports) throw new Error(`Unknown path: ${path}`);
+          return moduleExports;
+        },
+      );
+    }
+    getStoryIndex(store) {
+      let fileNameOrder = Object.keys(this.csfExports),
+        storySortParameter =
+          this.projectAnnotations.parameters?.options?.storySort,
+        sortableV6 = Object.entries(this.entries).map(
+          ([storyId, { type, importPath, ...entry }]) => {
+            let exports = this.csfExports[importPath],
+              csfFile = store.processCSFFileWithCache(
+                exports,
+                importPath,
+                exports.default.title,
+              ),
+              storyLike;
+            return (
+              type === 'story'
+                ? (storyLike = store.storyFromCSFFile({ storyId, csfFile }))
+                : (storyLike = {
+                    ...entry,
+                    story: entry.name,
+                    kind: entry.title,
+                    componentId: N(entry.componentId || entry.title),
+                    parameters: { fileName: importPath },
+                  }),
+              [
+                storyId,
+                storyLike,
+                csfFile.meta.parameters,
+                this.projectAnnotations.parameters || {},
+              ]
+            );
+          },
+        ),
+        sortedV7;
+      try {
+        sortedV7 = sortStoriesV6(sortableV6, storySortParameter, fileNameOrder);
+      } catch (err) {
+        throw typeof storySortParameter == 'function'
+          ? new Error(dedent`
+          Error sorting stories with sort parameter ${storySortParameter}:
+
+          > ${err.message}
+          
+          Are you using a V7-style sort function in V6 compatibility mode?
+          
+          More info: https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#v7-style-story-sort
+        `)
+          : err;
+      }
+      return {
+        v: 4,
+        entries: sortedV7.reduce(
+          (acc, s) => ((acc[s.id] = this.entries[s.id]), acc),
+          {},
+        ),
+      };
+    }
+    clearFilenameExports(fileName) {
+      this.csfExports[fileName] &&
+        (Object.entries(this.entries).forEach(([id, { importPath }]) => {
+          importPath === fileName && delete this.entries[id];
+        }),
+        (this.csfExports[fileName] = {}));
+    }
+    addStoriesFromExports(fileName, fileExports) {
+      if (
+        fileName.match(/\.mdx$/) &&
+        !fileName.match(/\.stories\.mdx$/) &&
+        scope.FEATURES?.storyStoreV7MdxErrors !== !1
+      )
+        throw new Error(dedent`
+        Cannot index \`.mdx\` file (\`${fileName}\`) in \`storyStoreV7: false\` mode.
+
+        The legacy story store does not support new-style \`.mdx\` files. If the file above
+        is not intended to be indexed (i.e. displayed as an entry in the sidebar), either
+        exclude it from your \`stories\` glob, or add <Meta isTemplate /> to it.
+        
+        If you wanted to index the file, you'll need to name it \`stories.mdx\` and stick to the
+        legacy (6.x) MDX API, or use the new store.`);
+      if (this.csfExports[fileName] === fileExports) return;
+      this.clearFilenameExports(fileName);
+      let {
+          default: defaultExport,
+          __namedExportsOrder,
+          ...namedExports
+        } = fileExports,
+        {
+          id: componentId,
+          title,
+          tags: componentTags = [],
+        } = defaultExport || {},
+        specifiers = (scope.STORIES || []).map((specifier) => ({
+          ...specifier,
+          importPathMatcher: new RegExp(specifier.importPathMatcher),
+        }));
+      if (((title = userOrAutoTitle(fileName, specifiers, title)), !title)) {
+        logger.info(
+          `Unexpected default export without title in '${fileName}': ${JSON.stringify(fileExports.default)}`,
+        );
+        return;
+      }
+      this.csfExports[fileName] = {
+        ...fileExports,
+        default: { ...defaultExport, title },
+      };
+      let sortedExports = namedExports;
+      Array.isArray(__namedExportsOrder) &&
+        ((sortedExports = {}),
+        __namedExportsOrder.forEach((name2) => {
+          let namedExport = namedExports[name2];
+          namedExport && (sortedExports[name2] = namedExport);
+        }));
+      let storyExports = Object.entries(sortedExports).filter(([key2]) =>
+          G(key2, defaultExport),
+        ),
+        docsOptions = scope.DOCS_OPTIONS || {},
+        { autodocs } = docsOptions,
+        componentAutodocs = componentTags.includes(AUTODOCS_TAG),
+        autodocsOptedIn =
+          autodocs === !0 || (autodocs === 'tag' && componentAutodocs);
+      if (
+        storyExports.length &&
+        (componentTags.includes(STORIES_MDX_TAG) || autodocsOptedIn)
+      ) {
+        let name2 = docsOptions.defaultName,
+          docsId = N(componentId || title, name2);
+        this.entries[docsId] = {
+          type: 'docs',
+          id: docsId,
+          title,
+          name: name2,
+          importPath: fileName,
+          ...(componentId && { componentId }),
+          tags: [
+            ...componentTags,
+            'docs',
+            ...(autodocsOptedIn && !componentAutodocs ? [AUTODOCS_TAG] : []),
+          ],
+          storiesImports: [],
+        };
+      }
+      storyExports.forEach(([key2, storyExport]) => {
+        let exportName = M(key2),
+          id =
+            storyExport.parameters?.__id || N(componentId || title, exportName),
+          name2 =
+            (typeof storyExport != 'function' && storyExport.name) ||
+            storyExport.storyName ||
+            storyExport.story?.name ||
+            exportName;
+        storyExport.parameters?.docsOnly ||
+          (this.entries[id] = {
+            type: 'story',
+            id,
+            name: name2,
+            title,
+            importPath: fileName,
+            ...(componentId && { componentId }),
+            tags: [...(storyExport.tags || componentTags), 'story'],
+          });
+      });
+    }
+  },
+  warningAlternatives = {
+    addDecorator:
+      'Instead, use `export const decorators = [];` in your `preview.js`.',
+    addParameters:
+      'Instead, use `export const parameters = {};` in your `preview.js`.',
+    addLoader:
+      'Instead, use `export const loaders = [];` in your `preview.js`.',
+    addArgs: '',
+    addArgTypes: '',
+    addArgsEnhancer: '',
+    addArgTypesEnhancer: '',
+    addStepRunner: '',
+    getGlobalRender: '',
+    setGlobalRender: '',
+  },
+  checkMethod = (method) => {
+    if (scope.FEATURES?.storyStoreV7)
+      throw new Error(dedent`You cannot use \`${method}\` with the new Story Store.
+
+      ${warningAlternatives[method]}`);
+    if (!scope.__STORYBOOK_CLIENT_API__)
+      throw new Error(
+        `Singleton client API not yet initialized, cannot call \`${method}\`.`,
+      );
+  },
+  addDecorator = (decorator) => {
+    checkMethod('addDecorator'),
+      scope.__STORYBOOK_CLIENT_API__?.addDecorator(decorator);
+  },
+  addParameters = (parameters) => {
+    checkMethod('addParameters'),
+      scope.__STORYBOOK_CLIENT_API__?.addParameters(parameters);
+  },
+  addLoader = (loader) => {
+    checkMethod('addLoader'), scope.__STORYBOOK_CLIENT_API__?.addLoader(loader);
+  },
+  addArgs = (args2) => {
+    checkMethod('addArgs'), scope.__STORYBOOK_CLIENT_API__?.addArgs(args2);
+  },
+  addArgTypes = (argTypes) => {
+    checkMethod('addArgTypes'),
+      scope.__STORYBOOK_CLIENT_API__?.addArgTypes(argTypes);
+  },
+  addArgsEnhancer = (enhancer) => {
+    checkMethod('addArgsEnhancer'),
+      scope.__STORYBOOK_CLIENT_API__?.addArgsEnhancer(enhancer);
+  },
+  addArgTypesEnhancer = (enhancer) => {
+    checkMethod('addArgTypesEnhancer'),
+      scope.__STORYBOOK_CLIENT_API__?.addArgTypesEnhancer(enhancer);
+  },
+  addStepRunner = (stepRunner) => {
+    checkMethod('addStepRunner'),
+      scope.__STORYBOOK_CLIENT_API__?.addStepRunner(stepRunner);
+  },
+  setGlobalRender = (render) => {
+    checkMethod('setGlobalRender'),
+      scope.__STORYBOOK_CLIENT_API__ &&
+        (scope.__STORYBOOK_CLIENT_API__.facade.projectAnnotations.render =
+          render);
+  },
+  invalidStoryTypes = new Set(['string', 'number', 'boolean', 'symbol']),
+  ClientApi = class {
+    constructor({ storyStore } = {}) {
+      (this.lastFileName = 0),
+        (this.addDecorator = (decorator) => {
+          this.facade.projectAnnotations.decorators?.push(decorator);
+        }),
+        (this.addParameters = ({ globals, globalTypes, ...parameters }) => {
+          (this.facade.projectAnnotations.parameters = combineParameters(
+            this.facade.projectAnnotations.parameters,
+            parameters,
+          )),
+            globals &&
+              (this.facade.projectAnnotations.globals = {
+                ...this.facade.projectAnnotations.globals,
+                ...globals,
+              }),
+            globalTypes &&
+              (this.facade.projectAnnotations.globalTypes = {
+                ...this.facade.projectAnnotations.globalTypes,
+                ...normalizeInputTypes(globalTypes),
+              });
+        }),
+        (this.addStepRunner = (stepRunner) => {
+          this.facade.projectAnnotations.runStep = composeStepRunners(
+            [this.facade.projectAnnotations.runStep, stepRunner].filter(
+              Boolean,
+            ),
+          );
+        }),
+        (this.addLoader = (loader) => {
+          this.facade.projectAnnotations.loaders?.push(loader);
+        }),
+        (this.addArgs = (args2) => {
+          this.facade.projectAnnotations.args = {
+            ...this.facade.projectAnnotations.args,
+            ...args2,
+          };
+        }),
+        (this.addArgTypes = (argTypes) => {
+          this.facade.projectAnnotations.argTypes = {
+            ...this.facade.projectAnnotations.argTypes,
+            ...normalizeInputTypes(argTypes),
+          };
+        }),
+        (this.addArgsEnhancer = (enhancer) => {
+          this.facade.projectAnnotations.argsEnhancers?.push(enhancer);
+        }),
+        (this.addArgTypesEnhancer = (enhancer) => {
+          this.facade.projectAnnotations.argTypesEnhancers?.push(enhancer);
+        }),
+        (this._addedExports = {}),
+        (this.storiesOf = (kind, m2) => {
+          if (!kind && typeof kind != 'string')
+            throw new Error(
+              'Invalid or missing kind provided for stories, should be a string',
+            );
+          if (
+            (m2 ||
+              logger.warn(
+                `Missing 'module' parameter for story with a kind of '${kind}'. It will break your HMR`,
+              ),
+            m2)
+          ) {
+            let proto = Object.getPrototypeOf(m2);
+            proto.exports &&
+              proto.exports.default &&
+              logger.error(
+                `Illegal mix of CSF default export and storiesOf calls in a single file: ${proto.i}`,
+              );
+          }
+          let baseFilename =
+              m2 && m2.id ? `${m2.id}` : (this.lastFileName++).toString(),
+            fileName = baseFilename,
+            i = 1;
+          for (; this._addedExports[fileName]; )
+            (i += 1), (fileName = `${baseFilename}-${i}`);
+          m2 &&
+            m2.hot &&
+            m2.hot.accept &&
+            (m2.hot.accept(),
+            m2.hot.dispose(() => {
+              this.facade.clearFilenameExports(fileName),
+                delete this._addedExports[fileName],
+                setTimeout(() => {
+                  this._loadAddedExports(),
+                    this.onImportFnChanged?.({
+                      importFn: this.importFn.bind(this),
+                    });
+                }, 0);
+            }));
+          let hasAdded = !1,
+            api = {
+              kind: kind.toString(),
+              add: () => api,
+              addDecorator: () => api,
+              addLoader: () => api,
+              addParameters: () => api,
+            };
+          Object.keys(this.addons).forEach((name2) => {
+            let addon = this.addons[name2];
+            api[name2] = (...args2) => (addon.apply(api, args2), api);
+          });
+          let meta = {
+            id: L(kind),
+            title: kind,
+            decorators: [],
+            loaders: [],
+            parameters: {},
+          };
+          this._addedExports[fileName] = { default: meta };
+          let counter = 0;
+          return (
+            (api.add = (storyName, storyFn, parameters = {}) => {
+              if (((hasAdded = !0), typeof storyName != 'string'))
+                throw new Error(
+                  `Invalid or missing storyName provided for a "${kind}" story.`,
+                );
+              if (
+                !storyFn ||
+                Array.isArray(storyFn) ||
+                invalidStoryTypes.has(typeof storyFn)
+              )
+                throw new Error(
+                  `Cannot load story "${storyName}" in "${kind}" due to invalid format. Storybook expected a function/object but received ${typeof storyFn} instead.`,
+                );
+              let {
+                  decorators,
+                  loaders,
+                  component,
+                  args: args2,
+                  argTypes,
+                  ...storyParameters
+                } = parameters,
+                storyId = parameters.__id || N(kind, storyName),
+                csfExports = this._addedExports[fileName];
+              return (
+                (csfExports[`story${counter}`] = {
+                  name: storyName,
+                  parameters: { fileName, __id: storyId, ...storyParameters },
+                  decorators,
+                  loaders,
+                  args: args2,
+                  argTypes,
+                  component,
+                  render: storyFn,
+                }),
+                (counter += 1),
+                api
+              );
+            }),
+            (api.addDecorator = (decorator) => {
+              if (hasAdded)
+                throw new Error(`You cannot add a decorator after the first story for a kind.
+Read more here: https://github.com/storybookjs/storybook/blob/master/MIGRATION.md#can-no-longer-add-decoratorsparameters-after-stories`);
+              return meta.decorators?.push(decorator), api;
+            }),
+            (api.addLoader = (loader) => {
+              if (hasAdded)
+                throw new Error(
+                  'You cannot add a loader after the first story for a kind.',
+                );
+              return meta.loaders?.push(loader), api;
+            }),
+            (api.addParameters = ({
+              component,
+              args: args2,
+              argTypes,
+              tags,
+              ...parameters
+            }) => {
+              if (hasAdded)
+                throw new Error(`You cannot add parameters after the first story for a kind.
+Read more here: https://github.com/storybookjs/storybook/blob/master/MIGRATION.md#can-no-longer-add-decoratorsparameters-after-stories`);
+              return (
+                (meta.parameters = combineParameters(
+                  meta.parameters,
+                  parameters,
+                )),
+                component && (meta.component = component),
+                args2 && (meta.args = { ...meta.args, ...args2 }),
+                argTypes && (meta.argTypes = { ...meta.argTypes, ...argTypes }),
+                tags && (meta.tags = tags),
+                api
+              );
+            }),
+            api
+          );
+        }),
+        (this.raw = () => this.storyStore?.raw()),
+        (this.facade = new StoryStoreFacade()),
+        (this.addons = {}),
+        (this.storyStore = storyStore);
+    }
+    importFn(path) {
+      return this.facade.importFn(path);
+    }
+    getStoryIndex() {
+      if (!this.storyStore)
+        throw new Error('Cannot get story index before setting storyStore');
+      return this.facade.getStoryIndex(this.storyStore);
+    }
+    _loadAddedExports() {
+      Object.entries(this._addedExports).forEach(([fileName, fileExports]) =>
+        this.facade.addStoriesFromExports(fileName, fileExports),
+      );
+    }
+    get _storyStore() {
+      return this.storyStore;
+    }
+  },
+  getQueryParams = () => {
+    let { document: document4 } = scope;
+    return document4 && document4.location && document4.location.search
+      ? (0, import_qs2.parse)(document4.location.search, {
+          ignoreQueryPrefix: !0,
+        })
+      : {};
+  },
+  getQueryParam = (key2) => getQueryParams()[key2];
+var import_synchronous_promise3 = __toESM(require_synchronous_promise(), 1);
+var import_qs3 = __toESM(require_lib(), 1),
+  import_isPlainObject2 = __toESM(require_isPlainObject(), 1),
   require_entities = __commonJS3({
     '../../node_modules/ansi-to-html/node_modules/entities/lib/maps/entities.json'(
       exports,
@@ -10560,17 +12981,17 @@ var import_qs = __toESM(require_lib(), 1),
           k.length === 1 ? single.push('\\' + k) : multiple.push(k);
         }
         single.sort();
-        for (var start = 0; start < single.length - 1; start++) {
+        for (var start2 = 0; start2 < single.length - 1; start2++) {
           for (
-            var end = start;
+            var end = start2;
             end < single.length - 1 &&
             single[end].charCodeAt(1) + 1 === single[end + 1].charCodeAt(1);
 
           )
             end += 1;
-          var count = 1 + end - start;
+          var count = 1 + end - start2;
           count < 3 ||
-            single.splice(start, count, single[start] + '-' + single[end]);
+            single.splice(start2, count, single[start2] + '-' + single[end]);
         }
         return (
           multiple.unshift('[' + single.join('') + ']'),
@@ -11246,1684 +13667,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       })();
       module.exports = Filter;
     },
-  });
-function mockChannel() {
-  let transport = { setHandler: () => {}, send: () => {} };
-  return new Channel({ transport });
-}
-var AddonStore = class {
-    constructor() {
-      (this.getChannel = () => {
-        if (!this.channel) {
-          let channel = mockChannel();
-          return this.setChannel(channel), channel;
-        }
-        return this.channel;
-      }),
-        (this.ready = () => this.promise),
-        (this.hasChannel = () => !!this.channel),
-        (this.setChannel = (channel) => {
-          (this.channel = channel), this.resolve();
-        }),
-        (this.promise = new Promise((res) => {
-          this.resolve = () => res(this.getChannel());
-        }));
-    }
-  },
-  KEY2 = '__STORYBOOK_ADDONS_PREVIEW';
-function getAddonsStore() {
-  return scope[KEY2] || (scope[KEY2] = new AddonStore()), scope[KEY2];
-}
-var addons = getAddonsStore(),
-  HooksContext = class {
-    constructor() {
-      (this.hookListsMap = void 0),
-        (this.mountedDecorators = void 0),
-        (this.prevMountedDecorators = void 0),
-        (this.currentHooks = void 0),
-        (this.nextHookIndex = void 0),
-        (this.currentPhase = void 0),
-        (this.currentEffects = void 0),
-        (this.prevEffects = void 0),
-        (this.currentDecoratorName = void 0),
-        (this.hasUpdates = void 0),
-        (this.currentContext = void 0),
-        (this.renderListener = (storyId) => {
-          storyId === this.currentContext?.id &&
-            (this.triggerEffects(),
-            (this.currentContext = null),
-            this.removeRenderListeners());
-        }),
-        this.init();
-    }
-    init() {
-      (this.hookListsMap = new WeakMap()),
-        (this.mountedDecorators = new Set()),
-        (this.prevMountedDecorators = new Set()),
-        (this.currentHooks = []),
-        (this.nextHookIndex = 0),
-        (this.currentPhase = 'NONE'),
-        (this.currentEffects = []),
-        (this.prevEffects = []),
-        (this.currentDecoratorName = null),
-        (this.hasUpdates = !1),
-        (this.currentContext = null);
-    }
-    clean() {
-      this.prevEffects.forEach((effect) => {
-        effect.destroy && effect.destroy();
-      }),
-        this.init(),
-        this.removeRenderListeners();
-    }
-    getNextHook() {
-      let hook = this.currentHooks[this.nextHookIndex];
-      return (this.nextHookIndex += 1), hook;
-    }
-    triggerEffects() {
-      this.prevEffects.forEach((effect) => {
-        !this.currentEffects.includes(effect) &&
-          effect.destroy &&
-          effect.destroy();
-      }),
-        this.currentEffects.forEach((effect) => {
-          this.prevEffects.includes(effect) ||
-            (effect.destroy = effect.create());
-        }),
-        (this.prevEffects = this.currentEffects),
-        (this.currentEffects = []);
-    }
-    addRenderListeners() {
-      this.removeRenderListeners(),
-        addons.getChannel().on(STORY_RENDERED, this.renderListener);
-    }
-    removeRenderListeners() {
-      addons.getChannel().removeListener(STORY_RENDERED, this.renderListener);
-    }
-  };
-function hookify(fn) {
-  let hookified = (...args2) => {
-    let { hooks } = typeof args2[0] == 'function' ? args2[1] : args2[0],
-      prevPhase = hooks.currentPhase,
-      prevHooks = hooks.currentHooks,
-      prevNextHookIndex = hooks.nextHookIndex,
-      prevDecoratorName = hooks.currentDecoratorName;
-    (hooks.currentDecoratorName = fn.name),
-      hooks.prevMountedDecorators.has(fn)
-        ? ((hooks.currentPhase = 'UPDATE'),
-          (hooks.currentHooks = hooks.hookListsMap.get(fn) || []))
-        : ((hooks.currentPhase = 'MOUNT'),
-          (hooks.currentHooks = []),
-          hooks.hookListsMap.set(fn, hooks.currentHooks),
-          hooks.prevMountedDecorators.add(fn)),
-      (hooks.nextHookIndex = 0);
-    let prevContext = scope.STORYBOOK_HOOKS_CONTEXT;
-    scope.STORYBOOK_HOOKS_CONTEXT = hooks;
-    let result2 = fn(...args2);
-    if (
-      ((scope.STORYBOOK_HOOKS_CONTEXT = prevContext),
-      hooks.currentPhase === 'UPDATE' && hooks.getNextHook() != null)
-    )
-      throw new Error(
-        'Rendered fewer hooks than expected. This may be caused by an accidental early return statement.',
-      );
-    return (
-      (hooks.currentPhase = prevPhase),
-      (hooks.currentHooks = prevHooks),
-      (hooks.nextHookIndex = prevNextHookIndex),
-      (hooks.currentDecoratorName = prevDecoratorName),
-      result2
-    );
-  };
-  return (hookified.originalFn = fn), hookified;
-}
-var numberOfRenders = 0,
-  RENDER_LIMIT = 25,
-  applyHooks = (applyDecorators) => (storyFn, decorators) => {
-    let decorated = applyDecorators(
-      hookify(storyFn),
-      decorators.map((decorator) => hookify(decorator)),
-    );
-    return (context) => {
-      let { hooks } = context;
-      (hooks.prevMountedDecorators ??= new Set()),
-        (hooks.mountedDecorators = new Set([storyFn, ...decorators])),
-        (hooks.currentContext = context),
-        (hooks.hasUpdates = !1);
-      let result2 = decorated(context);
-      for (numberOfRenders = 1; hooks.hasUpdates; )
-        if (
-          ((hooks.hasUpdates = !1),
-          (hooks.currentEffects = []),
-          (result2 = decorated(context)),
-          (numberOfRenders += 1),
-          numberOfRenders > RENDER_LIMIT)
-        )
-          throw new Error(
-            'Too many re-renders. Storybook limits the number of renders to prevent an infinite loop.',
-          );
-      return hooks.addRenderListeners(), result2;
-    };
-  },
-  areDepsEqual = (deps, nextDeps) =>
-    deps.length === nextDeps.length &&
-    deps.every((dep, i) => dep === nextDeps[i]),
-  invalidHooksError = () =>
-    new Error(
-      'Storybook preview hooks can only be called inside decorators and story functions.',
-    );
-function getHooksContextOrNull() {
-  return scope.STORYBOOK_HOOKS_CONTEXT || null;
-}
-function getHooksContextOrThrow() {
-  let hooks = getHooksContextOrNull();
-  if (hooks == null) throw invalidHooksError();
-  return hooks;
-}
-function useHook(name2, callback, deps) {
-  let hooks = getHooksContextOrThrow();
-  if (hooks.currentPhase === 'MOUNT') {
-    deps != null &&
-      !Array.isArray(deps) &&
-      logger.warn(
-        `${name2} received a final argument that is not an array (instead, received ${deps}). When specified, the final argument must be an array.`,
-      );
-    let hook = { name: name2, deps };
-    return hooks.currentHooks.push(hook), callback(hook), hook;
-  }
-  if (hooks.currentPhase === 'UPDATE') {
-    let hook = hooks.getNextHook();
-    if (hook == null)
-      throw new Error('Rendered more hooks than during the previous render.');
-    return (
-      hook.name !== name2 &&
-        logger.warn(
-          `Storybook has detected a change in the order of Hooks${hooks.currentDecoratorName ? ` called by ${hooks.currentDecoratorName}` : ''}. This will lead to bugs and errors if not fixed.`,
-        ),
-      deps != null &&
-        hook.deps == null &&
-        logger.warn(
-          `${name2} received a final argument during this render, but not during the previous render. Even though the final argument is optional, its type cannot change between renders.`,
-        ),
-      deps != null &&
-        hook.deps != null &&
-        deps.length !== hook.deps.length &&
-        logger.warn(`The final argument passed to ${name2} changed size between renders. The order and size of this array must remain constant.
-Previous: ${hook.deps}
-Incoming: ${deps}`),
-      (deps == null || hook.deps == null || !areDepsEqual(deps, hook.deps)) &&
-        (callback(hook), (hook.deps = deps)),
-      hook
-    );
-  }
-  throw invalidHooksError();
-}
-function useMemoLike(name2, nextCreate, deps) {
-  let { memoizedState } = useHook(
-    name2,
-    (hook) => {
-      hook.memoizedState = nextCreate();
-    },
-    deps,
-  );
-  return memoizedState;
-}
-function useMemo(nextCreate, deps) {
-  return useMemoLike('useMemo', nextCreate, deps);
-}
-function useCallback(callback, deps) {
-  return useMemoLike('useCallback', () => callback, deps);
-}
-function useRefLike(name2, initialValue) {
-  return useMemoLike(name2, () => ({ current: initialValue }), []);
-}
-function useRef(initialValue) {
-  return useRefLike('useRef', initialValue);
-}
-function triggerUpdate() {
-  let hooks = getHooksContextOrNull();
-  if (hooks != null && hooks.currentPhase !== 'NONE') hooks.hasUpdates = !0;
-  else
-    try {
-      addons.getChannel().emit(FORCE_RE_RENDER);
-    } catch {
-      logger.warn(
-        'State updates of Storybook preview hooks work only in browser',
-      );
-    }
-}
-function useStateLike(name2, initialState) {
-  let stateRef = useRefLike(
-      name2,
-      typeof initialState == 'function' ? initialState() : initialState,
-    ),
-    setState = (update) => {
-      (stateRef.current =
-        typeof update == 'function' ? update(stateRef.current) : update),
-        triggerUpdate();
-    };
-  return [stateRef.current, setState];
-}
-function useState(initialState) {
-  return useStateLike('useState', initialState);
-}
-function useReducer(reducer, initialArg, init) {
-  let initialState = init != null ? () => init(initialArg) : initialArg,
-    [state, setState] = useStateLike('useReducer', initialState);
-  return [
-    state,
-    (action) => setState((prevState) => reducer(prevState, action)),
-  ];
-}
-function useEffect(create, deps) {
-  let hooks = getHooksContextOrThrow(),
-    effect = useMemoLike('useEffect', () => ({ create }), deps);
-  hooks.currentEffects.includes(effect) || hooks.currentEffects.push(effect);
-}
-function useChannel(eventMap, deps = []) {
-  let channel = addons.getChannel();
-  return (
-    useEffect(
-      () => (
-        Object.entries(eventMap).forEach(([type, listener]) =>
-          channel.on(type, listener),
-        ),
-        () => {
-          Object.entries(eventMap).forEach(([type, listener]) =>
-            channel.removeListener(type, listener),
-          );
-        }
-      ),
-      [...Object.keys(eventMap), ...deps],
-    ),
-    useCallback(channel.emit.bind(channel), [channel])
-  );
-}
-function useStoryContext() {
-  let { currentContext } = getHooksContextOrThrow();
-  if (currentContext == null) throw invalidHooksError();
-  return currentContext;
-}
-function useParameter(parameterKey, defaultValue) {
-  let { parameters } = useStoryContext();
-  if (parameterKey) return parameters[parameterKey] ?? defaultValue;
-}
-function useArgs() {
-  let channel = addons.getChannel(),
-    { id: storyId, args: args2 } = useStoryContext(),
-    updateArgs = useCallback(
-      (updatedArgs) =>
-        channel.emit(UPDATE_STORY_ARGS, { storyId, updatedArgs }),
-      [channel, storyId],
-    ),
-    resetArgs = useCallback(
-      (argNames) => channel.emit(RESET_STORY_ARGS, { storyId, argNames }),
-      [channel, storyId],
-    );
-  return [args2, updateArgs, resetArgs];
-}
-function useGlobals() {
-  let channel = addons.getChannel(),
-    { globals } = useStoryContext(),
-    updateGlobals = useCallback(
-      (newGlobals) => channel.emit(UPDATE_GLOBALS, { globals: newGlobals }),
-      [channel],
-    );
-  return [globals, updateGlobals];
-}
-var makeDecorator = ({
-    name: name2,
-    parameterName,
-    wrapper,
-    skipIfNoParametersOrOptions = !1,
-  }) => {
-    let decorator = (options2) => (storyFn, context) => {
-      let parameters = context.parameters && context.parameters[parameterName];
-      return (parameters && parameters.disable) ||
-        (skipIfNoParametersOrOptions && !options2 && !parameters)
-        ? storyFn(context)
-        : wrapper(storyFn, context, { options: options2, parameters });
-    };
-    return (...args2) =>
-      typeof args2[0] == 'function'
-        ? decorator()(...args2)
-        : (...innerArgs) => {
-            if (innerArgs.length > 1)
-              return args2.length > 1
-                ? decorator(args2)(...innerArgs)
-                : decorator(...args2)(...innerArgs);
-            throw new Error(`Passing stories directly into ${name2}() is not allowed,
-        instead use addDecorator(${name2}) and pass options with the '${parameterName}' parameter`);
-          };
-  },
-  getImportPathMap = (0, import_memoizerific2.default)(1)((entries) =>
-    Object.values(entries).reduce(
-      (acc, entry) => (
-        (acc[entry.importPath] = acc[entry.importPath] || entry), acc
-      ),
-      {},
-    ),
-  ),
-  StoryIndexStore = class {
-    constructor({ entries } = { v: 4, entries: {} }) {
-      this.entries = entries;
-    }
-    entryFromSpecifier(specifier) {
-      let entries = Object.values(this.entries);
-      if (specifier === '*') return entries[0];
-      if (typeof specifier == 'string')
-        return this.entries[specifier]
-          ? this.entries[specifier]
-          : entries.find((entry) => entry.id.startsWith(specifier));
-      let { name: name2, title } = specifier;
-      return entries.find(
-        (entry) => entry.name === name2 && entry.title === title,
-      );
-    }
-    storyIdToEntry(storyId) {
-      let storyEntry = this.entries[storyId];
-      if (!storyEntry) throw new MissingStoryAfterHmrError({ storyId });
-      return storyEntry;
-    }
-    importPathToEntry(importPath) {
-      return getImportPathMap(this.entries)[importPath];
-    }
-  },
-  INCOMPATIBLE = Symbol('incompatible'),
-  map = (arg, argType) => {
-    let type = argType.type;
-    if (arg == null || !type || argType.mapping) return arg;
-    switch (type.name) {
-      case 'string':
-        return String(arg);
-      case 'enum':
-        return arg;
-      case 'number':
-        return Number(arg);
-      case 'boolean':
-        return String(arg) === 'true';
-      case 'array':
-        return !type.value || !Array.isArray(arg)
-          ? INCOMPATIBLE
-          : arg.reduce((acc, item, index) => {
-              let mapped = map(item, { type: type.value });
-              return mapped !== INCOMPATIBLE && (acc[index] = mapped), acc;
-            }, new Array(arg.length));
-      case 'object':
-        return typeof arg == 'string' || typeof arg == 'number'
-          ? arg
-          : !type.value || typeof arg != 'object'
-            ? INCOMPATIBLE
-            : Object.entries(arg).reduce((acc, [key2, val]) => {
-                let mapped = map(val, { type: type.value[key2] });
-                return mapped === INCOMPATIBLE
-                  ? acc
-                  : Object.assign(acc, { [key2]: mapped });
-              }, {});
-      default:
-        return INCOMPATIBLE;
-    }
-  },
-  mapArgsToTypes = (args2, argTypes) =>
-    Object.entries(args2).reduce((acc, [key2, value2]) => {
-      if (!argTypes[key2]) return acc;
-      let mapped = map(value2, argTypes[key2]);
-      return mapped === INCOMPATIBLE
-        ? acc
-        : Object.assign(acc, { [key2]: mapped });
-    }, {}),
-  combineArgs = (value2, update) =>
-    Array.isArray(value2) && Array.isArray(update)
-      ? update
-          .reduce(
-            (acc, upd, index) => (
-              (acc[index] = combineArgs(value2[index], update[index])), acc
-            ),
-            [...value2],
-          )
-          .filter((v2) => v2 !== void 0)
-      : !(0, import_isPlainObject.default)(value2) ||
-          !(0, import_isPlainObject.default)(update)
-        ? update
-        : Object.keys({ ...value2, ...update }).reduce((acc, key2) => {
-            if (key2 in update) {
-              let combined = combineArgs(value2[key2], update[key2]);
-              combined !== void 0 && (acc[key2] = combined);
-            } else acc[key2] = value2[key2];
-            return acc;
-          }, {}),
-  validateOptions = (args2, argTypes) =>
-    Object.entries(argTypes).reduce((acc, [key2, { options: options2 }]) => {
-      function allowArg() {
-        return key2 in args2 && (acc[key2] = args2[key2]), acc;
-      }
-      if (!options2) return allowArg();
-      if (!Array.isArray(options2))
-        return (
-          once.error(dedent`
-        Invalid argType: '${key2}.options' should be an array.
-
-        More info: https://storybook.js.org/docs/react/api/argtypes
-      `),
-          allowArg()
-        );
-      if (
-        options2.some(
-          (opt) => opt && ['object', 'function'].includes(typeof opt),
-        )
-      )
-        return (
-          once.error(dedent`
-        Invalid argType: '${key2}.options' should only contain primitives. Use a 'mapping' for complex values.
-
-        More info: https://storybook.js.org/docs/react/writing-stories/args#mapping-to-complex-arg-values
-      `),
-          allowArg()
-        );
-      let isArray2 = Array.isArray(args2[key2]),
-        invalidIndex =
-          isArray2 && args2[key2].findIndex((val) => !options2.includes(val)),
-        isValidArray = isArray2 && invalidIndex === -1;
-      if (
-        args2[key2] === void 0 ||
-        options2.includes(args2[key2]) ||
-        isValidArray
-      )
-        return allowArg();
-      let field = isArray2 ? `${key2}[${invalidIndex}]` : key2,
-        supportedOptions = options2
-          .map((opt) => (typeof opt == 'string' ? `'${opt}'` : String(opt)))
-          .join(', ');
-      return (
-        once.warn(
-          `Received illegal value for '${field}'. Supported options: ${supportedOptions}`,
-        ),
-        acc
-      );
-    }, {}),
-  DEEPLY_EQUAL = Symbol('Deeply equal'),
-  deepDiff = (value2, update) => {
-    if (typeof value2 != typeof update) return update;
-    if (dequal(value2, update)) return DEEPLY_EQUAL;
-    if (Array.isArray(value2) && Array.isArray(update)) {
-      let res = update.reduce((acc, upd, index) => {
-        let diff = deepDiff(value2[index], upd);
-        return diff !== DEEPLY_EQUAL && (acc[index] = diff), acc;
-      }, new Array(update.length));
-      return update.length >= value2.length
-        ? res
-        : res.concat(new Array(value2.length - update.length).fill(void 0));
-    }
-    return (0, import_isPlainObject.default)(value2) &&
-      (0, import_isPlainObject.default)(update)
-      ? Object.keys({ ...value2, ...update }).reduce((acc, key2) => {
-          let diff = deepDiff(value2?.[key2], update?.[key2]);
-          return diff === DEEPLY_EQUAL
-            ? acc
-            : Object.assign(acc, { [key2]: diff });
-        }, {})
-      : update;
-  },
-  UNTARGETED = 'UNTARGETED';
-function groupArgsByTarget({ args: args2, argTypes }) {
-  let groupedArgs = {};
-  return (
-    Object.entries(args2).forEach(([name2, value2]) => {
-      let { target = UNTARGETED } = argTypes[name2] || {};
-      (groupedArgs[target] = groupedArgs[target] || {}),
-        (groupedArgs[target][name2] = value2);
-    }),
-    groupedArgs
-  );
-}
-function deleteUndefined(obj) {
-  return (
-    Object.keys(obj).forEach(
-      (key2) => obj[key2] === void 0 && delete obj[key2],
-    ),
-    obj
-  );
-}
-var ArgsStore = class {
-    constructor() {
-      (this.initialArgsByStoryId = {}), (this.argsByStoryId = {});
-    }
-    get(storyId) {
-      if (!(storyId in this.argsByStoryId))
-        throw new Error(
-          `No args known for ${storyId} -- has it been rendered yet?`,
-        );
-      return this.argsByStoryId[storyId];
-    }
-    setInitial(story) {
-      if (!this.initialArgsByStoryId[story.id])
-        (this.initialArgsByStoryId[story.id] = story.initialArgs),
-          (this.argsByStoryId[story.id] = story.initialArgs);
-      else if (this.initialArgsByStoryId[story.id] !== story.initialArgs) {
-        let delta = deepDiff(
-          this.initialArgsByStoryId[story.id],
-          this.argsByStoryId[story.id],
-        );
-        (this.initialArgsByStoryId[story.id] = story.initialArgs),
-          (this.argsByStoryId[story.id] = story.initialArgs),
-          delta !== DEEPLY_EQUAL && this.updateFromDelta(story, delta);
-      }
-    }
-    updateFromDelta(story, delta) {
-      let validatedDelta = validateOptions(delta, story.argTypes);
-      this.argsByStoryId[story.id] = combineArgs(
-        this.argsByStoryId[story.id],
-        validatedDelta,
-      );
-    }
-    updateFromPersisted(story, persisted) {
-      let mappedPersisted = mapArgsToTypes(persisted, story.argTypes);
-      return this.updateFromDelta(story, mappedPersisted);
-    }
-    update(storyId, argsUpdate) {
-      if (!(storyId in this.argsByStoryId))
-        throw new Error(
-          `No args known for ${storyId} -- has it been rendered yet?`,
-        );
-      this.argsByStoryId[storyId] = deleteUndefined({
-        ...this.argsByStoryId[storyId],
-        ...argsUpdate,
-      });
-    }
-  },
-  getValuesFromArgTypes = (argTypes = {}) =>
-    Object.entries(argTypes).reduce(
-      (acc, [arg, { defaultValue }]) => (
-        typeof defaultValue < 'u' && (acc[arg] = defaultValue), acc
-      ),
-      {},
-    ),
-  GlobalsStore = class {
-    constructor({ globals = {}, globalTypes = {} }) {
-      this.set({ globals, globalTypes });
-    }
-    set({ globals = {}, globalTypes = {} }) {
-      let delta =
-        this.initialGlobals && deepDiff(this.initialGlobals, this.globals);
-      this.allowedGlobalNames = new Set([
-        ...Object.keys(globals),
-        ...Object.keys(globalTypes),
-      ]);
-      let defaultGlobals = getValuesFromArgTypes(globalTypes);
-      (this.initialGlobals = { ...defaultGlobals, ...globals }),
-        (this.globals = this.initialGlobals),
-        delta && delta !== DEEPLY_EQUAL && this.updateFromPersisted(delta);
-    }
-    filterAllowedGlobals(globals) {
-      return Object.entries(globals).reduce(
-        (acc, [key2, value2]) => (
-          this.allowedGlobalNames.has(key2)
-            ? (acc[key2] = value2)
-            : logger.warn(
-                `Attempted to set a global (${key2}) that is not defined in initial globals or globalTypes`,
-              ),
-          acc
-        ),
-        {},
-      );
-    }
-    updateFromPersisted(persisted) {
-      let allowedUrlGlobals = this.filterAllowedGlobals(persisted);
-      this.globals = { ...this.globals, ...allowedUrlGlobals };
-    }
-    get() {
-      return this.globals;
-    }
-    update(newGlobals) {
-      this.globals = {
-        ...this.globals,
-        ...this.filterAllowedGlobals(newGlobals),
-      };
-    }
-  },
-  normalizeType = (type) => (typeof type == 'string' ? { name: type } : type),
-  normalizeControl = (control) =>
-    typeof control == 'string' ? { type: control } : control,
-  normalizeInputType = (inputType, key2) => {
-    let { type, control, ...rest } = inputType,
-      normalized = { name: key2, ...rest };
-    return (
-      type && (normalized.type = normalizeType(type)),
-      control
-        ? (normalized.control = normalizeControl(control))
-        : control === !1 && (normalized.control = { disable: !0 }),
-      normalized
-    );
-  },
-  normalizeInputTypes = (inputTypes) =>
-    (0, import_mapValues.default)(inputTypes, normalizeInputType),
-  normalizeArrays = (array) =>
-    Array.isArray(array) ? array : array ? [array] : [],
-  deprecatedStoryAnnotation = dedent`
-CSF .story annotations deprecated; annotate story functions directly:
-- StoryFn.story.name => StoryFn.storyName
-- StoryFn.story.(parameters|decorators) => StoryFn.(parameters|decorators)
-See https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#hoisted-csf-annotations for details and codemod.
-`,
-  deprecatedStoryAnnotationWarning = (0, import_util_deprecate.default)(
-    () => {},
-    deprecatedStoryAnnotation,
-  );
-function normalizeStory(key2, storyAnnotations, meta) {
-  let storyObject = storyAnnotations,
-    userStoryFn =
-      typeof storyAnnotations == 'function' ? storyAnnotations : null,
-    { story } = storyObject;
-  story &&
-    (logger.debug('deprecated story', story),
-    deprecatedStoryAnnotationWarning());
-  let exportName = M(key2),
-    name2 =
-      (typeof storyObject != 'function' && storyObject.name) ||
-      storyObject.storyName ||
-      story?.name ||
-      exportName,
-    decorators = [
-      ...normalizeArrays(storyObject.decorators),
-      ...normalizeArrays(story?.decorators),
-    ],
-    parameters = { ...story?.parameters, ...storyObject.parameters },
-    args2 = { ...story?.args, ...storyObject.args },
-    argTypes = { ...story?.argTypes, ...storyObject.argTypes },
-    loaders = [
-      ...normalizeArrays(storyObject.loaders),
-      ...normalizeArrays(story?.loaders),
-    ],
-    { render, play, tags = [] } = storyObject,
-    id = parameters.__id || N(meta.id, exportName);
-  return {
-    moduleExport: storyAnnotations,
-    id,
-    name: name2,
-    tags,
-    decorators,
-    parameters,
-    args: args2,
-    argTypes: normalizeInputTypes(argTypes),
-    loaders,
-    ...(render && { render }),
-    ...(userStoryFn && { userStoryFn }),
-    ...(play && { play }),
-  };
-}
-function normalizeComponentAnnotations(
-  defaultExport,
-  title = defaultExport.title,
-  importPath,
-) {
-  let { id, argTypes } = defaultExport;
-  return {
-    id: L(id || title),
-    ...defaultExport,
-    title,
-    ...(argTypes && { argTypes: normalizeInputTypes(argTypes) }),
-    parameters: { fileName: importPath, ...defaultExport.parameters },
-  };
-}
-var checkGlobals = (parameters) => {
-    let { globals, globalTypes } = parameters;
-    (globals || globalTypes) &&
-      logger.error(
-        'Global args/argTypes can only be set globally',
-        JSON.stringify({ globals, globalTypes }),
-      );
-  },
-  checkStorySort = (parameters) => {
-    let { options: options2 } = parameters;
-    options2?.storySort &&
-      logger.error('The storySort option parameter can only be set globally');
-  },
-  checkDisallowedParameters = (parameters) => {
-    parameters && (checkGlobals(parameters), checkStorySort(parameters));
-  };
-function processCSFFile(moduleExports, importPath, title) {
-  let {
-      default: defaultExport,
-      __namedExportsOrder,
-      ...namedExports
-    } = moduleExports,
-    meta = normalizeComponentAnnotations(defaultExport, title, importPath);
-  checkDisallowedParameters(meta.parameters);
-  let csfFile = { meta, stories: {}, moduleExports };
-  return (
-    Object.keys(namedExports).forEach((key2) => {
-      if (G(key2, meta)) {
-        let storyMeta = normalizeStory(key2, namedExports[key2], meta);
-        checkDisallowedParameters(storyMeta.parameters),
-          (csfFile.stories[storyMeta.id] = storyMeta);
-      }
-    }),
-    csfFile
-  );
-}
-var combineParameters = (...parameterSets) => {
-  let mergeKeys = {},
-    definedParametersSets = parameterSets.filter(Boolean),
-    combined = definedParametersSets.reduce(
-      (acc, parameters) => (
-        Object.entries(parameters).forEach(([key2, value2]) => {
-          let existing = acc[key2];
-          Array.isArray(value2) || typeof existing > 'u'
-            ? (acc[key2] = value2)
-            : (0, import_isPlainObject.default)(value2) &&
-                (0, import_isPlainObject.default)(existing)
-              ? (mergeKeys[key2] = !0)
-              : typeof value2 < 'u' && (acc[key2] = value2);
-        }),
-        acc
-      ),
-      {},
-    );
-  return (
-    Object.keys(mergeKeys).forEach((key2) => {
-      let mergeValues = definedParametersSets
-        .filter(Boolean)
-        .map((p) => p[key2])
-        .filter((value2) => typeof value2 < 'u');
-      mergeValues.every((value2) => (0, import_isPlainObject.default)(value2))
-        ? (combined[key2] = combineParameters(...mergeValues))
-        : (combined[key2] = mergeValues[mergeValues.length - 1]);
-    }),
-    combined
-  );
-};
-function decorateStory(storyFn, decorator, bindWithContext) {
-  let boundStoryFunction = bindWithContext(storyFn);
-  return (context) => decorator(boundStoryFunction, context);
-}
-function sanitizeStoryContextUpdate({
-  componentId,
-  title,
-  kind,
-  id,
-  name: name2,
-  story,
-  parameters,
-  initialArgs,
-  argTypes,
-  ...update
-} = {}) {
-  return update;
-}
-function defaultDecorateStory(storyFn, decorators) {
-  let contextStore = {},
-    bindWithContext = (decoratedStoryFn) => (update) => {
-      if (!contextStore.value)
-        throw new Error('Decorated function called without init');
-      return (
-        (contextStore.value = {
-          ...contextStore.value,
-          ...sanitizeStoryContextUpdate(update),
-        }),
-        decoratedStoryFn(contextStore.value)
-      );
-    },
-    decoratedWithContextStore = decorators.reduce(
-      (story, decorator) => decorateStory(story, decorator, bindWithContext),
-      storyFn,
-    );
-  return (context) => (
-    (contextStore.value = context), decoratedWithContextStore(context)
-  );
-}
-function prepareStory(
-  storyAnnotations,
-  componentAnnotations,
-  projectAnnotations,
-) {
-  let { moduleExport, id, name: name2 } = storyAnnotations || {},
-    partialAnnotations = preparePartialAnnotations(
-      storyAnnotations,
-      componentAnnotations,
-      projectAnnotations,
-    ),
-    applyLoaders = async (context) => {
-      let updatedContext = { ...context, loaded: {} };
-      for (let loaders of [
-        ...('__STORYBOOK_TEST_LOADERS__' in scope &&
-        Array.isArray(scope.__STORYBOOK_TEST_LOADERS__)
-          ? [scope.__STORYBOOK_TEST_LOADERS__]
-          : []),
-        normalizeArrays(projectAnnotations.loaders),
-        normalizeArrays(componentAnnotations.loaders),
-        normalizeArrays(storyAnnotations.loaders),
-      ]) {
-        let loadResults = await Promise.all(
-            loaders.map((loader) => loader(updatedContext)),
-          ),
-          loaded = Object.assign({}, ...loadResults);
-        updatedContext = {
-          ...updatedContext,
-          loaded: { ...updatedContext.loaded, ...loaded },
-        };
-      }
-      return updatedContext;
-    },
-    undecoratedStoryFn = (context) => render(context.args, context),
-    { applyDecorators = defaultDecorateStory, runStep } = projectAnnotations,
-    decorators = [
-      ...normalizeArrays(storyAnnotations?.decorators),
-      ...normalizeArrays(componentAnnotations?.decorators),
-      ...normalizeArrays(projectAnnotations?.decorators),
-    ],
-    render =
-      storyAnnotations?.userStoryFn ||
-      storyAnnotations?.render ||
-      componentAnnotations.render ||
-      projectAnnotations.render;
-  if (!render)
-    throw new Error(`No render function available for storyId '${id}'`);
-  let decoratedStoryFn = applyHooks(applyDecorators)(
-      undecoratedStoryFn,
-      decorators,
-    ),
-    unboundStoryFn = (context) => decoratedStoryFn(context),
-    play = storyAnnotations?.play || componentAnnotations.play;
-  return {
-    ...partialAnnotations,
-    moduleExport,
-    id,
-    name: name2,
-    story: name2,
-    originalStoryFn: render,
-    undecoratedStoryFn,
-    unboundStoryFn,
-    applyLoaders,
-    playFunction:
-      play &&
-      (async (storyContext) => {
-        let playFunctionContext = {
-          ...storyContext,
-          step: (label, play2) => runStep(label, play2, playFunctionContext),
-        };
-        return play(playFunctionContext);
-      }),
-  };
-}
-function prepareMeta(componentAnnotations, projectAnnotations, moduleExport) {
-  return {
-    ...preparePartialAnnotations(
-      void 0,
-      componentAnnotations,
-      projectAnnotations,
-    ),
-    moduleExport,
-  };
-}
-function preparePartialAnnotations(
-  storyAnnotations,
-  componentAnnotations,
-  projectAnnotations,
-) {
-  let tags = [
-      ...(storyAnnotations?.tags || componentAnnotations.tags || []),
-      'story',
-    ],
-    parameters = combineParameters(
-      projectAnnotations.parameters,
-      componentAnnotations.parameters,
-      storyAnnotations?.parameters,
-    ),
-    { argTypesEnhancers = [], argsEnhancers = [] } = projectAnnotations,
-    passedArgTypes = combineParameters(
-      projectAnnotations.argTypes,
-      componentAnnotations.argTypes,
-      storyAnnotations?.argTypes,
-    );
-  if (storyAnnotations) {
-    let render =
-      storyAnnotations?.userStoryFn ||
-      storyAnnotations?.render ||
-      componentAnnotations.render ||
-      projectAnnotations.render;
-    parameters.__isArgsStory = render && render.length > 0;
-  }
-  let passedArgs = {
-      ...projectAnnotations.args,
-      ...componentAnnotations.args,
-      ...storyAnnotations?.args,
-    },
-    contextForEnhancers = {
-      componentId: componentAnnotations.id,
-      title: componentAnnotations.title,
-      kind: componentAnnotations.title,
-      id: storyAnnotations?.id || componentAnnotations.id,
-      name: storyAnnotations?.name || '__meta',
-      story: storyAnnotations?.name || '__meta',
-      component: componentAnnotations.component,
-      subcomponents: componentAnnotations.subcomponents,
-      tags,
-      parameters,
-      initialArgs: passedArgs,
-      argTypes: passedArgTypes,
-    };
-  contextForEnhancers.argTypes = argTypesEnhancers.reduce(
-    (accumulatedArgTypes, enhancer) =>
-      enhancer({ ...contextForEnhancers, argTypes: accumulatedArgTypes }),
-    contextForEnhancers.argTypes,
-  );
-  let initialArgsBeforeEnhancers = { ...passedArgs };
-  contextForEnhancers.initialArgs = argsEnhancers.reduce(
-    (accumulatedArgs, enhancer) => ({
-      ...accumulatedArgs,
-      ...enhancer({ ...contextForEnhancers, initialArgs: accumulatedArgs }),
-    }),
-    initialArgsBeforeEnhancers,
-  );
-  let { name: name2, story, ...withoutStoryIdentifiers } = contextForEnhancers;
-  return withoutStoryIdentifiers;
-}
-function prepareContext(context) {
-  let { args: unmappedArgs } = context,
-    targetedContext = { ...context, allArgs: void 0, argsByTarget: void 0 };
-  if (scope.FEATURES?.argTypeTargetsV7) {
-    let argsByTarget = groupArgsByTarget(context);
-    targetedContext = {
-      ...context,
-      allArgs: context.args,
-      argsByTarget,
-      args: argsByTarget[UNTARGETED] || {},
-    };
-  }
-  let mappedArgs = Object.entries(targetedContext.args).reduce(
-      (acc, [key2, val]) => {
-        if (!targetedContext.argTypes[key2]?.mapping)
-          return (acc[key2] = val), acc;
-        let mappingFn = (originalValue) =>
-          originalValue in targetedContext.argTypes[key2].mapping
-            ? targetedContext.argTypes[key2].mapping[originalValue]
-            : originalValue;
-        return (
-          (acc[key2] = Array.isArray(val)
-            ? val.map(mappingFn)
-            : mappingFn(val)),
-          acc
-        );
-      },
-      {},
-    ),
-    includedArgs = Object.entries(mappedArgs).reduce((acc, [key2, val]) => {
-      let argType = targetedContext.argTypes[key2] || {};
-      return (
-        O(argType, mappedArgs, targetedContext.globals) && (acc[key2] = val),
-        acc
-      );
-    }, {});
-  return { ...targetedContext, unmappedArgs, args: includedArgs };
-}
-var inferType = (value2, name2, visited) => {
-    let type = typeof value2;
-    switch (type) {
-      case 'boolean':
-      case 'string':
-      case 'number':
-      case 'function':
-      case 'symbol':
-        return { name: type };
-    }
-    return value2
-      ? visited.has(value2)
-        ? (logger.warn(dedent`
-        We've detected a cycle in arg '${name2}'. Args should be JSON-serializable.
-
-        Consider using the mapping feature or fully custom args:
-        - Mapping: https://storybook.js.org/docs/react/writing-stories/args#mapping-to-complex-arg-values
-        - Custom args: https://storybook.js.org/docs/react/essentials/controls#fully-custom-args
-      `),
-          { name: 'other', value: 'cyclic object' })
-        : (visited.add(value2),
-          Array.isArray(value2)
-            ? {
-                name: 'array',
-                value:
-                  value2.length > 0
-                    ? inferType(value2[0], name2, new Set(visited))
-                    : { name: 'other', value: 'unknown' },
-              }
-            : {
-                name: 'object',
-                value: (0, import_mapValues.default)(value2, (field) =>
-                  inferType(field, name2, new Set(visited)),
-                ),
-              })
-      : { name: 'object', value: {} };
-  },
-  inferArgTypes = (context) => {
-    let { id, argTypes: userArgTypes = {}, initialArgs = {} } = context,
-      argTypes = (0, import_mapValues.default)(initialArgs, (arg, key2) => ({
-        name: key2,
-        type: inferType(arg, `${id}.${key2}`, new Set()),
-      })),
-      userArgTypesNames = (0, import_mapValues.default)(
-        userArgTypes,
-        (argType, key2) => ({ name: key2 }),
-      );
-    return combineParameters(argTypes, userArgTypesNames, userArgTypes);
-  };
-inferArgTypes.secondPass = !0;
-var matches = (name2, descriptor) =>
-    Array.isArray(descriptor)
-      ? descriptor.includes(name2)
-      : name2.match(descriptor),
-  filterArgTypes = (argTypes, include, exclude) =>
-    !include && !exclude
-      ? argTypes
-      : argTypes &&
-        (0, import_pickBy.default)(argTypes, (argType, key2) => {
-          let name2 = argType.name || key2;
-          return (
-            (!include || matches(name2, include)) &&
-            (!exclude || !matches(name2, exclude))
-          );
-        }),
-  inferControl = (argType, name2, matchers) => {
-    let { type, options: options2 } = argType;
-    if (type) {
-      if (matchers.color && matchers.color.test(name2)) {
-        let controlType = type.name;
-        if (controlType === 'string') return { control: { type: 'color' } };
-        controlType !== 'enum' &&
-          logger.warn(
-            `Addon controls: Control of type color only supports string, received "${controlType}" instead`,
-          );
-      }
-      if (matchers.date && matchers.date.test(name2))
-        return { control: { type: 'date' } };
-      switch (type.name) {
-        case 'array':
-          return { control: { type: 'object' } };
-        case 'boolean':
-          return { control: { type: 'boolean' } };
-        case 'string':
-          return { control: { type: 'text' } };
-        case 'number':
-          return { control: { type: 'number' } };
-        case 'enum': {
-          let { value: value2 } = type;
-          return {
-            control: { type: value2?.length <= 5 ? 'radio' : 'select' },
-            options: value2,
-          };
-        }
-        case 'function':
-        case 'symbol':
-          return null;
-        default:
-          return { control: { type: options2 ? 'select' : 'object' } };
-      }
-    }
-  },
-  inferControls = (context) => {
-    let {
-      argTypes,
-      parameters: {
-        __isArgsStory,
-        controls: { include = null, exclude = null, matchers = {} } = {},
-      },
-    } = context;
-    if (!__isArgsStory) return argTypes;
-    let filteredArgTypes = filterArgTypes(argTypes, include, exclude),
-      withControls = (0, import_mapValues.default)(
-        filteredArgTypes,
-        (argType, name2) =>
-          argType?.type && inferControl(argType, name2, matchers),
-      );
-    return combineParameters(withControls, filteredArgTypes);
-  };
-inferControls.secondPass = !0;
-function normalizeProjectAnnotations({
-  argTypes,
-  globalTypes,
-  argTypesEnhancers,
-  decorators,
-  loaders,
-  ...annotations
-}) {
-  return {
-    ...(argTypes && { argTypes: normalizeInputTypes(argTypes) }),
-    ...(globalTypes && { globalTypes: normalizeInputTypes(globalTypes) }),
-    decorators: normalizeArrays(decorators),
-    loaders: normalizeArrays(loaders),
-    argTypesEnhancers: [
-      ...(argTypesEnhancers || []),
-      inferArgTypes,
-      inferControls,
-    ],
-    ...annotations,
-  };
-}
-function composeStepRunners(stepRunners) {
-  return async (label, play, playContext) => {
-    await stepRunners.reduceRight(
-      (innerPlay, stepRunner) => async () =>
-        stepRunner(label, innerPlay, playContext),
-      async () => play(playContext),
-    )();
-  };
-}
-function getField(moduleExportList, field) {
-  return moduleExportList
-    .map((xs) => xs.default?.[field] ?? xs[field])
-    .filter(Boolean);
-}
-function getArrayField(moduleExportList, field, options2 = {}) {
-  return getField(moduleExportList, field).reduce((prev, cur) => {
-    let normalized = normalizeArrays(cur);
-    return options2.reverseFileOrder
-      ? [...normalized, ...prev]
-      : [...prev, ...normalized];
-  }, []);
-}
-function getObjectField(moduleExportList, field) {
-  return Object.assign({}, ...getField(moduleExportList, field));
-}
-function getSingletonField(moduleExportList, field) {
-  return getField(moduleExportList, field).pop();
-}
-function composeConfigs(moduleExportList) {
-  let allArgTypeEnhancers = getArrayField(
-      moduleExportList,
-      'argTypesEnhancers',
-    ),
-    stepRunners = getField(moduleExportList, 'runStep');
-  return {
-    parameters: combineParameters(...getField(moduleExportList, 'parameters')),
-    decorators: getArrayField(moduleExportList, 'decorators', {
-      reverseFileOrder: !(scope.FEATURES?.legacyDecoratorFileOrder ?? !1),
-    }),
-    args: getObjectField(moduleExportList, 'args'),
-    argsEnhancers: getArrayField(moduleExportList, 'argsEnhancers'),
-    argTypes: getObjectField(moduleExportList, 'argTypes'),
-    argTypesEnhancers: [
-      ...allArgTypeEnhancers.filter((e) => !e.secondPass),
-      ...allArgTypeEnhancers.filter((e) => e.secondPass),
-    ],
-    globals: getObjectField(moduleExportList, 'globals'),
-    globalTypes: getObjectField(moduleExportList, 'globalTypes'),
-    loaders: getArrayField(moduleExportList, 'loaders'),
-    render: getSingletonField(moduleExportList, 'render'),
-    renderToCanvas: getSingletonField(moduleExportList, 'renderToCanvas'),
-    renderToDOM: getSingletonField(moduleExportList, 'renderToDOM'),
-    applyDecorators: getSingletonField(moduleExportList, 'applyDecorators'),
-    runStep: composeStepRunners(stepRunners),
-  };
-}
-var globalProjectAnnotations = {};
-function setProjectAnnotations(projectAnnotations) {
-  let annotations = Array.isArray(projectAnnotations)
-    ? projectAnnotations
-    : [projectAnnotations];
-  globalProjectAnnotations = composeConfigs(annotations);
-}
-function composeStory(
-  storyAnnotations,
-  componentAnnotations,
-  projectAnnotations,
-  defaultConfig,
-  exportsName,
-) {
-  if (storyAnnotations === void 0)
-    throw new Error('Expected a story but received undefined.');
-  componentAnnotations.title = componentAnnotations.title ?? 'ComposedStory';
-  let normalizedComponentAnnotations =
-      normalizeComponentAnnotations(componentAnnotations),
-    storyName =
-      exportsName ||
-      storyAnnotations.storyName ||
-      storyAnnotations.story?.name ||
-      storyAnnotations.name ||
-      'Unnamed Story',
-    normalizedStory = normalizeStory(
-      storyName,
-      storyAnnotations,
-      normalizedComponentAnnotations,
-    ),
-    normalizedProjectAnnotations = normalizeProjectAnnotations(
-      composeConfigs([
-        defaultConfig ?? {},
-        globalProjectAnnotations,
-        projectAnnotations ?? {},
-      ]),
-    ),
-    story = prepareStory(
-      normalizedStory,
-      normalizedComponentAnnotations,
-      normalizedProjectAnnotations,
-    ),
-    globalsFromGlobalTypes = getValuesFromArgTypes(
-      normalizedProjectAnnotations.globalTypes,
-    ),
-    context = {
-      hooks: new HooksContext(),
-      globals: {
-        ...globalsFromGlobalTypes,
-        ...normalizedProjectAnnotations.globals,
-      },
-      args: { ...story.initialArgs },
-      viewMode: 'story',
-      loaded: {},
-      abortSignal: null,
-      canvasElement: null,
-      ...story,
-    },
-    playFunction = story.playFunction
-      ? async (extraContext) =>
-          story.playFunction({
-            ...context,
-            ...extraContext,
-            canvasElement:
-              extraContext?.canvasElement ?? globalThis.document?.body,
-          })
-      : void 0;
-  return Object.assign(
-    function (extraArgs) {
-      return (
-        (context.args = { ...context.initialArgs, ...extraArgs }),
-        story.unboundStoryFn(prepareContext(context))
-      );
-    },
-    {
-      id: story.id,
-      storyName,
-      load: async () => {
-        let loadedContext = await story.applyLoaders(context);
-        context.loaded = loadedContext.loaded;
-      },
-      args: story.initialArgs,
-      parameters: story.parameters,
-      argTypes: story.argTypes,
-      play: playFunction,
-    },
-  );
-}
-function composeStories(storiesImport, globalConfig, composeStoryFn) {
-  let {
-    default: meta,
-    __esModule,
-    __namedExportsOrder,
-    ...stories
-  } = storiesImport;
-  return Object.entries(stories).reduce(
-    (storiesMap, [exportsName, story]) =>
-      G(exportsName, meta)
-        ? Object.assign(storiesMap, {
-            [exportsName]: composeStoryFn(
-              story,
-              meta,
-              globalConfig,
-              exportsName,
-            ),
-          })
-        : storiesMap,
-    {},
-  );
-}
-var CSF_CACHE_SIZE = 1e3,
-  STORY_CACHE_SIZE = 1e4,
-  StoryStore = class {
-    constructor(storyIndex, importFn, projectAnnotations) {
-      (this.importFn = importFn),
-        (this.getStoriesJsonData = () => {
-          let value2 = this.getSetStoriesPayload(),
-            allowedParameters = [
-              'fileName',
-              'docsOnly',
-              'framework',
-              '__id',
-              '__isArgsStory',
-            ];
-          return {
-            v: 3,
-            stories: (0, import_mapValues.default)(value2.stories, (story) => {
-              let { importPath } = this.storyIndex.entries[story.id];
-              return {
-                ...(0, import_pick.default)(story, ['id', 'name', 'title']),
-                importPath,
-                kind: story.title,
-                story: story.name,
-                parameters: {
-                  ...(0, import_pick.default)(
-                    story.parameters,
-                    allowedParameters,
-                  ),
-                  fileName: importPath,
-                },
-              };
-            }),
-          };
-        }),
-        (this.storyIndex = new StoryIndexStore(storyIndex)),
-        (this.projectAnnotations =
-          normalizeProjectAnnotations(projectAnnotations));
-      let { globals, globalTypes } = projectAnnotations;
-      (this.args = new ArgsStore()),
-        (this.globals = new GlobalsStore({ globals, globalTypes })),
-        (this.hooks = {}),
-        (this.processCSFFileWithCache = (0, import_memoizerific2.default)(
-          CSF_CACHE_SIZE,
-        )(processCSFFile)),
-        (this.prepareMetaWithCache = (0, import_memoizerific2.default)(
-          CSF_CACHE_SIZE,
-        )(prepareMeta)),
-        (this.prepareStoryWithCache = (0, import_memoizerific2.default)(
-          STORY_CACHE_SIZE,
-        )(prepareStory));
-    }
-    setProjectAnnotations(projectAnnotations) {
-      this.projectAnnotations = normalizeProjectAnnotations(projectAnnotations);
-      let { globals, globalTypes } = projectAnnotations;
-      this.globals.set({ globals, globalTypes });
-    }
-    async onStoriesChanged({ importFn, storyIndex }) {
-      importFn && (this.importFn = importFn),
-        storyIndex && (this.storyIndex.entries = storyIndex.entries),
-        this.cachedCSFFiles && (await this.cacheAllCSFFiles());
-    }
-    async storyIdToEntry(storyId) {
-      return this.storyIndex.storyIdToEntry(storyId);
-    }
-    async loadCSFFileByStoryId(storyId) {
-      let { importPath, title } = this.storyIndex.storyIdToEntry(storyId),
-        moduleExports = await this.importFn(importPath);
-      return this.processCSFFileWithCache(moduleExports, importPath, title);
-    }
-    async loadAllCSFFiles() {
-      let importPaths = {};
-      return (
-        Object.entries(this.storyIndex.entries).forEach(
-          ([storyId, { importPath }]) => {
-            importPaths[importPath] = storyId;
-          },
-        ),
-        (
-          await Promise.all(
-            Object.entries(importPaths).map(async ([importPath, storyId]) => ({
-              importPath,
-              csfFile: await this.loadCSFFileByStoryId(storyId),
-            })),
-          )
-        ).reduce(
-          (acc, { importPath, csfFile }) => ((acc[importPath] = csfFile), acc),
-          {},
-        )
-      );
-    }
-    async cacheAllCSFFiles() {
-      this.cachedCSFFiles = await this.loadAllCSFFiles();
-    }
-    preparedMetaFromCSFFile({ csfFile }) {
-      let componentAnnotations = csfFile.meta;
-      return this.prepareMetaWithCache(
-        componentAnnotations,
-        this.projectAnnotations,
-        csfFile.moduleExports.default,
-      );
-    }
-    async loadStory({ storyId }) {
-      let csfFile = await this.loadCSFFileByStoryId(storyId);
-      return this.storyFromCSFFile({ storyId, csfFile });
-    }
-    storyFromCSFFile({ storyId, csfFile }) {
-      let storyAnnotations = csfFile.stories[storyId];
-      if (!storyAnnotations)
-        throw new MissingStoryFromCsfFileError({ storyId });
-      let componentAnnotations = csfFile.meta,
-        story = this.prepareStoryWithCache(
-          storyAnnotations,
-          componentAnnotations,
-          this.projectAnnotations,
-        );
-      return (
-        this.args.setInitial(story),
-        (this.hooks[story.id] = this.hooks[story.id] || new HooksContext()),
-        story
-      );
-    }
-    componentStoriesFromCSFFile({ csfFile }) {
-      return Object.keys(this.storyIndex.entries)
-        .filter((storyId) => !!csfFile.stories[storyId])
-        .map((storyId) => this.storyFromCSFFile({ storyId, csfFile }));
-    }
-    async loadEntry(id) {
-      let entry = await this.storyIdToEntry(id),
-        storyImports = entry.type === 'docs' ? entry.storiesImports : [],
-        [entryExports, ...csfFiles] = await Promise.all([
-          this.importFn(entry.importPath),
-          ...storyImports.map((storyImportPath) => {
-            let firstStoryEntry =
-              this.storyIndex.importPathToEntry(storyImportPath);
-            return this.loadCSFFileByStoryId(firstStoryEntry.id);
-          }),
-        ]);
-      return { entryExports, csfFiles };
-    }
-    getStoryContext(story, { forceInitialArgs = !1 } = {}) {
-      return prepareContext({
-        ...story,
-        args: forceInitialArgs ? story.initialArgs : this.args.get(story.id),
-        globals: this.globals.get(),
-        hooks: this.hooks[story.id],
-      });
-    }
-    cleanupStory(story) {
-      this.hooks[story.id].clean();
-    }
-    extract(options2 = { includeDocsOnly: !1 }) {
-      let { cachedCSFFiles } = this;
-      if (!cachedCSFFiles) throw new CalledExtractOnStoreError();
-      return Object.entries(this.storyIndex.entries).reduce(
-        (acc, [storyId, { type, importPath }]) => {
-          if (type === 'docs') return acc;
-          let csfFile = cachedCSFFiles[importPath],
-            story = this.storyFromCSFFile({ storyId, csfFile });
-          return (
-            (!options2.includeDocsOnly && story.parameters.docsOnly) ||
-              (acc[storyId] = Object.entries(story).reduce(
-                (storyAcc, [key2, value2]) =>
-                  key2 === 'moduleExport' || typeof value2 == 'function'
-                    ? storyAcc
-                    : Array.isArray(value2)
-                      ? Object.assign(storyAcc, {
-                          [key2]: value2.slice().sort(),
-                        })
-                      : Object.assign(storyAcc, { [key2]: value2 }),
-                { args: story.initialArgs },
-              )),
-            acc
-          );
-        },
-        {},
-      );
-    }
-    getSetStoriesPayload() {
-      let stories = this.extract({ includeDocsOnly: !0 }),
-        kindParameters = Object.values(stories).reduce(
-          (acc, { title }) => ((acc[title] = {}), acc),
-          {},
-        );
-      return {
-        v: 2,
-        globals: this.globals.get(),
-        globalParameters: {},
-        kindParameters,
-        stories,
-      };
-    }
-    raw() {
-      return (
-        deprecate(
-          'StoryStore.raw() is deprecated and will be removed in 9.0, please use extract() instead',
-        ),
-        Object.values(this.extract())
-          .map(({ id }) => this.fromId(id))
-          .filter(Boolean)
-      );
-    }
-    fromId(storyId) {
-      if (
-        (deprecate(
-          'StoryStore.fromId() is deprecated and will be removed in 9.0, please use loadStory() instead',
-        ),
-        !this.cachedCSFFiles)
-      )
-        throw new Error(
-          'Cannot call fromId/raw() unless you call cacheAllCSFFiles() first.',
-        );
-      let importPath;
-      try {
-        ({ importPath } = this.storyIndex.storyIdToEntry(storyId));
-      } catch {
-        return null;
-      }
-      let csfFile = this.cachedCSFFiles[importPath],
-        story = this.storyFromCSFFile({ storyId, csfFile });
-      return {
-        ...story,
-        storyFn: (update) => {
-          let context = { ...this.getStoryContext(story), viewMode: 'story' };
-          return story.unboundStoryFn({ ...context, ...update });
-        },
-      };
-    }
-  };
-function slash(path) {
-  return path.startsWith('\\\\?\\') ? path : path.replace(/\\/g, '/');
-}
-var sanitize2 = (parts) => {
-  if (parts.length === 0) return parts;
-  let last = parts[parts.length - 1],
-    lastStripped = last?.replace(/(?:[.](?:story|stories))?([.][^.]+)$/i, '');
-  if (parts.length === 1) return [lastStripped];
-  let nextToLast = parts[parts.length - 2];
-  return lastStripped &&
-    nextToLast &&
-    lastStripped.toLowerCase() === nextToLast.toLowerCase()
-    ? [...parts.slice(0, -2), lastStripped]
-    : lastStripped &&
-        (/^(story|stories)([.][^.]+)$/i.test(last) ||
-          /^index$/i.test(lastStripped))
-      ? parts.slice(0, -1)
-      : [...parts.slice(0, -1), lastStripped];
-};
-function pathJoin(paths) {
-  return paths
-    .flatMap((p) => p.split('/'))
-    .filter(Boolean)
-    .join('/');
-}
-var userOrAutoTitleFromSpecifier = (fileName, entry, userTitle) => {
-    let { directory, importPathMatcher, titlePrefix = '' } = entry || {};
-    typeof fileName == 'number' &&
-      once.warn(dedent`
-      CSF Auto-title received a numeric fileName. This typically happens when
-      webpack is mis-configured in production mode. To force webpack to produce
-      filenames, set optimization.moduleIds = "named" in your webpack config.
-    `);
-    let normalizedFileName = slash(String(fileName));
-    if (importPathMatcher.exec(normalizedFileName)) {
-      if (!userTitle) {
-        let suffix = normalizedFileName.replace(directory, ''),
-          parts = pathJoin([titlePrefix, suffix]).split('/');
-        return (parts = sanitize2(parts)), parts.join('/');
-      }
-      return titlePrefix ? pathJoin([titlePrefix, userTitle]) : userTitle;
-    }
-  },
-  userOrAutoTitle = (fileName, storiesEntries, userTitle) => {
-    for (let i = 0; i < storiesEntries.length; i += 1) {
-      let title = userOrAutoTitleFromSpecifier(
-        fileName,
-        storiesEntries[i],
-        userTitle,
-      );
-      if (title) return title;
-    }
-    return userTitle || void 0;
-  },
-  STORY_KIND_PATH_SEPARATOR = /\s*\/\s*/,
-  storySort =
-    (options2 = {}) =>
-    (a, b2) => {
-      if (a.title === b2.title && !options2.includeNames) return 0;
-      let method = options2.method || 'configure',
-        order = options2.order || [],
-        storyTitleA = a.title.trim().split(STORY_KIND_PATH_SEPARATOR),
-        storyTitleB = b2.title.trim().split(STORY_KIND_PATH_SEPARATOR);
-      options2.includeNames &&
-        (storyTitleA.push(a.name), storyTitleB.push(b2.name));
-      let depth = 0;
-      for (; storyTitleA[depth] || storyTitleB[depth]; ) {
-        if (!storyTitleA[depth]) return -1;
-        if (!storyTitleB[depth]) return 1;
-        let nameA = storyTitleA[depth],
-          nameB = storyTitleB[depth];
-        if (nameA !== nameB) {
-          let indexA = order.indexOf(nameA),
-            indexB = order.indexOf(nameB),
-            indexWildcard = order.indexOf('*');
-          return indexA !== -1 || indexB !== -1
-            ? (indexA === -1 &&
-                (indexWildcard !== -1
-                  ? (indexA = indexWildcard)
-                  : (indexA = order.length)),
-              indexB === -1 &&
-                (indexWildcard !== -1
-                  ? (indexB = indexWildcard)
-                  : (indexB = order.length)),
-              indexA - indexB)
-            : method === 'configure'
-              ? 0
-              : nameA.localeCompare(
-                  nameB,
-                  options2.locales ? options2.locales : void 0,
-                  { numeric: !0, sensitivity: 'accent' },
-                );
-        }
-        let index = order.indexOf(nameA);
-        index === -1 && (index = order.indexOf('*')),
-          (order =
-            index !== -1 && Array.isArray(order[index + 1])
-              ? order[index + 1]
-              : []),
-          (depth += 1);
-      }
-      return 0;
-    },
-  sortStoriesCommon = (stories, storySortParameter, fileNameOrder) => {
-    if (storySortParameter) {
-      let sortFn;
-      typeof storySortParameter == 'function'
-        ? (sortFn = storySortParameter)
-        : (sortFn = storySort(storySortParameter)),
-        stories.sort(sortFn);
-    } else
-      stories.sort(
-        (s1, s2) =>
-          fileNameOrder.indexOf(s1.importPath) -
-          fileNameOrder.indexOf(s2.importPath),
-      );
-    return stories;
-  },
-  sortStoriesV7 = (stories, storySortParameter, fileNameOrder) => {
-    try {
-      return sortStoriesCommon(stories, storySortParameter, fileNameOrder);
-    } catch (err) {
-      throw new Error(dedent`
-    Error sorting stories with sort parameter ${storySortParameter}:
-
-    > ${err.message}
-    
-    Are you using a V6-style sort function in V7 mode?
-
-    More info: https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#v7-style-story-sort
-  `);
-    }
-  },
+  }),
   PREPARE_ABORTED = new Error('prepareAborted'),
   { AbortController } = globalThis;
 function serializeError(error) {
@@ -13081,31 +13825,22 @@ var StoryRender = class {
           abortSignal.aborted)
         )
           return;
-        let ignoreUnhandledErrors =
-            this.story.parameters?.test?.dangerouslyIgnoreUnhandledErrors ===
-            !0,
-          unhandledErrors = new Set(),
-          onError = (event) =>
-            unhandledErrors.add('error' in event ? event.error : event.reason);
         if (
           this.renderOptions.autoplay &&
           forceRemount &&
           playFunction &&
           this.phase !== 'errored'
         ) {
-          window.addEventListener('error', onError),
-            window.addEventListener('unhandledrejection', onError),
-            (this.disableKeyListeners = !0);
+          this.disableKeyListeners = !0;
           try {
             await this.runPhase(abortSignal, 'playing', async () => {
               await playFunction(renderContext.storyContext);
             }),
-              !ignoreUnhandledErrors && unhandledErrors.size > 0
-                ? await this.runPhase(abortSignal, 'errored')
-                : await this.runPhase(abortSignal, 'played');
+              await this.runPhase(abortSignal, 'played');
           } catch (error) {
             if (
-              (await this.runPhase(abortSignal, 'errored', async () => {
+              (logger.error(error),
+              await this.runPhase(abortSignal, 'errored', async () => {
                 this.channel.emit(
                   PLAY_FUNCTION_THREW_EXCEPTION,
                   serializeError(error),
@@ -13114,21 +13849,8 @@ var StoryRender = class {
               this.story.parameters.throwPlayFunctionExceptions !== !1)
             )
               throw error;
-            console.error(error);
           }
-          if (
-            (!ignoreUnhandledErrors &&
-              unhandledErrors.size > 0 &&
-              this.channel.emit(
-                UNHANDLED_ERRORS_WHILE_PLAYING,
-                Array.from(unhandledErrors).map(serializeError),
-              ),
-            (this.disableKeyListeners = !1),
-            window.removeEventListener('unhandledrejection', onError),
-            window.removeEventListener('error', onError),
-            abortSignal.aborted)
-          )
-            return;
+          if (((this.disableKeyListeners = !1), abortSignal.aborted)) return;
         }
         await this.runPhase(abortSignal, 'completed', async () =>
           this.channel.emit(STORY_RENDERED, id),
@@ -13163,51 +13885,24 @@ var StoryRender = class {
   { fetch } = scope,
   STORY_INDEX_PATH = './index.json',
   Preview = class {
-    constructor(
-      importFn,
-      getProjectAnnotations,
-      channel = addons.getChannel(),
-      shouldInitialize = !0,
-    ) {
-      (this.importFn = importFn),
-        (this.getProjectAnnotations = getProjectAnnotations),
-        (this.channel = channel),
+    constructor(channel = addons.getChannel()) {
+      (this.channel = channel),
         (this.storyRenders = []),
-        (this.storeInitializationPromise = new Promise((resolve, reject) => {
-          (this.resolveStoreInitializationPromise = resolve),
-            (this.rejectStoreInitializationPromise = reject);
-        })),
-        shouldInitialize && this.initialize();
+        scope.FEATURES?.storyStoreV7 &&
+          addons.hasServerChannel() &&
+          (this.serverChannel = addons.getServerChannel()),
+        (this.storyStore = new StoryStore());
     }
-    get storyStore() {
-      return new Proxy(
-        {},
-        {
-          get: (_, method) => {
-            if (this.storyStoreValue)
-              return (
-                deprecate(
-                  'Accessing the Story Store is deprecated and will be removed in 9.0',
-                ),
-                this.storyStoreValue[method]
-              );
-            throw new StoryStoreAccessedBeforeInitializationError();
-          },
-        },
+    initialize({ getStoryIndex, importFn, getProjectAnnotations }) {
+      return (
+        (this.getStoryIndex = getStoryIndex),
+        (this.importFn = importFn),
+        this.setupListeners(),
+        this.getProjectAnnotationsOrRenderError(getProjectAnnotations).then(
+          (projectAnnotations) =>
+            this.initializeWithProjectAnnotations(projectAnnotations),
+        )
       );
-    }
-    async initialize() {
-      this.setupListeners();
-      try {
-        let projectAnnotations =
-          await this.getProjectAnnotationsOrRenderError();
-        await this.initializeWithProjectAnnotations(projectAnnotations);
-      } catch (err) {
-        this.rejectStoreInitializationPromise(err);
-      }
-    }
-    ready() {
-      return this.storeInitializationPromise;
     }
     setupListeners() {
       this.channel.on(
@@ -13220,90 +13915,106 @@ var StoryRender = class {
         this.channel.on(FORCE_RE_RENDER, this.onForceReRender.bind(this)),
         this.channel.on(FORCE_REMOUNT, this.onForceRemount.bind(this));
     }
-    async getProjectAnnotationsOrRenderError() {
-      try {
-        let projectAnnotations = await this.getProjectAnnotations();
-        if (
-          ((this.renderToCanvas = projectAnnotations.renderToCanvas),
-          !this.renderToCanvas)
-        )
-          throw new MissingRenderToCanvasError();
-        return projectAnnotations;
-      } catch (err) {
-        throw (
-          (this.renderPreviewEntryError('Error reading preview.js:', err), err)
-        );
+    getProjectAnnotationsOrRenderError(getProjectAnnotations) {
+      return import_synchronous_promise3.SynchronousPromise.resolve()
+        .then(getProjectAnnotations)
+        .then((projectAnnotations) => {
+          if (
+            (projectAnnotations.renderToDOM &&
+              deprecate(
+                '`renderToDOM` is deprecated, please rename to `renderToCanvas`',
+              ),
+            (this.renderToCanvas =
+              projectAnnotations.renderToCanvas ||
+              projectAnnotations.renderToDOM),
+            !this.renderToCanvas)
+          )
+            throw new Error(dedent`
+            Expected your framework's preset to export a \`renderToCanvas\` field.
+
+            Perhaps it needs to be upgraded for Storybook 6.4?
+
+            More info: https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#mainjs-framework-field
+          `);
+          return projectAnnotations;
+        })
+        .catch((err) => {
+          throw (
+            (this.renderPreviewEntryError('Error reading preview.js:', err),
+            err)
+          );
+        });
+    }
+    initializeWithProjectAnnotations(projectAnnotations) {
+      this.storyStore.setProjectAnnotations(projectAnnotations),
+        this.setInitialGlobals();
+      let storyIndexPromise;
+      if (scope.FEATURES?.storyStoreV7)
+        storyIndexPromise = this.getStoryIndexFromServer();
+      else {
+        if (!this.getStoryIndex)
+          throw new Error('No `getStoryIndex` passed defined in v6 mode');
+        storyIndexPromise =
+          import_synchronous_promise3.SynchronousPromise.resolve().then(
+            this.getStoryIndex,
+          );
       }
-    }
-    async initializeWithProjectAnnotations(projectAnnotations) {
-      this.projectAnnotationsBeforeInitialization = projectAnnotations;
-      try {
-        let storyIndex = await this.getStoryIndexFromServer();
-        return this.initializeWithStoryIndex(storyIndex);
-      } catch (err) {
-        throw (
-          (this.renderPreviewEntryError('Error loading story index:', err), err)
-        );
-      }
-    }
-    async getStoryIndexFromServer() {
-      let result2 = await fetch(STORY_INDEX_PATH);
-      if (result2.status === 200) return result2.json();
-      throw new StoryIndexFetchError({ text: await result2.text() });
-    }
-    initializeWithStoryIndex(storyIndex) {
-      if (!this.projectAnnotationsBeforeInitialization)
-        throw new Error(
-          'Cannot call initializeWithStoryIndex until project annotations resolve',
-        );
-      (this.storyStoreValue = new StoryStore(
-        storyIndex,
-        this.importFn,
-        this.projectAnnotationsBeforeInitialization,
-      )),
-        delete this.projectAnnotationsBeforeInitialization,
-        this.setInitialGlobals(),
-        this.resolveStoreInitializationPromise();
+      return storyIndexPromise
+        .then((storyIndex) => this.initializeWithStoryIndex(storyIndex))
+        .catch((err) => {
+          throw (
+            (this.renderPreviewEntryError('Error loading story index:', err),
+            err)
+          );
+        });
     }
     async setInitialGlobals() {
       this.emitGlobals();
     }
     emitGlobals() {
-      if (!this.storyStoreValue)
-        throw new CalledPreviewMethodBeforeInitializationError({
-          methodName: 'emitGlobals',
-        });
+      if (!this.storyStore.globals || !this.storyStore.projectAnnotations)
+        throw new Error('Cannot emit before initialization');
       let payload = {
-        globals: this.storyStoreValue.globals.get() || {},
-        globalTypes: this.storyStoreValue.projectAnnotations.globalTypes || {},
+        globals: this.storyStore.globals.get() || {},
+        globalTypes: this.storyStore.projectAnnotations.globalTypes || {},
       };
       this.channel.emit(SET_GLOBALS, payload);
     }
+    async getStoryIndexFromServer() {
+      let result2 = await fetch(STORY_INDEX_PATH);
+      if (result2.status === 200) return result2.json();
+      throw new Error(await result2.text());
+    }
+    initializeWithStoryIndex(storyIndex) {
+      if (!this.importFn)
+        throw new Error(
+          'Cannot call initializeWithStoryIndex before initialization',
+        );
+      return this.storyStore.initialize({
+        storyIndex,
+        importFn: this.importFn,
+        cache: !scope.FEATURES?.storyStoreV7,
+      });
+    }
     async onGetProjectAnnotationsChanged({ getProjectAnnotations }) {
-      delete this.previewEntryError,
-        (this.getProjectAnnotations = getProjectAnnotations);
-      let projectAnnotations = await this.getProjectAnnotationsOrRenderError();
-      if (!this.storyStoreValue) {
+      delete this.previewEntryError;
+      let projectAnnotations = await this.getProjectAnnotationsOrRenderError(
+        getProjectAnnotations,
+      );
+      if (!this.storyStore.projectAnnotations) {
         await this.initializeWithProjectAnnotations(projectAnnotations);
         return;
       }
-      this.storyStoreValue.setProjectAnnotations(projectAnnotations),
+      await this.storyStore.setProjectAnnotations(projectAnnotations),
         this.emitGlobals();
     }
     async onStoryIndexChanged() {
-      if (
-        (delete this.previewEntryError,
-        !(
-          !this.storyStoreValue && !this.projectAnnotationsBeforeInitialization
-        ))
-      )
+      if ((delete this.previewEntryError, !!this.storyStore.projectAnnotations))
         try {
           let storyIndex = await this.getStoryIndexFromServer();
-          if (this.projectAnnotationsBeforeInitialization) {
-            this.initializeWithStoryIndex(storyIndex);
-            return;
-          }
-          await this.onStoriesChanged({ storyIndex });
+          this.storyStore.storyIndex ||
+            (await this.initializeWithStoryIndex(storyIndex)),
+            await this.onStoriesChanged({ storyIndex });
         } catch (err) {
           throw (
             (this.renderPreviewEntryError('Error loading story index:', err),
@@ -13312,30 +14023,20 @@ var StoryRender = class {
         }
     }
     async onStoriesChanged({ importFn, storyIndex }) {
-      if (!this.storyStoreValue)
-        throw new CalledPreviewMethodBeforeInitializationError({
-          methodName: 'onStoriesChanged',
-        });
-      await this.storyStoreValue.onStoriesChanged({ importFn, storyIndex });
+      await this.storyStore.onStoriesChanged({ importFn, storyIndex });
     }
     async onUpdateGlobals({ globals }) {
-      if (!this.storyStoreValue)
-        throw new CalledPreviewMethodBeforeInitializationError({
-          methodName: 'onUpdateGlobals',
-        });
-      this.storyStoreValue.globals.update(globals),
+      if (!this.storyStore.globals)
+        throw new Error('Cannot call onUpdateGlobals before initialization');
+      this.storyStore.globals.update(globals),
         await Promise.all(this.storyRenders.map((r) => r.rerender())),
         this.channel.emit(GLOBALS_UPDATED, {
-          globals: this.storyStoreValue.globals.get(),
-          initialGlobals: this.storyStoreValue.globals.initialGlobals,
+          globals: this.storyStore.globals.get(),
+          initialGlobals: this.storyStore.globals.initialGlobals,
         });
     }
     async onUpdateArgs({ storyId, updatedArgs }) {
-      if (!this.storyStoreValue)
-        throw new CalledPreviewMethodBeforeInitializationError({
-          methodName: 'onUpdateArgs',
-        });
-      this.storyStoreValue.args.update(storyId, updatedArgs),
+      this.storyStore.args.update(storyId, updatedArgs),
         await Promise.all(
           this.storyRenders
             .filter(
@@ -13345,22 +14046,18 @@ var StoryRender = class {
         ),
         this.channel.emit(STORY_ARGS_UPDATED, {
           storyId,
-          args: this.storyStoreValue.args.get(storyId),
+          args: this.storyStore.args.get(storyId),
         });
     }
     async onResetArgs({ storyId, argNames }) {
-      if (!this.storyStoreValue)
-        throw new CalledPreviewMethodBeforeInitializationError({
-          methodName: 'onResetArgs',
-        });
       let story =
           this.storyRenders.find((r) => r.id === storyId)?.story ||
-          (await this.storyStoreValue.loadStory({ storyId })),
+          (await this.storyStore.loadStory({ storyId })),
         updatedArgs = (
           argNames || [
             ...new Set([
               ...Object.keys(story.initialArgs),
-              ...Object.keys(this.storyStoreValue.args.get(storyId)),
+              ...Object.keys(this.storyStore.args.get(storyId)),
             ]),
           ]
         ).reduce(
@@ -13380,13 +14077,13 @@ var StoryRender = class {
       );
     }
     renderStoryToElement(story, element, callbacks, options2) {
-      if (!this.renderToCanvas || !this.storyStoreValue)
-        throw new CalledPreviewMethodBeforeInitializationError({
-          methodName: 'renderStoryToElement',
-        });
+      if (!this.renderToCanvas)
+        throw new Error(
+          'Cannot call renderStoryToElement before initialization',
+        );
       let render = new StoryRender(
         this.channel,
-        this.storyStoreValue,
+        this.storyStore,
         this.renderToCanvas,
         callbacks,
         story.id,
@@ -13406,29 +14103,16 @@ var StoryRender = class {
       (this.storyRenders = this.storyRenders.filter((r) => r !== render)),
         await render?.teardown?.({ viewModeChanged });
     }
-    async loadStory({ storyId }) {
-      if (!this.storyStoreValue)
-        throw new CalledPreviewMethodBeforeInitializationError({
-          methodName: 'loadStory',
-        });
-      return this.storyStoreValue.loadStory({ storyId });
-    }
-    getStoryContext(story, { forceInitialArgs = !1 } = {}) {
-      if (!this.storyStoreValue)
-        throw new CalledPreviewMethodBeforeInitializationError({
-          methodName: 'getStoryContext',
-        });
-      return this.storyStoreValue.getStoryContext(story, { forceInitialArgs });
-    }
     async extract(options2) {
-      if (!this.storyStoreValue)
-        throw new CalledPreviewMethodBeforeInitializationError({
-          methodName: 'extract',
-        });
       if (this.previewEntryError) throw this.previewEntryError;
+      if (!this.storyStore.projectAnnotations)
+        throw new Error(dedent`Failed to initialize Storybook.
+
+      Do you have an error in your \`preview.js\`? Check your Storybook's browser console for errors.`);
       return (
-        await this.storyStoreValue.cacheAllCSFFiles(),
-        this.storyStoreValue.extract(options2)
+        scope.FEATURES?.storyStoreV7 &&
+          (await this.storyStore.cacheAllCSFFiles()),
+        this.storyStore.extract(options2)
       );
     }
     renderPreviewEntryError(reason, err) {
@@ -13449,8 +14133,6 @@ var StoryRender = class {
           throw new Error(`No story found with that name: ${storyName}`);
         }),
         (this.componentStories = () => this.componentStoriesValue),
-        (this.componentStoriesFromCSFFile = (csfFile) =>
-          this.store.componentStoriesFromCSFFile({ csfFile })),
         (this.storyById = (storyId) => {
           if (!storyId) {
             if (!this.primaryStory)
@@ -13471,12 +14153,11 @@ var StoryRender = class {
           viewMode: 'docs',
         })),
         (this.loadStory = (id) => this.store.loadStory({ storyId: id })),
-        (this.componentStoriesValue = []),
         (this.storyIdToCSFFile = new Map()),
         (this.exportToStory = new Map()),
         (this.exportsToCSFFile = new Map()),
         (this.nameToStoryId = new Map()),
-        (this.attachedCSFFiles = new Set()),
+        (this.componentStoriesValue = []),
         csfFiles.forEach((csfFile, index) => {
           this.referenceCSFFile(csfFile);
         });
@@ -13495,13 +14176,12 @@ var StoryRender = class {
         throw new Error(
           'Cannot attach a CSF file that has not been referenced',
         );
-      this.attachedCSFFiles.has(csfFile) ||
-        (this.attachedCSFFiles.add(csfFile),
+      (this.attachedCSFFile = csfFile),
         this.store.componentStoriesFromCSFFile({ csfFile }).forEach((story) => {
           this.nameToStoryId.set(story.name, story.id),
             this.componentStoriesValue.push(story),
             this.primaryStory || (this.primaryStory = story);
-        }));
+        });
     }
     referenceMeta(metaExports, attach) {
       let resolved = this.resolveModuleExport(metaExports);
@@ -13527,14 +14207,13 @@ var StoryRender = class {
           );
         return { type: 'story', story: this.primaryStory };
       }
-      if (this.attachedCSFFiles.size === 0)
+      if (!this.attachedCSFFile)
         throw new Error(
           'No CSF file attached to this docs file, did you forget to use <Meta of={} />?',
         );
-      let firstAttachedCSFFile = Array.from(this.attachedCSFFiles)[0];
       if (moduleExportType === 'meta')
-        return { type: 'meta', csfFile: firstAttachedCSFFile };
-      let { component } = firstAttachedCSFFile.meta;
+        return { type: 'meta', csfFile: this.attachedCSFFile };
+      let { component } = this.attachedCSFFile.meta;
       if (!component)
         throw new Error(
           'Attached CSF file does not defined a component, did you forget to export one?',
@@ -13750,11 +14429,11 @@ function focusInInput(event) {
     target.getAttribute('contenteditable') !== null
   );
 }
-var AUTODOCS_TAG = 'autodocs',
-  STORIES_MDX_TAG = 'stories-mdx',
+var AUTODOCS_TAG2 = 'autodocs',
+  STORIES_MDX_TAG2 = 'stories-mdx',
   ATTACHED_MDX_TAG = 'attached-mdx';
 function isMdxEntry({ tags }) {
-  return !tags?.includes(AUTODOCS_TAG) && !tags?.includes(STORIES_MDX_TAG);
+  return !tags?.includes(AUTODOCS_TAG2) && !tags?.includes(STORIES_MDX_TAG2);
 }
 function isStoryRender(r) {
   return r.type === 'story';
@@ -13766,13 +14445,8 @@ function isCsfDocsRender(r) {
   return isDocsRender(r) && r.subtype === 'csf';
 }
 var PreviewWithSelection = class extends Preview {
-    constructor(importFn, getProjectAnnotations, selectionStore, view) {
-      super(importFn, getProjectAnnotations, void 0, !1),
-        (this.importFn = importFn),
-        (this.getProjectAnnotations = getProjectAnnotations),
-        (this.selectionStore = selectionStore),
-        (this.view = view),
-        this.initialize();
+    constructor(selectionStore, view) {
+      super(), (this.selectionStore = selectionStore), (this.view = view);
     }
     setupListeners() {
       super.setupListeners(),
@@ -13785,25 +14459,31 @@ var PreviewWithSelection = class extends Preview {
         this.channel.on(PRELOAD_ENTRIES, this.onPreloadStories.bind(this));
     }
     async setInitialGlobals() {
-      if (!this.storyStoreValue)
-        throw new CalledPreviewMethodBeforeInitializationError({
-          methodName: 'setInitialGlobals',
-        });
+      if (!this.storyStore.globals)
+        throw new Error('Cannot call setInitialGlobals before initialization');
       let { globals } = this.selectionStore.selectionSpecifier || {};
-      globals && this.storyStoreValue.globals.updateFromPersisted(globals),
+      globals && this.storyStore.globals.updateFromPersisted(globals),
         this.emitGlobals();
     }
-    async initializeWithStoryIndex(storyIndex) {
-      return (
-        await super.initializeWithStoryIndex(storyIndex),
-        this.selectSpecifiedStory()
-      );
+    initializeWithStoryIndex(storyIndex) {
+      return super
+        .initializeWithStoryIndex(storyIndex)
+        .then(
+          () => (
+            scope.FEATURES?.storyStoreV7 ||
+              this.channel.emit(
+                SET_INDEX,
+                this.storyStore.getSetIndexPayload(),
+              ),
+            this.selectSpecifiedStory()
+          ),
+        );
     }
     async selectSpecifiedStory() {
-      if (!this.storyStoreValue)
-        throw new CalledPreviewMethodBeforeInitializationError({
-          methodName: 'selectSpecifiedStory',
-        });
+      if (!this.storyStore.storyIndex)
+        throw new Error(
+          'Cannot call selectSpecifiedStory before initialization',
+        );
       if (this.selectionStore.selection) {
         await this.renderSelection();
         return;
@@ -13814,19 +14494,25 @@ var PreviewWithSelection = class extends Preview {
       }
       let { storySpecifier, args: args2 } =
           this.selectionStore.selectionSpecifier,
-        entry =
-          this.storyStoreValue.storyIndex.entryFromSpecifier(storySpecifier);
+        entry = this.storyStore.storyIndex.entryFromSpecifier(storySpecifier);
       if (!entry) {
         storySpecifier === '*'
           ? this.renderStoryLoadingException(
               storySpecifier,
-              new EmptyIndexError(),
+              new Error(dedent`
+            Couldn't find any stories in your Storybook.
+            - Please check your stories field of your main.js config.
+            - Also check the browser console and terminal for error messages.
+          `),
             )
           : this.renderStoryLoadingException(
               storySpecifier,
-              new NoStoryMatchError({
-                storySpecifier: storySpecifier.toString(),
-              }),
+              new Error(dedent`
+            Couldn't find story matching '${storySpecifier}'.
+            - Are you sure a story with that id exists?
+            - Please check your stories field of your main.js config.
+            - Also check the browser console and terminal for error messages.
+          `),
             );
         return;
       }
@@ -13842,6 +14528,11 @@ var PreviewWithSelection = class extends Preview {
     }
     async onStoriesChanged({ importFn, storyIndex }) {
       await super.onStoriesChanged({ importFn, storyIndex }),
+        scope.FEATURES?.storyStoreV7 ||
+          this.channel.emit(
+            SET_INDEX,
+            await this.storyStore.getSetIndexPayload(),
+          ),
         this.selectionStore.selection
           ? await this.renderSelection()
           : await this.selectSpecifiedStory();
@@ -13875,7 +14566,7 @@ var PreviewWithSelection = class extends Preview {
     }
     async onSetCurrentStory(selection) {
       this.selectionStore.setSelection({ viewMode: 'story', ...selection }),
-        await this.storeInitializationPromise,
+        await this.storyStore.initializationPromise,
         this.channel.emit(CURRENT_STORY_WAS_SET, this.selectionStore.selection),
         this.renderSelection();
     }
@@ -13892,26 +14583,19 @@ var PreviewWithSelection = class extends Preview {
       super.onUpdateArgs({ storyId, updatedArgs });
     }
     async onPreloadStories({ ids }) {
-      let { storyStoreValue } = this;
-      if (!storyStoreValue)
-        throw new CalledPreviewMethodBeforeInitializationError({
-          methodName: 'onPreloadStories',
-        });
-      await Promise.allSettled(ids.map((id) => storyStoreValue.loadEntry(id)));
+      await Promise.allSettled(ids.map((id) => this.storyStore.loadEntry(id)));
     }
     async renderSelection({ persistedArgs } = {}) {
       let { renderToCanvas } = this;
-      if (!this.storyStoreValue || !renderToCanvas)
-        throw new CalledPreviewMethodBeforeInitializationError({
-          methodName: 'renderSelection',
-        });
+      if (!renderToCanvas)
+        throw new Error('Cannot call renderSelection before initialization');
       let { selection } = this.selectionStore;
       if (!selection)
         throw new Error('Cannot call renderSelection as no selection was made');
       let { storyId } = selection,
         entry;
       try {
-        entry = await this.storyStoreValue.storyIdToEntry(storyId);
+        entry = await this.storyStore.storyIdToEntry(storyId);
       } catch (err) {
         this.currentRender && (await this.teardownRender(this.currentRender)),
           this.renderStoryLoadingException(storyId, err);
@@ -13928,7 +14612,7 @@ var PreviewWithSelection = class extends Preview {
       entry.type === 'story'
         ? (render = new StoryRender(
             this.channel,
-            this.storyStoreValue,
+            this.storyStore,
             (...args2) => (
               this.view.showStoryDuringRender(), renderToCanvas(...args2)
             ),
@@ -13939,13 +14623,13 @@ var PreviewWithSelection = class extends Preview {
         : isMdxEntry(entry)
           ? (render = new MdxDocsRender(
               this.channel,
-              this.storyStoreValue,
+              this.storyStore,
               entry,
               this.mainStoryCallbacks(storyId),
             ))
           : (render = new CsfDocsRender(
               this.channel,
-              this.storyStoreValue,
+              this.storyStore,
               entry,
               this.mainStoryCallbacks(storyId),
             ));
@@ -13963,19 +14647,16 @@ var PreviewWithSelection = class extends Preview {
       }
       let implementationChanged =
         !storyIdChanged && lastRender && !render.isEqual(lastRender);
+      if (persistedArgs && isStoryRender(render)) {
+        if (!render.story) throw new Error('Render has not been prepared!');
+        this.storyStore.args.updateFromPersisted(render.story, persistedArgs);
+      }
       if (
-        (persistedArgs &&
-          isStoryRender(render) &&
-          (invariant(!!render.story),
-          this.storyStoreValue.args.updateFromPersisted(
-            render.story,
-            persistedArgs,
-          )),
         lastRender &&
-          !lastRender.torndown &&
-          !storyIdChanged &&
-          !implementationChanged &&
-          !viewModeChanged)
+        !lastRender.torndown &&
+        !storyIdChanged &&
+        !implementationChanged &&
+        !viewModeChanged
       ) {
         (this.currentRender = lastRender),
           this.channel.emit(STORY_UNCHANGED, storyId),
@@ -13990,49 +14671,67 @@ var PreviewWithSelection = class extends Preview {
           this.channel.emit(STORY_CHANGED, storyId),
         isStoryRender(render))
       ) {
-        invariant(!!render.story);
+        if (!render.story) throw new Error('Render has not been prepared!');
         let { parameters, initialArgs, argTypes, unmappedArgs } =
-          this.storyStoreValue.getStoryContext(render.story);
-        this.channel.emit(STORY_PREPARED, {
-          id: storyId,
-          parameters,
-          initialArgs,
-          argTypes,
-          args: unmappedArgs,
-        }),
+          this.storyStore.getStoryContext(render.story);
+        scope.FEATURES?.storyStoreV7 &&
+          this.channel.emit(STORY_PREPARED, {
+            id: storyId,
+            parameters,
+            initialArgs,
+            argTypes,
+            args: unmappedArgs,
+          }),
           (implementationChanged || persistedArgs) &&
             this.channel.emit(STORY_ARGS_UPDATED, {
               storyId,
               args: unmappedArgs,
             });
-      } else {
-        let { parameters } = this.storyStoreValue.projectAnnotations;
+      } else if (scope.FEATURES?.storyStoreV7) {
+        if (!this.storyStore.projectAnnotations)
+          throw new Error('Store not initialized');
+        let { parameters } = this.storyStore.projectAnnotations;
         if (
           isCsfDocsRender(render) ||
           render.entry.tags?.includes(ATTACHED_MDX_TAG)
         ) {
           if (!render.csfFiles)
-            throw new MdxFileWithNoCsfReferencesError({ storyId });
-          ({ parameters } = this.storyStoreValue.preparedMetaFromCSFFile({
+            throw new Error(
+              'Render not prepared, or attached MDX file has no CSF references',
+            );
+          ({ parameters } = this.storyStore.preparedMetaFromCSFFile({
             csfFile: render.csfFiles[0],
           }));
         }
         this.channel.emit(DOCS_PREPARED, { id: storyId, parameters });
       }
-      isStoryRender(render)
-        ? (invariant(!!render.story),
-          this.storyRenders.push(render),
+      if (isStoryRender(render)) {
+        if (!render.story) throw new Error('Render has not been prepared!');
+        this.storyRenders.push(render),
           this.currentRender.renderToElement(
             this.view.prepareForStory(render.story),
-          ))
-        : this.currentRender.renderToElement(
-            this.view.prepareForDocs(),
-            this.renderStoryToElement.bind(this),
           );
+      } else
+        this.currentRender.renderToElement(
+          this.view.prepareForDocs(),
+          this.renderStoryToElement.bind(this),
+        );
     }
     async teardownRender(render, { viewModeChanged = !1 } = {}) {
       (this.storyRenders = this.storyRenders.filter((r) => r !== render)),
         await render?.teardown?.({ viewModeChanged });
+    }
+    async extract(options2) {
+      if (this.previewEntryError) throw this.previewEntryError;
+      if (!this.storyStore.projectAnnotations)
+        throw new Error(dedent`Failed to initialize Storybook.
+
+      Do you have an error in your \`preview.js\`? Check your Storybook's browser console for errors.`);
+      return (
+        scope.FEATURES?.storyStoreV7 &&
+          (await this.storyStore.cacheAllCSFFiles()),
+        this.storyStore.extract(options2)
+      );
     }
     mainStoryCallbacks(storyId) {
       return {
@@ -14095,7 +14794,7 @@ var PreviewWithSelection = class extends Preview {
             COLOR_REGEXP.test(value2)
           : Array.isArray(value2)
             ? value2.every((v2) => validateArgs(key2, v2))
-            : (0, import_isPlainObject.default)(value2)
+            : (0, import_isPlainObject2.default)(value2)
               ? Object.entries(value2).every(([k, v2]) => validateArgs(k, v2))
               : !1,
   QS_OPTIONS = {
@@ -14132,7 +14831,7 @@ var PreviewWithSelection = class extends Preview {
       .split(';')
       .map((part) => part.replace('=', '~').replace(':', '='));
     return Object.entries(
-      import_qs.default.parse(parts.join(';'), QS_OPTIONS),
+      import_qs3.default.parse(parts.join(';'), QS_OPTIONS),
     ).reduce(
       (acc, [key2, value2]) =>
         validateArgs(key2, value2)
@@ -14155,11 +14854,11 @@ function pathToId(path) {
 }
 var getQueryString = ({ selection, extraParams }) => {
     let { search = '' } = document3.location,
-      { path, selectedKind, selectedStory, ...rest } = import_qs.default.parse(
+      { path, selectedKind, selectedStory, ...rest } = import_qs3.default.parse(
         search,
         { ignoreQueryPrefix: !0 },
       );
-    return import_qs.default.stringify(
+    return import_qs3.default.stringify(
       {
         ...rest,
         ...extraParams,
@@ -14193,7 +14892,7 @@ var getQueryString = ({ selection, extraParams }) => {
     }
   },
   getSelectionSpecifierFromPath = () => {
-    let query = import_qs.default.parse(document3.location.search, {
+    let query = import_qs3.default.parse(document3?.location?.search, {
         ignoreQueryPrefix: !0,
       }),
       args2 =
@@ -14255,8 +14954,8 @@ var getQueryString = ({ selection, extraParams }) => {
   WebView = class {
     constructor() {
       this.testing = !1;
-      let { __SPECIAL_TEST_PARAMETER__ } = import_qs.default.parse(
-        document22.location.search,
+      let { __SPECIAL_TEST_PARAMETER__ } = import_qs3.default.parse(
+        document22?.location?.search,
         { ignoreQueryPrefix: !0 },
       );
       switch (__SPECIAL_TEST_PARAMETER__) {
@@ -14327,13 +15026,8 @@ var getQueryString = ({ selection, extraParams }) => {
 `);
       parts.length > 1 &&
         (([header] = parts),
-        (detail = parts
-          .slice(1)
-          .join(
-            `
-`,
-          )
-          .replace(/^\n/, ''))),
+        (detail = parts.slice(1).join(`
+`))),
         (document22.getElementById('error-message').innerHTML =
           ansiConverter.toHtml(header)),
         (document22.getElementById('error-stack').innerHTML =
@@ -14380,10 +15074,8 @@ var getQueryString = ({ selection, extraParams }) => {
     }
   },
   PreviewWeb = class extends PreviewWithSelection {
-    constructor(importFn, getProjectAnnotations) {
-      super(importFn, getProjectAnnotations, new UrlStore(), new WebView()),
-        (this.importFn = importFn),
-        (this.getProjectAnnotations = getProjectAnnotations),
+    constructor() {
+      super(new UrlStore(), new WebView()),
         (scope.__STORYBOOK_PREVIEW__ = this);
     }
   },
@@ -14461,6 +15153,172 @@ function simulatePageLoad($container) {
         );
   } else simulateDOMContentLoaded();
 }
+function executeLoadable(loadable) {
+  let reqs = null;
+  Array.isArray(loadable)
+    ? (reqs = loadable)
+    : loadable.keys && (reqs = [loadable]);
+  let exportsMap = new Map();
+  if (reqs)
+    reqs.forEach((req) => {
+      req.keys().forEach((filename) => {
+        try {
+          let fileExports = req(filename);
+          exportsMap.set(
+            typeof req.resolve == 'function' ? req.resolve(filename) : filename,
+            fileExports,
+          );
+        } catch (error) {
+          let errorString =
+            error.message && error.stack
+              ? `${error.message}
+ ${error.stack}`
+              : error.toString();
+          logger.error(
+            `Unexpected error while loading ${filename}: ${errorString}`,
+          );
+        }
+      });
+    });
+  else {
+    let exported = loadable();
+    Array.isArray(exported) && exported.every((obj) => obj.default != null)
+      ? (exportsMap = new Map(
+          exported.map((fileExports, index) => [
+            `exports-map-${index}`,
+            fileExports,
+          ]),
+        ))
+      : exported &&
+        logger.warn(
+          `Loader function passed to 'configure' should return void or an array of module exports that all contain a 'default' export. Received: ${JSON.stringify(exported)}`,
+        );
+  }
+  return exportsMap;
+}
+function executeLoadableForChanges(loadable, m2) {
+  let lastExportsMap = m2?.hot?.data?.lastExportsMap || new Map();
+  m2?.hot?.dispose &&
+    (m2.hot.accept(),
+    m2.hot.dispose((data) => {
+      data.lastExportsMap = lastExportsMap;
+    }));
+  let exportsMap = executeLoadable(loadable),
+    added = new Map();
+  Array.from(exportsMap.entries())
+    .filter(([, fileExports]) => !!fileExports.default)
+    .filter(
+      ([fileName, fileExports]) => lastExportsMap.get(fileName) !== fileExports,
+    )
+    .forEach(([fileName, fileExports]) => added.set(fileName, fileExports));
+  let removed = new Map();
+  return (
+    Array.from(lastExportsMap.keys())
+      .filter((fileName) => !exportsMap.has(fileName))
+      .forEach((fileName) => {
+        let value2 = lastExportsMap.get(fileName);
+        value2 && removed.set(fileName, value2);
+      }),
+    (lastExportsMap = exportsMap),
+    { added, removed }
+  );
+}
+var { FEATURES } = scope,
+  removedApi = (name2) => () => {
+    throw new Error(
+      `@storybook/client-api:${name2} was removed in storyStoreV7.`,
+    );
+  };
+function start(renderToCanvas, { decorateStory: decorateStory2, render } = {}) {
+  if ((scope && (scope.IS_STORYBOOK = !0), FEATURES?.storyStoreV7))
+    return {
+      forceReRender: removedApi('forceReRender'),
+      configure: removedApi('configure'),
+      clientApi: {
+        storiesOf: removedApi('clientApi.storiesOf'),
+        raw: removedApi('raw'),
+      },
+    };
+  let channel = createBrowserChannel({ page: 'preview' });
+  addons.setChannel(channel);
+  let clientApi = scope?.__STORYBOOK_CLIENT_API__ || new ClientApi(),
+    preview = scope?.__STORYBOOK_PREVIEW__ || new PreviewWeb(),
+    initialized = !1,
+    importFn = (path) => clientApi.importFn(path);
+  function onStoriesChanged() {
+    let storyIndex = clientApi.getStoryIndex();
+    preview.onStoriesChanged({ storyIndex, importFn });
+  }
+  return (
+    (clientApi.onImportFnChanged = onStoriesChanged),
+    (clientApi.storyStore = preview.storyStore),
+    scope &&
+      ((scope.__STORYBOOK_CLIENT_API__ = clientApi),
+      (scope.__STORYBOOK_ADDONS_CHANNEL__ = channel),
+      (scope.__STORYBOOK_PREVIEW__ = preview),
+      (scope.__STORYBOOK_STORY_STORE__ = preview.storyStore)),
+    {
+      forceReRender: () => channel.emit(FORCE_RE_RENDER),
+      clientApi,
+      configure(renderer, loadable, m2, disableBackwardCompatibility = !0) {
+        if (disableBackwardCompatibility)
+          throw new Error('unexpected configure() call');
+        clientApi.addParameters({ renderer });
+        let getProjectAnnotations = () => {
+          let { added, removed } = executeLoadableForChanges(loadable, m2);
+          return (
+            clientApi._loadAddedExports(),
+            Array.from(added.entries()).forEach(([fileName, fileExports]) =>
+              clientApi.facade.addStoriesFromExports(fileName, fileExports),
+            ),
+            Array.from(removed.entries()).forEach(([fileName]) =>
+              clientApi.facade.clearFilenameExports(fileName),
+            ),
+            {
+              render,
+              ...clientApi.facade.projectAnnotations,
+              renderToCanvas,
+              applyDecorators: decorateStory2,
+            }
+          );
+        };
+        initialized
+          ? (getProjectAnnotations(), onStoriesChanged())
+          : (preview.initialize({
+              getStoryIndex: () => clientApi.getStoryIndex(),
+              importFn,
+              getProjectAnnotations,
+            }),
+            (initialized = !0));
+      },
+    }
+  );
+}
+var makeDecorator = ({
+  name: name2,
+  parameterName,
+  wrapper,
+  skipIfNoParametersOrOptions = !1,
+}) => {
+  let decorator = (options2) => (storyFn, context) => {
+    let parameters = context.parameters && context.parameters[parameterName];
+    return (parameters && parameters.disable) ||
+      (skipIfNoParametersOrOptions && !options2 && !parameters)
+      ? storyFn(context)
+      : wrapper(storyFn, context, { options: options2, parameters });
+  };
+  return (...args2) =>
+    typeof args2[0] == 'function'
+      ? decorator()(...args2)
+      : (...innerArgs) => {
+          if (innerArgs.length > 1)
+            return args2.length > 1
+              ? decorator(args2)(...innerArgs)
+              : decorator(...args2)(...innerArgs);
+          throw new Error(`Passing stories directly into ${name2}() is not allowed,
+        instead use addDecorator(${name2}) and pass options with the '${parameterName}' parameter`);
+        };
+};
 var dist_exports6 = {};
 __export(dist_exports6, { Addon_TypesEnum: () => Addon_TypesEnum });
 var Addon_TypesEnum = ((Addon_TypesEnum2) => (
@@ -14472,16 +15330,197 @@ var Addon_TypesEnum = ((Addon_TypesEnum2) => (
   (Addon_TypesEnum2.experimental_PAGE = 'page'),
   (Addon_TypesEnum2.experimental_SIDEBAR_BOTTOM = 'sidebar-bottom'),
   (Addon_TypesEnum2.experimental_SIDEBAR_TOP = 'sidebar-top'),
+  (Addon_TypesEnum2.NOTES_ELEMENT = 'notes-element'),
   Addon_TypesEnum2
 ))(Addon_TypesEnum || {});
+var addons_exports = {};
+__export(addons_exports, {
+  AddonStore: () => AddonStore,
+  HooksContext: () => HooksContext,
+  addons: () => addons,
+  applyHooks: () => applyHooks,
+  makeDecorator: () => makeDecorator,
+  mockChannel: () => mockChannel,
+  useArgs: () => useArgs,
+  useCallback: () => useCallback,
+  useChannel: () => useChannel,
+  useEffect: () => useEffect,
+  useGlobals: () => useGlobals,
+  useMemo: () => useMemo,
+  useParameter: () => useParameter,
+  useReducer: () => useReducer,
+  useRef: () => useRef,
+  useState: () => useState,
+  useStoryContext: () => useStoryContext,
+});
+var client_api_exports = {};
+__export(client_api_exports, {
+  ClientApi: () => ClientApi,
+  DEEPLY_EQUAL: () => DEEPLY_EQUAL,
+  HooksContext: () => HooksContext,
+  StoryStore: () => StoryStore,
+  UNTARGETED: () => UNTARGETED,
+  addArgTypes: () => addArgTypes,
+  addArgTypesEnhancer: () => addArgTypesEnhancer,
+  addArgs: () => addArgs,
+  addArgsEnhancer: () => addArgsEnhancer,
+  addDecorator: () => addDecorator,
+  addLoader: () => addLoader,
+  addParameters: () => addParameters,
+  addStepRunner: () => addStepRunner,
+  applyHooks: () => applyHooks,
+  combineArgs: () => combineArgs,
+  combineParameters: () => combineParameters,
+  composeConfigs: () => composeConfigs,
+  composeStepRunners: () => composeStepRunners,
+  composeStories: () => composeStories,
+  composeStory: () => composeStory,
+  decorateStory: () => decorateStory,
+  deepDiff: () => deepDiff,
+  defaultDecorateStory: () => defaultDecorateStory,
+  filterArgTypes: () => filterArgTypes,
+  getArrayField: () => getArrayField,
+  getField: () => getField,
+  getObjectField: () => getObjectField,
+  getQueryParam: () => getQueryParam,
+  getQueryParams: () => getQueryParams,
+  getSingletonField: () => getSingletonField,
+  getValuesFromArgTypes: () => getValuesFromArgTypes,
+  groupArgsByTarget: () => groupArgsByTarget,
+  inferControls: () => inferControls,
+  mapArgsToTypes: () => mapArgsToTypes,
+  noTargetArgs: () => noTargetArgs,
+  normalizeComponentAnnotations: () => normalizeComponentAnnotations,
+  normalizeInputType: () => normalizeInputType,
+  normalizeInputTypes: () => normalizeInputTypes,
+  normalizeProjectAnnotations: () => normalizeProjectAnnotations,
+  normalizeStory: () => normalizeStory,
+  prepareContext: () => prepareContext,
+  prepareMeta: () => prepareMeta,
+  prepareStory: () => prepareStory,
+  processCSFFile: () => processCSFFile,
+  sanitizeStoryContextUpdate: () => sanitizeStoryContextUpdate,
+  setGlobalRender: () => setGlobalRender,
+  setProjectAnnotations: () => setProjectAnnotations,
+  sortStoriesV6: () => sortStoriesV6,
+  sortStoriesV7: () => sortStoriesV7,
+  useAddonState: () => useAddonState,
+  useArgs: () => useArgs,
+  useCallback: () => useCallback,
+  useChannel: () => useChannel,
+  useEffect: () => useEffect,
+  useGlobals: () => useGlobals,
+  useMemo: () => useMemo,
+  useParameter: () => useParameter,
+  useReducer: () => useReducer,
+  useRef: () => useRef,
+  useSharedState: () => useSharedState,
+  useState: () => useState,
+  useStoryContext: () => useStoryContext,
+  userOrAutoTitle: () => userOrAutoTitle,
+  userOrAutoTitleFromSpecifier: () => userOrAutoTitleFromSpecifier,
+  validateOptions: () => validateOptions,
+});
+var core_client_exports = {};
+__export(core_client_exports, {
+  ClientApi: () => ClientApi,
+  StoryStore: () => StoryStore,
+  start: () => start,
+});
+var preview_web_exports = {};
+__export(preview_web_exports, {
+  DocsContext: () => DocsContext,
+  Preview: () => Preview,
+  PreviewWeb: () => PreviewWeb,
+  PreviewWithSelection: () => PreviewWithSelection,
+  composeConfigs: () => composeConfigs,
+  simulateDOMContentLoaded: () => simulateDOMContentLoaded,
+  simulatePageLoad: () => simulatePageLoad,
+});
+var store_exports = {};
+__export(store_exports, {
+  DEEPLY_EQUAL: () => DEEPLY_EQUAL,
+  HooksContext: () => HooksContext,
+  StoryStore: () => StoryStore,
+  UNTARGETED: () => UNTARGETED,
+  applyHooks: () => applyHooks,
+  combineArgs: () => combineArgs,
+  combineParameters: () => combineParameters,
+  composeConfigs: () => composeConfigs,
+  composeStepRunners: () => composeStepRunners,
+  composeStories: () => composeStories,
+  composeStory: () => composeStory,
+  decorateStory: () => decorateStory,
+  deepDiff: () => deepDiff,
+  defaultDecorateStory: () => defaultDecorateStory,
+  filterArgTypes: () => filterArgTypes,
+  getArrayField: () => getArrayField,
+  getField: () => getField,
+  getObjectField: () => getObjectField,
+  getSingletonField: () => getSingletonField,
+  getValuesFromArgTypes: () => getValuesFromArgTypes,
+  groupArgsByTarget: () => groupArgsByTarget,
+  inferControls: () => inferControls,
+  mapArgsToTypes: () => mapArgsToTypes,
+  noTargetArgs: () => noTargetArgs,
+  normalizeComponentAnnotations: () => normalizeComponentAnnotations,
+  normalizeInputType: () => normalizeInputType,
+  normalizeInputTypes: () => normalizeInputTypes,
+  normalizeProjectAnnotations: () => normalizeProjectAnnotations,
+  normalizeStory: () => normalizeStory,
+  prepareContext: () => prepareContext,
+  prepareMeta: () => prepareMeta,
+  prepareStory: () => prepareStory,
+  processCSFFile: () => processCSFFile,
+  sanitizeStoryContextUpdate: () => sanitizeStoryContextUpdate,
+  setProjectAnnotations: () => setProjectAnnotations,
+  sortStoriesV6: () => sortStoriesV6,
+  sortStoriesV7: () => sortStoriesV7,
+  useAddonState: () => useAddonState,
+  useArgs: () => useArgs,
+  useCallback: () => useCallback,
+  useChannel: () => useChannel,
+  useEffect: () => useEffect,
+  useGlobals: () => useGlobals,
+  useMemo: () => useMemo,
+  useParameter: () => useParameter,
+  useReducer: () => useReducer,
+  useRef: () => useRef,
+  useSharedState: () => useSharedState,
+  useState: () => useState,
+  useStoryContext: () => useStoryContext,
+  userOrAutoTitle: () => userOrAutoTitle,
+  userOrAutoTitleFromSpecifier: () => userOrAutoTitleFromSpecifier,
+  validateOptions: () => validateOptions,
+});
+var postmessage_exports = {};
+__export(postmessage_exports, {
+  KEY: () => KEY,
+  PostMessageTransport: () => PostMessageTransport,
+  PostmsgTransport: () => PostmsgTransport,
+  createChannel: () => createChannel,
+  default: () => postmessage_default,
+});
+var websocket_exports = {};
+__export(websocket_exports, {
+  WebsocketTransport: () => WebsocketTransport,
+  createChannel: () => createChannel2,
+  default: () => websocket_default,
+});
 var globalsNameValueMap = {
   '@storybook/channels': dist_exports4,
   '@storybook/client-logger': dist_exports3,
   '@storybook/core-events': dist_exports,
-  '@storybook/core-events/preview-errors': preview_errors_exports,
   '@storybook/preview-api': dist_exports5,
   '@storybook/global': dist_exports2,
   '@storybook/types': dist_exports6,
+  '@storybook/channel-postmessage': postmessage_exports,
+  '@storybook/channel-websocket': websocket_exports,
+  '@storybook/addons': addons_exports,
+  '@storybook/client-api': client_api_exports,
+  '@storybook/core-client': core_client_exports,
+  '@storybook/preview-web': preview_web_exports,
+  '@storybook/store': store_exports,
 };
 var import_browser_dtector = __toESM(require_browser_dtector_umd_min()),
   browserInfo;
