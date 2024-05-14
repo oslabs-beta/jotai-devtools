@@ -27,21 +27,30 @@ const createAtomNode = (
 
 //Builds a tree structure of atom nodes based on the provided atoms and their dependencies
 //Establishes parent-child relationships between atoms
+
 const buildAtomTree = (
   atoms: AnyAtom[],
   dependents: Map<AnyAtom, Set<AnyAtom>>,
   atomMap: Map<AnyAtom, AtomNode>,
+  visitedAtoms: Set<AnyAtom> = new Set(),
 ): AtomNode[] => {
   const relationships: [AnyAtom, AnyAtom][] = [];
 
-  atoms.forEach((atom) => {
+  const uniqueAtoms = Array.from(new Set(atoms));
+  uniqueAtoms.forEach((atom) => {
     if (!atomMap.has(atom)) {
       atomMap.set(atom, createAtomNode(atom));
     }
   });
 
-  atoms.forEach((atom) => {
-    const node = atomMap.get(atom)!;
+  uniqueAtoms.forEach((atom) => {
+    if (visitedAtoms.has(atom)) {
+      return;
+    }
+    visitedAtoms.add(atom);
+
+    const node = atomMap.get(atom);
+
     const depsForAtom = Array.from(dependents.get(atom) || []);
 
     depsForAtom.forEach((depAtom) => {
@@ -55,15 +64,21 @@ const buildAtomTree = (
   });
 
   relationships.forEach(([parentAtom, childAtom]) => {
-    const parentNode = atomMap.get(parentAtom)!;
-    const childNode = atomMap.get(childAtom)!;
-    if (!childNode.parent) {
-      childNode.parent = parentNode;
+    if (parentAtom !== childAtom) {
+      const parentNode = atomMap.get(parentAtom)!;
+      const childNode = atomMap.get(childAtom)!;
+      if (!childNode.parent) {
+        childNode.parent = parentNode;
+      }
+      parentNode.children.push(childNode);
     }
-    parentNode.children.push(childNode);
   });
 
-  return Array.from(atomMap.values()).filter((node) => !node.parent);
+  const rootNodes = Array.from(atomMap.values()).filter((node) => {
+    return !node.parent;
+  });
+
+  return rootNodes;
 };
 
 //Recursively lays out the atom nodes in a Dagre graph based on their parent-child relationships
@@ -153,9 +168,21 @@ export const useCreateAtomNodes = (
   let atoms: AnyAtom[];
   if (selectedAtomData) {
     atoms = [selectedAtomData.atom];
-    const getDependentAtoms = (atom: AnyAtom): AnyAtom[] => {
+    const getDependentAtoms = (
+      atom: AnyAtom,
+      depth = 0,
+      maxDepth = 10,
+    ): AnyAtom[] => {
+      if (depth > maxDepth) {
+        return [];
+      }
       const depsForAtom = Array.from(dependents.get(atom) || []);
-      return [...depsForAtom, ...depsForAtom.flatMap(getDependentAtoms)];
+      return [
+        ...depsForAtom,
+        ...depsForAtom.flatMap((dep) =>
+          getDependentAtoms(dep, depth + 1, maxDepth),
+        ),
+      ];
     };
     atoms = [...atoms, ...getDependentAtoms(selectedAtomData.atom)];
   } else {
@@ -163,9 +190,21 @@ export const useCreateAtomNodes = (
   }
 
   const atomMap = new Map(atoms.map((atom) => [atom, createAtomNode(atom)]));
+  // const startTime = performance.now();
   const rootNodes = buildAtomTree(atoms, dependents, atomMap);
+  // const endTime = performance.now();
+  //  console.log(`buildAtomTree took ${endTime - startTime} milliseconds`);
+  // const startTime = performance.now();
   layoutNodes(rootNodes, dagreGraph);
+  // const endTime = performance.now();
+  // console.log(`layoutNodes took ${endTime - startTime} milliseconds`);
+  // const { atomNodes, atomEdges } = buildComponents(rootNodes, atomMap);
+  // const startTime = performance.now();
+
   const { atomNodes, atomEdges } = buildComponents(rootNodes, atomMap);
+  // console.log('atomNodes:', atomNodes)
+  // const endTime = performance.now();
+  // console.log(`buildComponents took ${endTime - startTime} milliseconds`);
 
   layout(dagreGraph);
 
