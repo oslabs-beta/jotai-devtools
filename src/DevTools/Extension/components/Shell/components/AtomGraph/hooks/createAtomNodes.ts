@@ -190,21 +190,12 @@ export const useCreateAtomNodes = (
   }
 
   const atomMap = new Map(atoms.map((atom) => [atom, createAtomNode(atom)]));
-  // const startTime = performance.now();
+
   const rootNodes = buildAtomTree(atoms, dependents, atomMap);
-  // const endTime = performance.now();
-  //  console.log(`buildAtomTree took ${endTime - startTime} milliseconds`);
-  // const startTime = performance.now();
+
   layoutNodes(rootNodes, dagreGraph);
-  // const endTime = performance.now();
-  // console.log(`layoutNodes took ${endTime - startTime} milliseconds`);
-  // const { atomNodes, atomEdges } = buildComponents(rootNodes, atomMap);
-  // const startTime = performance.now();
 
   const { atomNodes, atomEdges } = buildComponents(rootNodes, atomMap);
-  // console.log('atomNodes:', atomNodes)
-  // const endTime = performance.now();
-  // console.log(`buildComponents took ${endTime - startTime} milliseconds`);
 
   layout(dagreGraph);
 
