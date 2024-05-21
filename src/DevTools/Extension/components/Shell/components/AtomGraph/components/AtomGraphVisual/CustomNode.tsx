@@ -16,7 +16,7 @@ type CustomNodeProps = {
 
 function CustomNode({ data }: CustomNodeProps) {
   return (
-    <div>
+    <div data-testId={`atom-node-${data.label}`}>
       <div className="internal-jotai-devtools-custom-node" id={data.label}>
         {data.label}
       </div>

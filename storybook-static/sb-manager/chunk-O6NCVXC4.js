@@ -12130,11 +12130,13 @@ var ToolbarComp = import_react33.default.memo(function ({
     return import_react33.default.createElement(
       import_react33.default.Fragment,
       null,
-      list.filter(Boolean).map(({ render: Render, id, ...t3 }, index) =>
-        import_react33.default.createElement(Render, {
-          key: id || t3.key || `f-${index}`,
-        }),
-      ),
+      list
+        .filter(Boolean)
+        .map(({ render: Render, id, ...t3 }, index) =>
+          import_react33.default.createElement(Render, {
+            key: id || t3.key || `f-${index}`,
+          }),
+        ),
     );
   });
 function toolbarItemHasBeenExcluded(item, entry) {

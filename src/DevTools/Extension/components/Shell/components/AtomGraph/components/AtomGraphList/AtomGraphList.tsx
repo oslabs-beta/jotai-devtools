@@ -101,6 +101,7 @@ export const AtomGraphList = () => {
             label={atomToPrintable(atom)}
             onClick={handleOnClick}
             id={i}
+            data-testId={atomToPrintable(atom)}
             isActive={selectedAtomData?.atomKey === atomKey}
           />
         );
