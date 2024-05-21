@@ -78,7 +78,10 @@ export const AtomGraphVisual = React.memo(() => {
   }, [nodes]);
 
   return (
-    <div className="internal-jotai-devtools-graph-container">
+    <div
+      className="internal-jotai-devtools-graph-container"
+      data-testId="reactflow-container"
+    >
       <ReactFlow
         nodes={nodes}
         nodesDraggable={false}
